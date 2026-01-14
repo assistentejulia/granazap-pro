@@ -11,12 +11,12 @@ interface InfoCardProps {
   storageKey?: string; // Para lembrar que foi fechado
 }
 
-export function InfoCard({ 
-  title, 
-  description, 
-  tips, 
+export function InfoCard({
+  title,
+  description,
+  tips,
   dismissible = true,
-  storageKey 
+  storageKey
 }: InfoCardProps) {
   const [isVisible, setIsVisible] = useState(() => {
     if (!dismissible || !storageKey) return true;
@@ -47,26 +47,26 @@ export function InfoCard({
 
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2 mb-2">
-            <h4 className="text-sm font-semibold text-white">{title}</h4>
+            <h4 className="text-sm font-semibold text-foreground">{title}</h4>
             {dismissible && (
               <button
                 onClick={handleDismiss}
-                className="text-zinc-400 hover:text-white transition-colors flex-shrink-0"
+                className="text-muted-foreground hover:text-foreground transition-colors flex-shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
             )}
           </div>
 
-          <p className="text-sm text-zinc-300 mb-3 leading-relaxed">
+          <p className="text-sm text-muted-foreground mb-3 leading-relaxed">
             {description}
           </p>
 
           {tips && tips.length > 0 && (
             <ul className="space-y-2">
               {tips.map((tip, index) => (
-                <li key={index} className="text-xs text-blue-300 flex items-start gap-2">
-                  <span className="text-blue-400 flex-shrink-0">•</span>
+                <li key={index} className="text-xs text-blue-600 dark:text-blue-300 flex items-start gap-2">
+                  <span className="text-blue-500 dark:text-blue-400 flex-shrink-0">•</span>
                   <span>{tip}</span>
                 </li>
               ))}
