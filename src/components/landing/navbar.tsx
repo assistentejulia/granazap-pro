@@ -13,12 +13,13 @@ export function Navbar() {
                 </Link>
 
                 <div className="flex items-center gap-4">
-                    <Link href="/login" className="text-sm text-zinc-400 hover:text-white transition-colors hidden sm:block">
+                    <Link href="/login" className="text-sm font-medium text-zinc-300 hover:text-white transition-colors">
                         Entrar
                     </Link>
                     <Link href="/cadastro">
-                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6">
-                            Criar conta
+                        <Button size="sm" className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-4 sm:px-6">
+                            <span className="hidden sm:inline">Criar conta</span>
+                            <span className="sm:hidden">Criar</span>
                             <MoveRight className="w-4 h-4 ml-2" />
                         </Button>
                     </Link>

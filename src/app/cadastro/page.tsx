@@ -57,7 +57,7 @@ export default function SignupPage() {
         {/* Sign In Link */}
         <div className="mt-6 text-center text-sm text-zinc-400">
           {t('signup.hasAccount')}{" "}
-          <Link href="/" className="font-semibold text-primary hover:text-primary/80 transition-colors">
+          <Link href="/login" className="font-semibold text-primary hover:text-primary/80 transition-colors">
             {t('signup.signIn')}
           </Link>
         </div>
