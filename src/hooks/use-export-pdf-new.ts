@@ -420,6 +420,7 @@ export function useExportPDFNew() {
 
       return true;
     } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
       return false;
     }
   }, []);

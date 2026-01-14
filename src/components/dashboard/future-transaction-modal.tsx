@@ -38,6 +38,7 @@ interface FutureTransactionModalProps {
   type: 'entrada' | 'saida';
   transactionToEdit?: any;
   editType?: 'single' | 'future';
+  onTypeChange?: (type: 'entrada' | 'saida') => void;
 }
 
 export function FutureTransactionModal({
@@ -46,7 +47,8 @@ export function FutureTransactionModal({
   onSuccess,
   type,
   transactionToEdit,
-  editType = 'single'
+  editType = 'single',
+  onTypeChange
 }: FutureTransactionModalProps) {
   const { t, language } = useLanguage();
   const { getCurrencySymbol } = useCurrency();
@@ -55,7 +57,7 @@ export function FutureTransactionModal({
   const { categories: allCategories } = useCategoriesQuery();
   const { accounts, loading: loadingAccounts } = useAccounts(accountFilter);
   const { cards, loading: loadingCards } = useCreditCards();
-  
+
   // Filtrar categorias por tipo
   const categories = allCategories.filter(c => c.tipo === type);
 
@@ -128,7 +130,7 @@ export function FutureTransactionModal({
     try {
       setCreatingCategory(true);
       const supabase = createClient();
-      
+
       const { data, error } = await supabase
         .from('categoria_trasacoes')
         .insert([{
@@ -146,7 +148,7 @@ export function FutureTransactionModal({
       setValue('categoria_id', data.id);
       setShowNewCategory(false);
       setNewCategoryName("");
-      
+
       // Recarregar categorias
       window.dispatchEvent(new CustomEvent('categoriesChanged'));
     } catch (error) {
@@ -164,7 +166,7 @@ export function FutureTransactionModal({
 
     while (currentDate <= finalDate) {
       dates.push(format(currentDate, 'yyyy-MM-dd'));
-      
+
       switch (period) {
         case 'diario':
           currentDate = addDays(currentDate, 1);
@@ -243,7 +245,7 @@ export function FutureTransactionModal({
               .select('id, descricao')
               .eq('usuario_id', profile.id)
               .eq('parcelamento', 'true')
-              .eq('descricao', transactionToEdit.descricao) 
+              .eq('descricao', transactionToEdit.descricao)
               .eq('numero_parcelas', transactionToEdit.numero_parcelas)
               .gte('parcela_atual', transactionToEdit.parcela_atual);
 
@@ -251,13 +253,13 @@ export function FutureTransactionModal({
 
             if (relatedTransactions && relatedTransactions.length > 0) {
               const dataNova = parseISO(data.data_prevista + 'T12:00:00');
-              
+
               for (let i = 0; i < relatedTransactions.length; i++) {
                 const transaction = relatedTransactions[i];
                 const parcelaAtual = transactionToEdit.parcela_atual + i;
                 const mesesDiferenca = parcelaAtual - transactionToEdit.parcela_atual;
                 const novaData = addMonths(dataNova, mesesDiferenca);
-                
+
                 const { error } = await supabase
                   .from('lancamentos_futuros')
                   .update({
@@ -276,13 +278,13 @@ export function FutureTransactionModal({
               }
             }
           } else if (isRecorrente) {
-             // ...
+            // ...
             const { data: relatedTransactions, error: fetchError } = await supabase
               .from('lancamentos_futuros')
               .select('id, descricao, data_prevista')
               .eq('usuario_id', profile.id)
               .eq('recorrente', true)
-              .eq('descricao', transactionToEdit.descricao) 
+              .eq('descricao', transactionToEdit.descricao)
               .eq('periodicidade', transactionToEdit.periodicidade)
               .gte('data_prevista', transactionToEdit.data_prevista)
               .order('data_prevista');
@@ -292,11 +294,11 @@ export function FutureTransactionModal({
             if (relatedTransactions && relatedTransactions.length > 0) {
               const dataNova = parseISO(data.data_prevista + 'T12:00:00');
               const periodicidade = transactionToEdit.periodicidade;
-              
+
               for (let i = 0; i < relatedTransactions.length; i++) {
                 const transaction = relatedTransactions[i];
                 let novaData = dataNova;
-                
+
                 // ... (Recalculate date logic - kept same)
                 switch (periodicidade) {
                   case 'diario': novaData = addDays(dataNova, i); break;
@@ -309,7 +311,7 @@ export function FutureTransactionModal({
                   case 'anual': novaData = addMonths(dataNova, i * 12); break;
                   default: novaData = addMonths(dataNova, i);
                 }
-                
+
                 const { error } = await supabase
                   .from('lancamentos_futuros')
                   .update({
@@ -343,7 +345,7 @@ export function FutureTransactionModal({
           const { error } = await supabase.from('lancamentos_futuros').insert(transactions);
           if (error) throw error;
         } else if (isInstallment && numeroParcelas) {
-           // ...
+          // ...
           const parcelas = parseInt(numeroParcelas);
           const valorTotal = parseFloat(data.valor);
           const valorParcela = valorTotal / parcelas;
@@ -397,15 +399,44 @@ export function FutureTransactionModal({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-2.5">
         {/* ... (Header Badges - kept same) */}
         <div className="flex justify-center gap-2">
-          <span className={cn(
-            "px-3 py-1.5 rounded-full text-xs font-semibold",
-            type === 'entrada'
-              ? "bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/30"
-              : "bg-red-500/10 text-red-500 border border-red-500/30"
-          )}>
-            {type === 'entrada' ? `💰 ${t('future.toReceive')}` : `💸 ${t('future.toPay')}`}
-          </span>
-          
+          {!transactionToEdit ? (
+            <div className="flex bg-[#0A0F1C] p-1 rounded-full border border-white/10">
+              <button
+                type="button"
+                onClick={() => onTypeChange?.('entrada')}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-xs font-medium transition-all",
+                  type === 'entrada'
+                    ? "bg-[#22C55E]/20 text-[#22C55E] shadow-sm"
+                    : "text-zinc-400 hover:text-white"
+                )}
+              >
+                💰 {t('future.toReceive')}
+              </button>
+              <button
+                type="button"
+                onClick={() => onTypeChange?.('saida')}
+                className={cn(
+                  "px-4 py-1.5 rounded-full text-xs font-medium transition-all",
+                  type === 'saida'
+                    ? "bg-red-500/20 text-red-500 shadow-sm"
+                    : "text-zinc-400 hover:text-white"
+                )}
+              >
+                💸 {t('future.toPay')}
+              </button>
+            </div>
+          ) : (
+            <span className={cn(
+              "px-3 py-1.5 rounded-full text-xs font-semibold",
+              type === 'entrada'
+                ? "bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/30"
+                : "bg-red-500/10 text-red-500 border border-red-500/30"
+            )}>
+              {type === 'entrada' ? `💰 ${t('future.toReceive')}` : `💸 ${t('future.toPay')}`}
+            </span>
+          )}
+
           {accountFilter === 'pj' ? (
             <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/30">
               💼 PJ
@@ -457,7 +488,7 @@ export function FutureTransactionModal({
             <span className="text-[10px] text-zinc-500">{accountFilter === 'pessoal' ? t('future.personal') : t('future.business')}</span>
           </label>
           <div className="relative mt-1">
-             <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none">
+            <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none">
               <Wallet className="w-3.5 h-3.5" />
             </div>
             <select
@@ -520,7 +551,7 @@ export function FutureTransactionModal({
                 </button>
               )}
             </label>
-            
+
             {showNewCategory ? (
               <div className="mt-1 flex flex-col sm:flex-row gap-2">
                 <input
@@ -546,7 +577,7 @@ export function FutureTransactionModal({
                     onClick={handleCreateCategory}
                     disabled={creatingCategory || !newCategoryName.trim()}
                     className="flex-1 sm:flex-none h-9 px-4 rounded-lg text-white text-sm font-medium transition-colors disabled:opacity-50"
-                    style={{ 
+                    style={{
                       backgroundColor: accentColor,
                       opacity: (creatingCategory || !newCategoryName.trim()) ? 0.5 : 1
                     }}
@@ -598,7 +629,7 @@ export function FutureTransactionModal({
 
         {/* Agendamento and Options (Recurrent/Installments) - kept same */}
         {/* ... */}
-        
+
         <div>
           <label className="text-xs font-medium text-zinc-400">
             📅 {t('future.dueDate')} <span className="text-red-400">*</span>

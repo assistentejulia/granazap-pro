@@ -5,6 +5,7 @@ import { SidebarProvider } from "@/contexts/sidebar-context";
 import { SubscriptionBlockModal } from "@/components/dashboard/subscription-block-modal";
 import { SubscriptionWarningBanner } from "@/components/dashboard/subscription-warning-banner";
 import { useSubscriptionStatus } from "@/hooks/use-subscription-status";
+import { ForceRefresh } from "@/components/force-refresh";
 import dynamic from 'next/dynamic';
 
 // Sidebar com SSR desabilitado para evitar flash de branding
@@ -48,6 +49,9 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex h-screen bg-[#0A0F1C] text-white overflow-hidden">
+      {/* Reset Cache Component */}
+      <ForceRefresh />
+
       {/* Modal de bloqueio suave (1-13 dias expirado) */}
       {blockingLevel === 'soft-block' && <SubscriptionBlockModal />}
 
@@ -63,7 +67,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
         <main className="flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6">
           {/* Banner de aviso (3 dias antes de expirar) */}
           {blockingLevel === 'warning' && <SubscriptionWarningBanner />}
-          
+
           {children}
         </main>
       </div>

@@ -21,7 +21,7 @@ export function UsersManagementPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  
+
   // Estados dos filtros
   const [selectedPlanos, setSelectedPlanos] = useState<number[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<string[]>([]);
@@ -29,23 +29,23 @@ export function UsersManagementPage() {
   const [filterHasPassword, setFilterHasPassword] = useState<boolean | undefined>(undefined);
   const [filterPlanoValido, setFilterPlanoValido] = useState<boolean | undefined>(undefined);
   const [filterUltimoAcesso, setFilterUltimoAcesso] = useState<number | undefined>(undefined);
-  
+
   // Construir objeto de filtros
-  const filters: UserFilters | undefined = 
+  const filters: UserFilters | undefined =
     selectedPlanos.length > 0 ||
-    selectedStatus.length > 0 ||
-    filterAdmin !== undefined ||
-    filterHasPassword !== undefined ||
-    filterPlanoValido !== undefined ||
-    filterUltimoAcesso !== undefined
+      selectedStatus.length > 0 ||
+      filterAdmin !== undefined ||
+      filterHasPassword !== undefined ||
+      filterPlanoValido !== undefined ||
+      filterUltimoAcesso !== undefined
       ? {
-          planoIds: selectedPlanos.length > 0 ? selectedPlanos : undefined,
-          status: selectedStatus.length > 0 ? selectedStatus : undefined,
-          isAdmin: filterAdmin,
-          hasPassword: filterHasPassword,
-          planoValido: filterPlanoValido,
-          ultimoAcessoDias: filterUltimoAcesso,
-        }
+        planoIds: selectedPlanos.length > 0 ? selectedPlanos : undefined,
+        status: selectedStatus.length > 0 ? selectedStatus : undefined,
+        isAdmin: filterAdmin,
+        hasPassword: filterHasPassword,
+        planoValido: filterPlanoValido,
+        ultimoAcessoDias: filterUltimoAcesso,
+      }
       : undefined;
 
   // Buscar planos dinamicamente
@@ -138,8 +138,8 @@ export function UsersManagementPage() {
   };
 
   const togglePlano = (planoId: number) => {
-    setSelectedPlanos(prev => 
-      prev.includes(planoId) 
+    setSelectedPlanos(prev =>
+      prev.includes(planoId)
         ? prev.filter(id => id !== planoId)
         : [...prev, planoId]
     );
@@ -147,7 +147,7 @@ export function UsersManagementPage() {
   };
 
   const toggleStatus = (status: string) => {
-    setSelectedStatus(prev => 
+    setSelectedStatus(prev =>
       prev.includes(status)
         ? prev.filter(s => s !== status)
         : [...prev, status]
@@ -155,7 +155,7 @@ export function UsersManagementPage() {
     setCurrentPage(1);
   };
 
-  const activeFiltersCount = 
+  const activeFiltersCount =
     selectedPlanos.length +
     selectedStatus.length +
     (filterAdmin !== undefined ? 1 : 0) +
@@ -457,7 +457,7 @@ export function UsersManagementPage() {
               <tbody className="divide-y divide-white/5">
                 {users.map((user) => {
                   const daysRemaining = getDaysRemaining(user.data_final_plano);
-                  
+
                   return (
                     <tr key={user.id} className="hover:bg-white/5 transition-colors">
                       <td className="px-6 py-4">
@@ -485,11 +485,10 @@ export function UsersManagementPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                          user.plano === 'free' || !user.plano
+                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${user.plano === 'free' || !user.plano
                             ? 'bg-zinc-500/20 text-zinc-300'
                             : 'bg-yellow-500/20 text-yellow-300'
-                        }`}>
+                          }`}>
                           {user.plano || 'Free'}
                         </div>
                         {daysRemaining !== null && (
@@ -501,7 +500,7 @@ export function UsersManagementPage() {
                       <td className="px-6 py-4">
                         {user.is_admin ? (
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-500/20 text-purple-300">
-                            Usuário
+                            Admin
                           </span>
                         ) : (
                           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-zinc-500/20 text-zinc-400">
@@ -510,11 +509,10 @@ export function UsersManagementPage() {
                         )}
                       </td>
                       <td className="px-6 py-4">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                          user.status === 'ativo'
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${user.status === 'ativo'
                             ? 'bg-green-500/20 text-green-300'
                             : 'bg-red-500/20 text-red-300'
-                        }`}>
+                          }`}>
                           {user.status}
                         </span>
                       </td>

@@ -37,7 +37,7 @@ export function FutureTransactionsPage() {
   const { period } = usePeriodFilter();
   const { transactions, loading, isRefetching } = useFutureTransactionsQuery(period);
   const { invalidateAll } = useFutureTransactionMutations();
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearchTerm = useDeferredValue(searchTerm); // Busca deferida
   const [filterType, setFilterType] = useState<FilterType>('todos');
@@ -78,7 +78,7 @@ export function FutureTransactionsPage() {
     return transactions.filter((transaction) => {
       // Filtro de busca
       const searchLower = deferredSearchTerm.toLowerCase();
-      const matchesSearch = 
+      const matchesSearch =
         transaction.descricao.toLowerCase().includes(searchLower) ||
         transaction.pagador_recebedor?.toLowerCase().includes(searchLower) ||
         transaction.categoria?.descricao.toLowerCase().includes(searchLower);
@@ -180,7 +180,7 @@ export function FutureTransactionsPage() {
 
   const getDateStatus = (dateStr: string, status: string) => {
     if (status !== 'pendente') return null;
-    
+
     const date = parseISO(dateStr);
     const daysUntil = differenceInDays(date, new Date());
 
@@ -221,10 +221,10 @@ export function FutureTransactionsPage() {
   const handleEditConfirm = (selectedEditType: 'single' | 'future') => {
     // Armazenar o tipo de edição escolhido
     setEditType(selectedEditType);
-    
+
     // Fechar modal de confirmação
     setIsEditConfirmModalOpen(false);
-    
+
     // Abrir modal de edição com a transação selecionada
     if (selectedTransaction) {
       setModalType(selectedTransaction.tipo);
@@ -244,7 +244,7 @@ export function FutureTransactionsPage() {
       setIsCreditCardWarningOpen(true);
       return;
     }
-    
+
     setSelectedTransaction(transaction);
     setIsPaymentModalOpen(true);
   };
@@ -263,7 +263,7 @@ export function FutureTransactionsPage() {
     setIsPaymentModalOpen(false);
     setIsCancelModalOpen(false);
     setSelectedTransaction(null);
-    
+
     // Invalidar cache do React Query para recarregar dados
     invalidateAll();
   };
@@ -309,17 +309,30 @@ export function FutureTransactionsPage() {
               <span className="hidden sm:inline">{t('common.updating')}</span>
             </div>
           )}
-          <button
-            onClick={() => {
-              setSelectedTransaction(null);
-              setModalType('saida');
-              setIsCreateModalOpen(true);
-            }}
-            className="flex items-center gap-2 px-4 h-10 bg-[#22C55E] hover:bg-[#16A34A] text-white rounded-lg font-medium transition-colors shadow-lg shadow-[#22C55E]/20"
-          >
-            <Plus className="w-5 h-5" />
-            <span className="hidden sm:inline">Nova</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                setSelectedTransaction(null);
+                setModalType('entrada');
+                setIsCreateModalOpen(true);
+              }}
+              className="flex items-center gap-2 px-3 sm:px-4 h-10 bg-[#22C55E] hover:bg-[#16A34A] text-white rounded-lg font-medium transition-colors shadow-lg shadow-[#22C55E]/20"
+            >
+              <TrendingUp className="w-4 h-4" />
+              <span className="hidden sm:inline">{t('common.income')}</span>
+            </button>
+            <button
+              onClick={() => {
+                setSelectedTransaction(null);
+                setModalType('saida');
+                setIsCreateModalOpen(true);
+              }}
+              className="flex items-center gap-2 px-3 sm:px-4 h-10 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors shadow-lg shadow-red-500/20"
+            >
+              <TrendingDown className="w-4 h-4" />
+              <span className="hidden sm:inline">{t('common.expense')}</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -605,8 +618,8 @@ export function FutureTransactionsPage() {
                               {transaction.cartao_id && (
                                 <span className="flex items-center gap-1 px-2 py-0.5 bg-purple-500/10 text-purple-400 text-xs rounded border border-purple-500/30 font-medium">
                                   <CreditCard className="w-3 h-3" />
-                                  {transaction.parcela_info ? 
-                                    `${transaction.parcela_info.numero}/${transaction.parcela_info.total}x` : 
+                                  {transaction.parcela_info ?
+                                    `${transaction.parcela_info.numero}/${transaction.parcela_info.total}x` :
                                     'Cartão'}
                                 </span>
                               )}
@@ -663,7 +676,7 @@ export function FutureTransactionsPage() {
                       <td className="px-6 py-4">
                         <div className="flex items-center justify-end gap-2">
                           {transaction.status === 'pendente' ? (
-                            <button 
+                            <button
                               onClick={() => handleConfirmPayment(transaction)}
                               className="p-2 hover:bg-[#22C55E]/10 text-[#22C55E] rounded-lg transition-colors"
                               title="Marcar como pago"
@@ -671,7 +684,7 @@ export function FutureTransactionsPage() {
                               <CheckCircle2 className="w-4 h-4" />
                             </button>
                           ) : transaction.status === 'pago' && (
-                            <button 
+                            <button
                               onClick={() => handleCancelPayment(transaction)}
                               className="p-2 hover:bg-yellow-500/10 text-yellow-500 rounded-lg transition-colors"
                               title={t('action.cancelPayment')}
@@ -680,7 +693,7 @@ export function FutureTransactionsPage() {
                             </button>
                           )}
                           {transaction.recorrente && transaction.status === 'pendente' && (
-                            <button 
+                            <button
                               onClick={() => {
                                 setSelectedTransaction(transaction);
                                 setIsRecurrenceModalOpen(true);
@@ -692,7 +705,7 @@ export function FutureTransactionsPage() {
                             </button>
                           )}
                           {transaction.status === 'pendente' && (
-                            <button 
+                            <button
                               onClick={() => handleEdit(transaction)}
                               className="p-2 hover:bg-white/10 text-zinc-400 hover:text-white rounded-lg transition-colors"
                               title={t('action.edit')}
@@ -701,7 +714,7 @@ export function FutureTransactionsPage() {
                             </button>
                           )}
                           {transaction.status === 'pendente' && (
-                            <button 
+                            <button
                               onClick={() => handleDelete(transaction)}
                               className="p-2 hover:bg-red-500/10 text-red-400 hover:text-red-300 rounded-lg transition-colors"
                               title={t('action.delete')}
@@ -769,6 +782,7 @@ export function FutureTransactionsPage() {
         }}
         onSuccess={handleSuccess}
         type={modalType}
+        onTypeChange={setModalType}
         transactionToEdit={selectedTransaction}
         editType={editType}
       />
@@ -845,7 +859,7 @@ export function FutureTransactionsPage() {
               <CreditCard className="w-5 h-5 text-purple-400" />
               Como pagar esta despesa?
             </h3>
-            
+
             <ol className="space-y-2 text-sm text-zinc-300">
               <li className="flex items-start gap-2">
                 <span className="text-purple-400 font-bold mt-0.5">1.</span>

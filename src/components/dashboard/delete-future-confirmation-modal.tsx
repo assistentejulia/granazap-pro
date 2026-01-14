@@ -190,16 +190,14 @@ export function DeleteFutureConfirmationModal({
           >
             {t('common.cancel')}
           </Button>
-          {isRelated && (
-            <Button
-              onClick={handleDelete}
-              disabled={deleting}
-              className="px-6 bg-red-500 hover:bg-red-600 text-white font-medium"
-            >
-              {deleting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              {t('common.delete')}
-            </Button>
-          )}
+          <Button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="px-6 bg-red-500 hover:bg-red-600 text-white font-medium"
+          >
+            {deleting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+            {t('common.delete')}
+          </Button>
         </div>
       </div>
     </Modal>

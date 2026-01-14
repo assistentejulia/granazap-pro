@@ -7,6 +7,7 @@ import { useAllTransactions } from "@/hooks/use-all-transactions";
 import { useAccountFilter } from "@/hooks/use-account-filter";
 import { useAccounts } from "@/hooks/use-accounts";
 import { usePeriodFilter } from "@/hooks/use-period-filter";
+import { useTransactionsExport } from "@/hooks/use-transactions-export";
 import { cn } from "@/lib/utils";
 import { AllTransactionsModal } from "./all-transactions-modal";
 import { DeleteTransactionModal } from "./delete-transaction-modal";
@@ -19,6 +20,7 @@ import { EmptyStateEducational } from "@/components/ui/empty-state-educational";
 export function AllTransactionsPage() {
   const { t, language } = useLanguage();
   const { formatCurrency } = useCurrency();
+  const { exportTransactionsToPDF } = useTransactionsExport();
   const router = useRouter();
   const searchParams = useSearchParams();
   const contaIdParam = searchParams.get('conta_id');
@@ -156,7 +158,10 @@ export function AllTransactionsPage() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <button className="flex items-center gap-2 px-3 md:px-4 py-2 min-h-[44px] bg-[#111827] text-zinc-300 rounded-lg hover:bg-white/5 transition-colors border border-white/5 text-xs md:text-sm font-medium">
+          <button
+            onClick={() => exportTransactionsToPDF(filteredTransactions, formatCurrency)}
+            className="flex items-center gap-2 px-3 md:px-4 py-2 min-h-[44px] bg-[#111827] text-zinc-300 rounded-lg hover:bg-white/5 transition-colors border border-white/5 text-xs md:text-sm font-medium"
+          >
             <Download className="w-4 h-4" />
             <span className="hidden sm:inline">{t('common.export')}</span>
           </button>

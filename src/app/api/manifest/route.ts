@@ -34,20 +34,6 @@ export async function GET() {
       orientation: 'portrait-primary',
       scope: '/',
       icons: buildIcons(settings),
-      screenshots: [
-        {
-          src: '/screenshot-mobile.png',
-          sizes: '390x844',
-          type: 'image/png',
-          form_factor: 'narrow'
-        },
-        {
-          src: '/screenshot-desktop.png',
-          sizes: '1920x1080',
-          type: 'image/png',
-          form_factor: 'wide'
-        }
-      ],
       categories: ['finance', 'productivity', 'business'],
       shortcuts: [
         {

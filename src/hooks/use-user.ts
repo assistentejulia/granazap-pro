@@ -38,47 +38,7 @@ export function useUser() {
       if (authError) throw authError;
       if (!authUser) return { user: null, profile: null };
 
-      // 2. Tentar buscar como usuário principal
-      const { data: profileData, error: profileError } = await supabase
-        .from('usuarios')
-        .select(`
-          *,
-          is_admin,
-          planos_sistema!plano_id (
-            max_usuarios_dependentes,
-            permite_compartilhamento
-          )
-        `)
-        .eq('auth_user', authUser.id)
-        .single();
-
-      // Se encontrou como usuário principal, retornar
-      if (profileData) {
-        // Supabase retorna planos_sistema como objeto quando há apenas 1 resultado
-        const planosData = Array.isArray(profileData.planos_sistema)
-          ? profileData.planos_sistema[0]
-          : profileData.planos_sistema;
-
-        const finalProfile = {
-          user: authUser,
-          profile: {
-            ...profileData,
-            is_dependente: false,
-            max_usuarios_dependentes: planosData?.max_usuarios_dependentes || 0,
-            permite_compartilhamento: planosData?.permite_compartilhamento || false
-          } as UserProfile
-        };
-
-        // Salvar no localStorage para evitar flash no refresh
-        try {
-          localStorage.setItem('user_profile_cache', JSON.stringify(finalProfile));
-        } catch (e) {
-        }
-
-        return finalProfile;
-      }
-
-      // 3. Se não encontrou, verificar se é usuário dependente
+      // 2. PRIMEIRO: Verificar se é usuário dependente (Prioridade para acesso compartilhado)
       const { data: dependenteData, error: dependenteError } = await supabase
         .from('usuarios_dependentes')
         .select('id, nome, email, telefone, usuario_principal_id, status, permissoes')
@@ -129,6 +89,45 @@ export function useUser() {
           } as UserProfile
         };
 
+        // Salvar no localStorage para evitar flash no refresh
+        try {
+          localStorage.setItem('user_profile_cache', JSON.stringify(finalProfile));
+        } catch (e) {
+        }
+
+        return finalProfile;
+      }
+
+      // 3. SE NÃO FOR DEPENDENTE: Buscar como usuário principal (Fallback)
+      const { data: profileData, error: profileError } = await supabase
+        .from('usuarios')
+        .select(`
+          *,
+          is_admin,
+          planos_sistema!plano_id (
+            max_usuarios_dependentes,
+            permite_compartilhamento
+          )
+        `)
+        .eq('auth_user', authUser.id)
+        .single();
+
+      // Se encontrou como usuário principal, retornar
+      if (profileData) {
+        // Supabase retorna planos_sistema como objeto quando há apenas 1 resultado
+        const planosData = Array.isArray(profileData.planos_sistema)
+          ? profileData.planos_sistema[0]
+          : profileData.planos_sistema;
+
+        const finalProfile = {
+          user: authUser,
+          profile: {
+            ...profileData,
+            is_dependente: false,
+            max_usuarios_dependentes: planosData?.max_usuarios_dependentes || 0,
+            permite_compartilhamento: planosData?.permite_compartilhamento || false
+          } as UserProfile
+        };
 
         // Salvar no localStorage para evitar flash no refresh
         try {
@@ -139,7 +138,7 @@ export function useUser() {
         return finalProfile;
       }
 
-      // Se não encontrou nem como principal nem como dependente
+      // 4. Se não encontrou nada
       return { user: authUser, profile: null };
     },
     initialData: () => {

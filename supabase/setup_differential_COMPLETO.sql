@@ -78,6 +78,9 @@ COMMENT ON COLUMN contas_bancarias.user_id IS 'ID do usuário na tabela usuarios
 COMMENT ON COLUMN contas_bancarias.saldo_atual IS 'Saldo atual calculado automaticamente';
 COMMENT ON COLUMN contas_bancarias.tipo_conta IS 'Tipo de conta: pessoal ou pj (Pessoa Jurídica)';
 
+ALTER TABLE contas_bancarias 
+ADD COLUMN IF NOT EXISTS ultima_atualizacao TIMESTAMP WITH TIME ZONE DEFAULT NOW();
+
 -- 2.3 Tabela: cartoes_credito
 CREATE TABLE IF NOT EXISTS cartoes_credito (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -103,6 +106,9 @@ COMMENT ON COLUMN cartoes_credito.user_id IS 'ID do usuário na tabela usuarios 
 COMMENT ON COLUMN cartoes_credito.dia_fechamento IS 'Dia do mês em que a fatura fecha';
 COMMENT ON COLUMN cartoes_credito.dia_vencimento IS 'Dia do mês em que a fatura vence';
 COMMENT ON COLUMN cartoes_credito.conta_vinculada_id IS 'Conta bancária usada para pagar a fatura';
+
+ALTER TABLE cartoes_credito 
+ADD COLUMN IF NOT EXISTS ultima_atualizacao TIMESTAMP WITH TIME ZONE DEFAULT NOW();
 
 -- 2.4 Tabela: investment_assets
 CREATE TABLE IF NOT EXISTS investment_assets (
@@ -232,6 +238,9 @@ ADD COLUMN IF NOT EXISTS keywords TEXT[] DEFAULT '{}';
 COMMENT ON COLUMN categoria_trasacoes.tipo IS 'Tipo de categoria: entrada, saida ou ambos';
 COMMENT ON COLUMN categoria_trasacoes.keywords IS 'Keywords for AI-powered category identification';
 
+ALTER TABLE categoria_trasacoes 
+ADD COLUMN IF NOT EXISTS ultima_atualizacao TIMESTAMP WITH TIME ZONE DEFAULT NOW();
+
 -- 2.3 Tabela: transacoes
 -- Colunas para Modo PJ, Transferências, Contas Bancárias e Cartões
 ALTER TABLE transacoes 
@@ -251,6 +260,9 @@ ADD COLUMN IF NOT EXISTS cartao_id UUID REFERENCES cartoes_credito(id) ON DELETE
 
 ALTER TABLE transacoes 
 ADD COLUMN IF NOT EXISTS conta_destino_id UUID REFERENCES contas_bancarias(id) ON DELETE SET NULL;
+
+ALTER TABLE transacoes 
+ADD COLUMN IF NOT EXISTS ultima_atualizacao TIMESTAMP WITH TIME ZONE DEFAULT NOW();
 
 COMMENT ON COLUMN transacoes.conta_destino_id IS 'Conta bancária de destino (usado em transferências entre contas)';
 
@@ -657,6 +669,26 @@ END;
 $$;
 
 COMMENT ON FUNCTION verificar_proprietario_por_auth() IS 'Retorna o ID do usuário principal. Se for dependente, retorna o ID do titular. Usado nas políticas RLS para permitir acesso compartilhado.';
+
+-- 4.7.2 Função: get_usuario_id_from_auth (Necessária para AdjustBalanceModal)
+CREATE OR REPLACE FUNCTION get_usuario_id_from_auth()
+RETURNS INTEGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+    v_user_id INTEGER;
+BEGIN
+    SELECT id INTO v_user_id
+    FROM public.usuarios
+    WHERE auth_user = auth.uid();
+    
+    RETURN v_user_id;
+END;
+$$;
+
+COMMENT ON FUNCTION get_usuario_id_from_auth() IS 'Returns the numeric user ID for the authenticated user. Used by frontend components.';
 
 -- 4.8 Função: sync_user_id_from_auth (ATUALIZADA - 10/01/2026)
 -- Suporta tanto usuários principais quanto dependentes

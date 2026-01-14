@@ -1663,6 +1663,21 @@ BEGIN
 END;
 $function$;
 
+-- Função para sincronizar nome do plano (Trigger Function)
+CREATE OR REPLACE FUNCTION public.sync_plano_name()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (TG_OP = 'INSERT' AND NEW.plano_id IS NOT NULL) OR 
+       (TG_OP = 'UPDATE' AND NEW.plano_id IS DISTINCT FROM OLD.plano_id AND NEW.plano_id IS NOT NULL) THEN
+           
+        SELECT nome INTO NEW.plano
+        FROM public.planos_sistema
+        WHERE id = NEW.plano_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
 -- =====================================================
 -- 4. TRIGGERS
 -- =====================================================
@@ -1685,6 +1700,13 @@ CREATE TRIGGER create_default_notification_preferences
 AFTER INSERT ON auth.users
 FOR EACH ROW
 EXECUTE FUNCTION public.create_default_notification_preferences();
+
+-- Trigger para sincronizar nome do plano
+DROP TRIGGER IF EXISTS trigger_sync_plano_name ON public.usuarios;
+CREATE TRIGGER trigger_sync_plano_name
+BEFORE INSERT OR UPDATE ON public.usuarios
+FOR EACH ROW
+EXECUTE FUNCTION public.sync_plano_name();
 
 -- =====================================================
 -- 5. FOREIGN KEYS

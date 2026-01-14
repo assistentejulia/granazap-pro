@@ -2,15 +2,15 @@
 
 import { useMemo, useState } from "react";
 import { useExportPDFNew } from "@/hooks/use-export-pdf-new";
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  Tooltip, 
-  ResponsiveContainer, 
-  PieChart, 
-  Pie, 
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
   Cell,
   CartesianGrid,
   LineChart,
@@ -19,12 +19,12 @@ import {
   Area,
   Legend
 } from 'recharts';
-import { 
-  Calendar, 
-  TrendingUp, 
-  TrendingDown, 
-  Wallet, 
-  PieChart as PieChartIcon, 
+import {
+  Calendar,
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+  PieChart as PieChartIcon,
   BarChart3,
   Download,
   Filter,
@@ -55,7 +55,7 @@ export function ReportsPage() {
   const { period, customRange, setCustomDateRange, changePeriod } = usePeriodFilter();
   const { transactions, loading, stats } = useTransactionsQuery(period as any, customRange);
   const { filter: accountFilter } = useAccountFilter();
-  
+
   // Hooks para previsão financeira
   const { transactions: futureTransactions, loading: loadingFuture } = useFutureTransactionsQuery();
   const { accounts } = useAccounts(accountFilter);
@@ -80,14 +80,14 @@ export function ReportsPage() {
       const periodLabel = period === 'custom' && customRange
         ? `${format(new Date(customRange.start), 'dd-MM-yyyy')}_${format(new Date(customRange.end), 'dd-MM-yyyy')}`
         : period === 'month'
-        ? format(new Date(), 'MM-yyyy')
-        : period === 'year'
-        ? format(new Date(), 'yyyy')
-        : format(new Date(), 'dd-MM-yyyy');
-      
+          ? format(new Date(), 'MM-yyyy')
+          : period === 'year'
+            ? format(new Date(), 'yyyy')
+            : format(new Date(), 'dd-MM-yyyy');
+
       const accountType = accountFilter === 'pessoal' ? 'Pessoal' : 'PJ';
       const filename = `Relatorio_${accountType}_${periodLabel}.pdf`;
-      
+
       // Preparar dados para o novo hook
       const reportData = {
         stats,
@@ -101,9 +101,20 @@ export function ReportsPage() {
         accountFilter,
         formatCurrency
       };
-      
-      await exportReportToPDF(reportData, filename);
+
+      console.log('Iniciando exportação do PDF...', { period, accountFilter });
+      const success = await exportReportToPDF(reportData, filename);
+
+      if (success) {
+        console.log('PDF exportado com sucesso!');
+        // Opcional: toast.success('Relatório exportado com sucesso!');
+      } else {
+        console.error('Falha na exportação do PDF (retornou false)');
+        alert('Erro ao gerar o arquivo PDF. Verifique o console do navegador para mais detalhes.');
+      }
     } catch (error) {
+      console.error('Erro inesperado ao exportar:', error);
+      alert('Ocorreu um erro inesperado ao tentar exportar.');
     } finally {
       setIsExporting(false);
     }
@@ -114,7 +125,7 @@ export function ReportsPage() {
     const now = new Date();
     let start = new Date();
     let end = new Date();
-    
+
     if (period === 'custom' && customRange) {
       start = new Date(customRange.start);
       end = new Date(customRange.end);
@@ -160,7 +171,7 @@ export function ReportsPage() {
       .reduce((sum, t) => sum + Number(t.valor), 0);
 
     const currentBalance = accounts.reduce((sum, acc) => sum + acc.saldo_atual, 0);
-    
+
     // Saldo Previsto = Saldo Atual + (Receitas Pendentes - Despesas Pendentes)
     // Nota: O saldo atual já considera transações realizadas. 
     // Se o filtro for passado, receitas pendentes serão 0 (ou deveriam ser).
@@ -180,7 +191,7 @@ export function ReportsPage() {
   // Agrupar dados por mês/dia para o gráfico de evolução
   const evolutionData = useMemo(() => {
     const grouped = new Map();
-    
+
     // Ordenar transações por data (antiga para nova)
     const sortedTransactions = [...transactions].sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
 
@@ -191,20 +202,20 @@ export function ReportsPage() {
       let label = "";
 
       if (period === 'day' || period === 'week') {
-         key = t.data.split('T')[0];
-         label = format(date, 'dd/MM', { locale: ptBR });
+        key = t.data.split('T')[0];
+        label = format(date, 'dd/MM', { locale: ptBR });
       } else if (period === 'year') {
-         key = format(date, 'yyyy-MM');
-         label = format(date, 'MMM', { locale: ptBR });
+        key = format(date, 'yyyy-MM');
+        label = format(date, 'MMM', { locale: ptBR });
       } else {
-         key = t.data.split('T')[0];
-         label = format(date, 'dd/MM', { locale: ptBR });
+        key = t.data.split('T')[0];
+        label = format(date, 'dd/MM', { locale: ptBR });
       }
 
       if (!grouped.has(key)) {
         grouped.set(key, { name: label, fullDate: key, Receitas: 0, Despesas: 0, Saldo: 0 });
       }
-      
+
       const item = grouped.get(key);
       if (t.tipo === 'entrada') {
         item.Receitas += Number(t.valor);
@@ -240,7 +251,7 @@ export function ReportsPage() {
   // Agrupar dados por categoria
   const getCategoryData = (type: 'entrada' | 'saida') => {
     const categoryMap = new Map();
-    
+
     transactions
       .filter(t => t.tipo === type)
       .forEach(t => {
@@ -270,8 +281,8 @@ export function ReportsPage() {
             <h1 className="text-2xl font-bold text-white">{t('reports.title')}</h1>
             <span className={cn(
               "px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1",
-              accountFilter === 'pessoal' 
-                ? "bg-blue-500/10 text-blue-400 border border-blue-500/20" 
+              accountFilter === 'pessoal'
+                ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
                 : "bg-purple-500/10 text-purple-400 border border-purple-500/20"
             )}>
               {accountFilter === 'pessoal' ? '👤 Pessoal' : '🏢 PJ'}
@@ -317,7 +328,7 @@ export function ReportsPage() {
                 className={cn(
                   "px-4 py-2 rounded-md text-sm font-medium transition-all",
                   period === p
-                    ? "bg-white/10 text-white" 
+                    ? "bg-white/10 text-white"
                     : "text-zinc-400 hover:text-white hover:bg-white/5"
                 )}
               >
@@ -330,7 +341,7 @@ export function ReportsPage() {
               className={cn(
                 "px-4 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2",
                 period === 'custom'
-                  ? "bg-[#22C55E]/20 text-[#22C55E]" 
+                  ? "bg-[#22C55E]/20 text-[#22C55E]"
                   : "text-zinc-400 hover:text-white hover:bg-white/5"
               )}
             >
@@ -459,20 +470,20 @@ export function ReportsPage() {
             <ResponsiveContainer width="100%" height={320}>
               <BarChart data={evolutionData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                <XAxis 
-                  dataKey="name" 
+                <XAxis
+                  dataKey="name"
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: '#71717A', fontSize: 12 }}
                   dy={10}
                 />
-                <YAxis 
+                <YAxis
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: '#71717A', fontSize: 12 }}
-                  tickFormatter={(val) => `${getCurrencySymbol()}${val/1000}k`}
+                  tickFormatter={(val) => `${getCurrencySymbol()}${val / 1000}k`}
                 />
-                <Tooltip 
+                <Tooltip
                   cursor={{ fill: 'rgba(255,255,255,0.05)' }}
                   contentStyle={{ backgroundColor: '#1F2937', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
                   itemStyle={{ color: '#fff' }}
@@ -481,7 +492,7 @@ export function ReportsPage() {
                     return [formatCurrency(value || 0), translatedName];
                   }}
                 />
-                <Legend 
+                <Legend
                   formatter={(value: string) => value === 'Receitas' ? t('reports.income') : t('reports.expenses')}
                   wrapperStyle={{ paddingTop: '20px' }}
                 />
@@ -503,37 +514,37 @@ export function ReportsPage() {
               <AreaChart data={cumulativeData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                 <defs>
                   <linearGradient id="colorAcumulado" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#3B82F6" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                <XAxis 
-                  dataKey="name" 
+                <XAxis
+                  dataKey="name"
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: '#71717A', fontSize: 12 }}
                   dy={10}
                 />
-                <YAxis 
+                <YAxis
                   axisLine={false}
                   tickLine={false}
                   tick={{ fill: '#71717A', fontSize: 12 }}
-                  tickFormatter={(val) => `${getCurrencySymbol()}${val/1000}k`}
+                  tickFormatter={(val) => `${getCurrencySymbol()}${val / 1000}k`}
                 />
-                <Tooltip 
+                <Tooltip
                   cursor={{ stroke: 'rgba(255,255,255,0.1)' }}
                   contentStyle={{ backgroundColor: '#1F2937', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
                   itemStyle={{ color: '#fff' }}
                   formatter={(value: number | undefined) => formatCurrency(value || 0)}
                 />
-                <Area 
-                  type="monotone" 
-                  dataKey="Acumulado" 
-                  stroke="#3B82F6" 
+                <Area
+                  type="monotone"
+                  dataKey="Acumulado"
+                  stroke="#3B82F6"
                   strokeWidth={2}
-                  fillOpacity={1} 
-                  fill="url(#colorAcumulado)" 
+                  fillOpacity={1}
+                  fill="url(#colorAcumulado)"
                 />
               </AreaChart>
             </ResponsiveContainer>
@@ -547,145 +558,145 @@ export function ReportsPage() {
           <CalendarClock className="w-6 h-6 text-blue-500" />
           {t('reports.forecast')} ({t('reports.noPending').replace('Nenhum lançamento pendente', 'Pendentes')})
         </h2>
-        
+
         {/* Forecast Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-           {/* Total a Receber */}
-           <div className="bg-[#111827] border border-white/5 rounded-xl p-6 relative overflow-hidden">
-             <div className="relative z-10">
-                <div className="text-sm text-zinc-400 mb-2 flex items-center gap-2">
-                  <div className="p-1.5 bg-[#22C55E]/10 rounded-lg">
-                    <ArrowUpRight className="w-4 h-4 text-[#22C55E]" />
-                  </div>
-                  {t('reports.toReceive')}
+          {/* Total a Receber */}
+          <div className="bg-[#111827] border border-white/5 rounded-xl p-6 relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="text-sm text-zinc-400 mb-2 flex items-center gap-2">
+                <div className="p-1.5 bg-[#22C55E]/10 rounded-lg">
+                  <ArrowUpRight className="w-4 h-4 text-[#22C55E]" />
                 </div>
-                <p className="text-3xl font-bold font-mono text-[#22C55E]">
-                  {formatCurrency(forecastData.pendingIncome)}
-                </p>
-                <p className="text-xs text-zinc-500 mt-1">
-                  {format(dateRange.start, 'dd/MM/yyyy')} - {format(dateRange.end, 'dd/MM/yyyy')}
-                </p>
-             </div>
-           </div>
+                {t('reports.toReceive')}
+              </div>
+              <p className="text-3xl font-bold font-mono text-[#22C55E]">
+                {formatCurrency(forecastData.pendingIncome)}
+              </p>
+              <p className="text-xs text-zinc-500 mt-1">
+                {format(dateRange.start, 'dd/MM/yyyy')} - {format(dateRange.end, 'dd/MM/yyyy')}
+              </p>
+            </div>
+          </div>
 
-           {/* Total a Pagar */}
-           <div className="bg-[#111827] border border-white/5 rounded-xl p-6 relative overflow-hidden">
-             <div className="relative z-10">
-                <div className="text-sm text-zinc-400 mb-2 flex items-center gap-2">
-                  <div className="p-1.5 bg-[#EF4444]/10 rounded-lg">
-                    <ArrowDownRight className="w-4 h-4 text-[#EF4444]" />
-                  </div>
-                  {t('reports.toPay')}
+          {/* Total a Pagar */}
+          <div className="bg-[#111827] border border-white/5 rounded-xl p-6 relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="text-sm text-zinc-400 mb-2 flex items-center gap-2">
+                <div className="p-1.5 bg-[#EF4444]/10 rounded-lg">
+                  <ArrowDownRight className="w-4 h-4 text-[#EF4444]" />
                 </div>
-                <p className="text-3xl font-bold font-mono text-[#EF4444]">
-                  {formatCurrency(forecastData.pendingExpense)}
-                </p>
-                <p className="text-xs text-zinc-500 mt-1">
-                  {format(dateRange.start, 'dd/MM/yyyy')} - {format(dateRange.end, 'dd/MM/yyyy')}
-                </p>
-             </div>
-           </div>
+                {t('reports.toPay')}
+              </div>
+              <p className="text-3xl font-bold font-mono text-[#EF4444]">
+                {formatCurrency(forecastData.pendingExpense)}
+              </p>
+              <p className="text-xs text-zinc-500 mt-1">
+                {format(dateRange.start, 'dd/MM/yyyy')} - {format(dateRange.end, 'dd/MM/yyyy')}
+              </p>
+            </div>
+          </div>
 
-           {/* Saldo Previsto */}
-           <div className="bg-[#111827] border border-white/5 rounded-xl p-6 relative overflow-hidden">
-             <div className="relative z-10">
-                <div className="text-sm text-zinc-400 mb-2 flex items-center gap-2">
-                  <div className="p-1.5 bg-blue-500/10 rounded-lg">
-                    <Wallet className="w-4 h-4 text-blue-500" />
-                  </div>
-                  {t('reports.projectedBalance')}
+          {/* Saldo Previsto */}
+          <div className="bg-[#111827] border border-white/5 rounded-xl p-6 relative overflow-hidden">
+            <div className="relative z-10">
+              <div className="text-sm text-zinc-400 mb-2 flex items-center gap-2">
+                <div className="p-1.5 bg-blue-500/10 rounded-lg">
+                  <Wallet className="w-4 h-4 text-blue-500" />
                 </div>
-                <p className={cn(
-                  "text-3xl font-bold font-mono",
-                  forecastData.projectedBalance >= 0 ? "text-blue-500" : "text-[#EF4444]"
-                )}>
-                  {formatCurrency(forecastData.projectedBalance)}
-                </p>
-                <p className="text-xs text-zinc-500 mt-1">
-                  {t('reports.projectedFormula')}
-                </p>
-             </div>
-           </div>
+                {t('reports.projectedBalance')}
+              </div>
+              <p className={cn(
+                "text-3xl font-bold font-mono",
+                forecastData.projectedBalance >= 0 ? "text-blue-500" : "text-[#EF4444]"
+              )}>
+                {formatCurrency(forecastData.projectedBalance)}
+              </p>
+              <p className="text-xs text-zinc-500 mt-1">
+                {t('reports.projectedFormula')}
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* Forecast Lists */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Receitas Pendentes */}
           <div className="bg-[#111827] border border-white/5 rounded-xl p-6 flex flex-col h-[400px]">
-             <div className="flex justify-between items-center mb-4">
-               <div>
-                 <h3 className="text-lg font-semibold text-white">{t('reports.pendingIncomeTitle')}</h3>
-                 <p className="text-sm text-zinc-400">{t('reports.toReceiveLabel')}</p>
-               </div>
-               <span className="px-2 py-1 bg-[#22C55E]/10 text-[#22C55E] text-xs rounded border border-[#22C55E]/20">
-                 {t('reports.incomeLabel')}
-               </span>
-             </div>
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-white">{t('reports.pendingIncomeTitle')}</h3>
+                <p className="text-sm text-zinc-400">{t('reports.toReceiveLabel')}</p>
+              </div>
+              <span className="px-2 py-1 bg-[#22C55E]/10 text-[#22C55E] text-xs rounded border border-[#22C55E]/20">
+                {t('reports.incomeLabel')}
+              </span>
+            </div>
 
-             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
-               {forecastData.incomes.map((item) => (
-                 <div key={item.id} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/5 flex justify-between items-center">
-                   <div className="flex flex-col gap-1">
-                     <span className="text-sm font-medium text-white line-clamp-1">{item.descricao}</span>
-                     <div className="flex items-center gap-2 text-xs text-zinc-500">
-                       <span>{format(new Date(item.data_prevista), "dd/MM/yyyy", { locale: ptBR })}</span>
-                       <span className="px-1.5 py-0.5 rounded bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20">
-                         {item.categoria?.descricao || 'Outros'}
-                       </span>
-                     </div>
-                   </div>
-                   <span className="text-sm font-bold text-[#22C55E] whitespace-nowrap">
-                     {formatCurrency(item.valor)}
-                   </span>
-                 </div>
-               ))}
-               
-               {forecastData.incomes.length === 0 && (
-                  <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-2">
-                    <Receipt className="w-8 h-8 opacity-50" />
-                    <p className="text-sm">{t('reports.noPendingIncome')}</p>
+            <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
+              {forecastData.incomes.map((item) => (
+                <div key={item.id} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/5 flex justify-between items-center">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm font-medium text-white line-clamp-1">{item.descricao}</span>
+                    <div className="flex items-center gap-2 text-xs text-zinc-500">
+                      <span>{format(new Date(item.data_prevista), "dd/MM/yyyy", { locale: ptBR })}</span>
+                      <span className="px-1.5 py-0.5 rounded bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20">
+                        {item.categoria?.descricao || 'Outros'}
+                      </span>
+                    </div>
                   </div>
-               )}
-             </div>
+                  <span className="text-sm font-bold text-[#22C55E] whitespace-nowrap">
+                    {formatCurrency(item.valor)}
+                  </span>
+                </div>
+              ))}
+
+              {forecastData.incomes.length === 0 && (
+                <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-2">
+                  <Receipt className="w-8 h-8 opacity-50" />
+                  <p className="text-sm">{t('reports.noPendingIncome')}</p>
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Despesas Pendentes */}
           <div className="bg-[#111827] border border-white/5 rounded-xl p-6 flex flex-col h-[400px]">
-             <div className="flex justify-between items-center mb-4">
-               <div>
-                 <h3 className="text-lg font-semibold text-white">{t('reports.pendingExpensesTitle')}</h3>
-                 <p className="text-sm text-zinc-400">{t('reports.toPayLabel')}</p>
-               </div>
-               <span className="px-2 py-1 bg-[#EF4444]/10 text-[#EF4444] text-xs rounded border border-[#EF4444]/20">
-                 {t('reports.expenseLabel')}
-               </span>
-             </div>
+            <div className="flex justify-between items-center mb-4">
+              <div>
+                <h3 className="text-lg font-semibold text-white">{t('reports.pendingExpensesTitle')}</h3>
+                <p className="text-sm text-zinc-400">{t('reports.toPayLabel')}</p>
+              </div>
+              <span className="px-2 py-1 bg-[#EF4444]/10 text-[#EF4444] text-xs rounded border border-[#EF4444]/20">
+                {t('reports.expenseLabel')}
+              </span>
+            </div>
 
-             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
-               {forecastData.expenses.map((item) => (
-                 <div key={item.id} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/5 flex justify-between items-center">
-                   <div className="flex flex-col gap-1">
-                     <span className="text-sm font-medium text-white line-clamp-1">{item.descricao}</span>
-                     <div className="flex items-center gap-2 text-xs text-zinc-500">
-                       <span>{format(new Date(item.data_prevista), "dd/MM/yyyy", { locale: ptBR })}</span>
-                       <span className="px-1.5 py-0.5 rounded bg-[#EF4444]/10 text-[#EF4444] border border-[#EF4444]/20">
-                         {item.categoria?.descricao || 'Outros'}
-                       </span>
-                     </div>
-                   </div>
-                   <span className="text-sm font-bold text-[#EF4444] whitespace-nowrap">
-                     {formatCurrency(item.valor)}
-                   </span>
-                 </div>
-               ))}
-
-               {forecastData.expenses.length === 0 && (
-                  <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-2">
-                    <Receipt className="w-8 h-8 opacity-50" />
-                    <p className="text-sm">{t('reports.noPendingExpense')}</p>
+            <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
+              {forecastData.expenses.map((item) => (
+                <div key={item.id} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/5 flex justify-between items-center">
+                  <div className="flex flex-col gap-1">
+                    <span className="text-sm font-medium text-white line-clamp-1">{item.descricao}</span>
+                    <div className="flex items-center gap-2 text-xs text-zinc-500">
+                      <span>{format(new Date(item.data_prevista), "dd/MM/yyyy", { locale: ptBR })}</span>
+                      <span className="px-1.5 py-0.5 rounded bg-[#EF4444]/10 text-[#EF4444] border border-[#EF4444]/20">
+                        {item.categoria?.descricao || 'Outros'}
+                      </span>
+                    </div>
                   </div>
-               )}
-             </div>
+                  <span className="text-sm font-bold text-[#EF4444] whitespace-nowrap">
+                    {formatCurrency(item.valor)}
+                  </span>
+                </div>
+              ))}
+
+              {forecastData.expenses.length === 0 && (
+                <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-2">
+                  <Receipt className="w-8 h-8 opacity-50" />
+                  <p className="text-sm">{t('reports.noPendingExpense')}</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -698,7 +709,7 @@ export function ReportsPage() {
             <PieChartIcon className="w-5 h-5 text-zinc-400" />
             {t('reports.incomeOrigin')}
           </h3>
-          
+
           <div className="w-full relative" style={{ height: '256px' }}>
             <ResponsiveContainer width="100%" height={256}>
               <PieChart>
@@ -716,7 +727,7 @@ export function ReportsPage() {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1F2937', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
                   itemStyle={{ color: '#fff' }}
                   formatter={(value: number | undefined) => formatCurrency(value || 0)}
@@ -755,7 +766,7 @@ export function ReportsPage() {
             <PieChartIcon className="w-5 h-5 text-zinc-400" />
             {t('reports.expenseDestination')}
           </h3>
-          
+
           <div className="w-full relative" style={{ height: '256px' }}>
             <ResponsiveContainer width="100%" height={256}>
               <PieChart>
@@ -773,7 +784,7 @@ export function ReportsPage() {
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
-                <Tooltip 
+                <Tooltip
                   contentStyle={{ backgroundColor: '#1F2937', borderColor: 'rgba(255,255,255,0.1)', borderRadius: '8px' }}
                   itemStyle={{ color: '#fff' }}
                   formatter={(value: number | undefined) => formatCurrency(value || 0)}
@@ -812,7 +823,7 @@ export function ReportsPage() {
             <Receipt className="w-5 h-5 text-[#EF4444]" />
             {t('reports.topExpenses')}
           </h3>
-          
+
           <div className="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar space-y-3 pr-2">
             {topExpenses.map((expense) => (
               <div key={expense.id} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
@@ -832,7 +843,7 @@ export function ReportsPage() {
                 </div>
               </div>
             ))}
-            
+
             {topExpenses.length === 0 && (
               <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-2">
                 <Receipt className="w-8 h-8 opacity-50" />
