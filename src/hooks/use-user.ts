@@ -21,6 +21,7 @@ export interface UserProfile {
   tipos_conta_permitidos?: string[]; // Tipos de conta que dependente pode acessar (pessoal, pj)
   max_usuarios_dependentes?: number; // Limite de dependentes do plano
   permite_compartilhamento?: boolean; // Se o plano permite compartilhamento
+  is_admin?: boolean;
   [key: string]: any; // Permitir outras colunas do banco
 }
 
@@ -42,6 +43,7 @@ export function useUser() {
         .from('usuarios')
         .select(`
           *,
+          is_admin,
           planos_sistema!plano_id (
             max_usuarios_dependentes,
             permite_compartilhamento
@@ -53,10 +55,10 @@ export function useUser() {
       // Se encontrou como usuário principal, retornar
       if (profileData) {
         // Supabase retorna planos_sistema como objeto quando há apenas 1 resultado
-        const planosData = Array.isArray(profileData.planos_sistema) 
-          ? profileData.planos_sistema[0] 
+        const planosData = Array.isArray(profileData.planos_sistema)
+          ? profileData.planos_sistema[0]
           : profileData.planos_sistema;
-        
+
         const finalProfile = {
           user: authUser,
           profile: {
@@ -101,8 +103,8 @@ export function useUser() {
           .single();
 
         // Supabase retorna planos_sistema como objeto quando há apenas 1 resultado
-        const planosData = Array.isArray(principalData?.planos_sistema) 
-          ? principalData.planos_sistema[0] 
+        const planosData = Array.isArray(principalData?.planos_sistema)
+          ? principalData.planos_sistema[0]
           : principalData?.planos_sistema;
 
         const tiposContaPermitidos = (dependenteData.permissoes as any)?.tipos_conta_permitidos || ['pessoal', 'pj'];

@@ -6,27 +6,27 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     const supabase = await createClient();
-    
+
     // Buscar configurações do sistema
     const { data, error } = await supabase.rpc('get_system_settings');
-    
+
     if (error) {
       console.error('Error fetching system settings:', error);
       // Retornar manifest padrão em caso de erro
       return NextResponse.json(getDefaultManifest());
     }
-    
+
     const settings = Array.isArray(data) ? data[0] : data;
-    
+
     if (!settings) {
       return NextResponse.json(getDefaultManifest());
     }
-    
+
     // Construir manifest dinâmico
     const manifest = {
-      name: `${settings.app_name || 'GranaZap'} - Gestão Financeira`,
-      short_name: settings.app_name || 'GranaZap',
-      description: `Sistema completo de gestão financeira pessoal e empresarial - ${settings.app_name || 'GranaZap'}`,
+      name: `${settings.app_name || 'Assistente Julia'} - Gestão Financeira`,
+      short_name: settings.app_name || 'Assistente Julia',
+      description: `Sistema completo de gestão financeira pessoal e empresarial - ${settings.app_name || 'Assistente Julia'}`,
       start_url: '/dashboard',
       display: 'standalone',
       background_color: '#ffffff',
@@ -55,9 +55,9 @@ export async function GET() {
           short_name: 'Receita',
           description: 'Adicionar nova receita',
           url: '/dashboard/receitas?action=new',
-          icons: [{ 
-            src: settings.pwa_icon_192_url || settings.favicon_url || '/icon-192.png', 
-            sizes: '192x192' 
+          icons: [{
+            src: settings.pwa_icon_192_url || settings.favicon_url || '/icon-192.png',
+            sizes: '192x192'
           }]
         },
         {
@@ -65,9 +65,9 @@ export async function GET() {
           short_name: 'Despesa',
           description: 'Adicionar nova despesa',
           url: '/dashboard/despesas?action=new',
-          icons: [{ 
-            src: settings.pwa_icon_192_url || settings.favicon_url || '/icon-192.png', 
-            sizes: '192x192' 
+          icons: [{
+            src: settings.pwa_icon_192_url || settings.favicon_url || '/icon-192.png',
+            sizes: '192x192'
           }]
         },
         {
@@ -75,9 +75,9 @@ export async function GET() {
           short_name: 'Relatórios',
           description: 'Ver relatórios financeiros',
           url: '/dashboard/relatorios',
-          icons: [{ 
-            src: settings.pwa_icon_192_url || settings.favicon_url || '/icon-192.png', 
-            sizes: '192x192' 
+          icons: [{
+            src: settings.pwa_icon_192_url || settings.favicon_url || '/icon-192.png',
+            sizes: '192x192'
           }]
         }
       ],
@@ -90,7 +90,7 @@ export async function GET() {
         }
       }
     };
-    
+
     return NextResponse.json(manifest, {
       headers: {
         'Content-Type': 'application/manifest+json',
@@ -105,7 +105,7 @@ export async function GET() {
 
 function buildIcons(settings: any) {
   const icons = [];
-  
+
   // Ícone 192x192
   if (settings.pwa_icon_192_url) {
     icons.push({
@@ -131,7 +131,7 @@ function buildIcons(settings: any) {
       purpose: 'any maskable'
     });
   }
-  
+
   // Ícone 512x512
   if (settings.pwa_icon_512_url) {
     icons.push({
@@ -157,7 +157,7 @@ function buildIcons(settings: any) {
       purpose: 'any maskable'
     });
   }
-  
+
   // Apple Touch Icon
   if (settings.apple_touch_icon_url) {
     icons.push({
@@ -180,14 +180,14 @@ function buildIcons(settings: any) {
       type: 'image/png'
     });
   }
-  
+
   return icons;
 }
 
 function getDefaultManifest() {
   return {
-    name: 'GranaZap - Gestão Financeira',
-    short_name: 'GranaZap',
+    name: 'Assistente Julia - Gestão Financeira',
+    short_name: 'Assistente Julia',
     description: 'Sistema completo de gestão financeira pessoal e empresarial',
     start_url: '/dashboard',
     display: 'standalone',

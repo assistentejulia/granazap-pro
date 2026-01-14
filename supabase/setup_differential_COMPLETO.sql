@@ -1,5 +1,5 @@
 -- =====================================================
--- SETUP DIFFERENTIAL COMPLETO - GRANAZAP V5
+-- SETUP DIFFERENTIAL COMPLETO - Assistente Julia V5
 -- =====================================================
 -- Este arquivo contém TODAS as diferenças entre o setup.sql original
 -- e o banco de dados atual em produção no Supabase.
@@ -330,7 +330,7 @@ COMMENT ON COLUMN planos_sistema.permite_modo_pj IS 'Se este plano permite usar 
 -- 2.6 Tabela: configuracoes_sistema
 -- Colunas Admin e Configurações Adicionais
 ALTER TABLE configuracoes_sistema 
-ADD COLUMN IF NOT EXISTS support_email CHARACTER VARYING DEFAULT 'suporte@granazap.com';
+ADD COLUMN IF NOT EXISTS support_email CHARACTER VARYING DEFAULT 'suporte@Assistente Julia.com';
 
 -- Configuração unificada de cadastro (substituiu bloquear_cadastro_novos_usuarios)
 ALTER TABLE configuracoes_sistema 
@@ -3367,3 +3367,11 @@ SET DEFAULT '{
 -- ✅ Principal pode editar tipos_conta_permitidos via frontend
 -- ✅ Nada quebra - implementação 100% retrocompatível
 -- =====================================================
+
+-- =====================================================
+-- 12. CORREÇÕES DE CONSTRAINTS (13/01/2026)
+-- =====================================================
+-- Corrigir constraints para permitir deletar categorias (set null)
+ALTER TABLE transacoes ALTER COLUMN categoria_id DROP NOT NULL;
+ALTER TABLE lancamentos_futuros ALTER COLUMN categoria_id DROP NOT NULL;
+

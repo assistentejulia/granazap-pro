@@ -25,11 +25,11 @@ interface BrandingSettings {
 }
 
 const defaultSettings: BrandingSettings = {
-  appName: "GranaZap",
+  appName: "Assistente Julia",
   appLogoUrl: "",
   primaryColor: "#22C55E",
   secondaryColor: "#0A0F1C",
-  supportEmail: "suporte@granazap.com",
+  supportEmail: "suporte@Assistente Julia.com",
   habilitar_modo_pj: true,
   restringir_cadastro_usuarios_existentes: false,
 };

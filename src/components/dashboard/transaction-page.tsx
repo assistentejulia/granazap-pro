@@ -64,7 +64,7 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
       const matchesType = type === 'receita' ? t.tipo === 'entrada' : t.tipo === 'saida';
       const searchLower = deferredSearchTerm.toLowerCase();
       const matchesSearch = t.descricao.toLowerCase().includes(searchLower) ||
-        t.categoria?.descricao.toLowerCase().includes(searchLower);
+        (t.categoria?.descricao || "").toLowerCase().includes(searchLower);
       return matchesType && matchesSearch;
     });
   }, [transactions, type, deferredSearchTerm]);

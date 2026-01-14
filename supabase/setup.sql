@@ -1,8 +1,8 @@
 -- =====================================================
--- SETUP COMPLETO GRANAZAP V2.0 (NOVOS PROJETOS)
+-- SETUP COMPLETO Assistente Julia V2.0 (NOVOS PROJETOS)
 -- =====================================================
 -- 🎯 PARA NOVOS ALUNOS OU PROJETOS DO ZERO
--- Este script configura a estrutura COMPLETA do GranaZap V2.0
+-- Este script configura a estrutura COMPLETA do Assistente Julia V2.0
 -- 
 -- ⚠️ IMPORTANTE: Use este arquivo apenas para projetos NOVOS
 -- Se você já tem a estrutura antiga, use UPGRADE_V1_TO_V2_DIFERENCIAL.sql
@@ -138,7 +138,7 @@ CREATE TABLE public.configuracoes_sistema (
     primary_color text DEFAULT '#7c4dff'::text,
     secondary_color text DEFAULT '#6a3de8'::text,
     logo_url text DEFAULT ''::text,
-    company_name text DEFAULT 'GranaZap'::text,
+    company_name text DEFAULT 'Assistente Julia'::text,
     white_label_active boolean DEFAULT false,
     created_at timestamp with time zone DEFAULT now(),
     updated_at timestamp with time zone DEFAULT now(),
@@ -1874,7 +1874,7 @@ INSERT INTO public.configuracoes_sistema (
     login_background_image_url, login_use_background_image, login_background_image_opacity,
     login_hide_logo_on_image, login_show_text_on_image
 ) VALUES (
-    1, '#7c4dff', '#6a3de8', '', 'GranaZap', false, 
+    1, '#7c4dff', '#6a3de8', '', 'Assistente Julia', false, 
     now(), now(), 'Gerencie suas finanças de forma simples', 
     '', '', true, true, 
     '', '', '', '', 
@@ -1917,7 +1917,7 @@ ON CONFLICT (nome) DO UPDATE SET
 -- =====================================================
 -- SETUP COMPLETO CONCLUÍDO! ✅
 -- =====================================================
--- Sua plataforma GranaZap V6.1 está pronta com:
+-- Sua plataforma Assistente Julia V6.1 está pronta com:
 -- ✅ Estrutura completa de banco de dados
 -- ✅ Sistema de planos configuráveis  
 -- ✅ Controle de acesso Free configurável (7 dias padrão)
@@ -3028,5 +3028,5 @@ END $$;
 */
 
 -- =====================================================
--- FIM DO SETUP COMPLETO GRANAZAP V2.1 + PLANOS COMPARTILHADOS + CORREÇÕES DE SEGURANÇA
+-- FIM DO SETUP COMPLETO Assistente Julia V2.1 + PLANOS COMPARTILHADOS + CORREÇÕES DE SEGURANÇA
 -- =====================================================

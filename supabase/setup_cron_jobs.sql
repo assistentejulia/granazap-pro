@@ -1,5 +1,5 @@
 -- =====================================================
--- CONFIGURAÇÃO DE CRON JOBS - GRANAZAP V5
+-- CONFIGURAÇÃO DE CRON JOBS - Assistente Julia V5
 -- =====================================================
 -- Este arquivo configura os Cron Jobs para atualização automática
 -- de preços de investimentos (ações, FIIs, criptomoedas).
@@ -12,7 +12,7 @@
 -- 3. ✅ Edge Functions deployadas (update-investment-prices)
 -- 
 -- Data: 12/01/2026
--- Projeto: GranaZap V5
+-- Projeto: Assistente Julia V5
 -- =====================================================
 
 -- =====================================================

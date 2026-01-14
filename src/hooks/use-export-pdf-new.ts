@@ -91,17 +91,17 @@ export function useExportPDFNew() {
       // ===== HEADER =====
       pdf.setFillColor(17, 24, 39);
       pdf.rect(0, 0, pageWidth, 50, 'F');
-      
+
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(24);
       pdf.setFont('helvetica', 'bold');
       pdf.text('Relatório Financeiro', margin, 20);
-      
+
       pdf.setFontSize(12);
       pdf.setFont('helvetica', 'normal');
       pdf.setTextColor(156, 163, 175);
       pdf.text(getPeriodLabel(), margin, 30);
-      
+
       // Badge de conta
       const accountText = data.accountFilter === 'pessoal' ? 'Conta Pessoal' : 'Conta PJ';
       const badgeColor = data.accountFilter === 'pessoal' ? [59, 130, 246] : [168, 85, 247];
@@ -111,7 +111,7 @@ export function useExportPDFNew() {
       const badgeWidth = pdf.getTextWidth(accountText) + 8;
       pdf.roundedRect(pageWidth - margin - badgeWidth, 15, badgeWidth, 8, 2, 2, 'F');
       pdf.text(accountText, pageWidth - margin - badgeWidth + 4, 20);
-      
+
       pdf.setTextColor(107, 114, 128);
       pdf.setFontSize(8);
       pdf.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}`, margin, 40);
@@ -128,7 +128,7 @@ export function useExportPDFNew() {
       // Cards de resumo
       const cardHeight = 35;
       const cardWidth = (contentWidth - 10) / 3;
-      
+
       // Card Receitas
       pdf.setFillColor(17, 24, 39);
       pdf.roundedRect(margin, yPosition, cardWidth, cardHeight, 3, 3, 'F');
@@ -179,12 +179,12 @@ export function useExportPDFNew() {
 
       // ===== EVOLUÇÃO FINANCEIRA =====
       checkAddPage(60);
-      
+
       // Fundo para a seção
       const evolutionSectionStart = yPosition - 5;
       pdf.setFillColor(10, 15, 28);
       pdf.rect(0, evolutionSectionStart, pageWidth, 70, 'F');
-      
+
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
@@ -227,12 +227,12 @@ export function useExportPDFNew() {
 
       // ===== ANÁLISE POR CATEGORIA =====
       checkAddPage(80);
-      
+
       // Fundo para a seção
       const categorySectionStart = yPosition - 5;
       pdf.setFillColor(10, 15, 28);
       pdf.rect(0, categorySectionStart, pageWidth, 80, 'F');
-      
+
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
@@ -248,7 +248,7 @@ export function useExportPDFNew() {
       pdf.setFontSize(11);
       pdf.setFont('helvetica', 'bold');
       pdf.text('Receitas por Categoria', margin + 5, yPosition + 8);
-      
+
       let catY = yPosition + 15;
       data.incomeCategories.slice(0, 5).forEach((cat, idx) => {
         pdf.setTextColor(156, 163, 175);
@@ -269,7 +269,7 @@ export function useExportPDFNew() {
       pdf.setFontSize(11);
       pdf.setFont('helvetica', 'bold');
       pdf.text('Despesas por Categoria', margin + categoryCardWidth + 10, yPosition + 8);
-      
+
       catY = yPosition + 15;
       data.expenseCategories.slice(0, 5).forEach((cat, idx) => {
         pdf.setTextColor(156, 163, 175);
@@ -288,12 +288,12 @@ export function useExportPDFNew() {
       // ===== MAIORES DESPESAS =====
       if (data.topExpenses.length > 0) {
         checkAddPage(60);
-        
+
         // Fundo para a seção
         const expensesSectionStart = yPosition - 5;
         pdf.setFillColor(10, 15, 28);
         pdf.rect(0, expensesSectionStart, pageWidth, 70, 'F');
-        
+
         pdf.setTextColor(255, 255, 255);
         pdf.setFontSize(14);
         pdf.setFont('helvetica', 'bold');
@@ -335,12 +335,12 @@ export function useExportPDFNew() {
 
       // ===== PREVISÃO FINANCEIRA =====
       checkAddPage(50);
-      
+
       // Fundo para a seção
       const forecastSectionStart = yPosition - 5;
       pdf.setFillColor(10, 15, 28);
       pdf.rect(0, forecastSectionStart, pageWidth, 50, 'F');
-      
+
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
@@ -349,7 +349,7 @@ export function useExportPDFNew() {
 
       // Cards de previsão
       const forecastCardWidth = (contentWidth - 10) / 3;
-      
+
       // A Receber
       pdf.setFillColor(17, 24, 39);
       pdf.roundedRect(margin, yPosition, forecastCardWidth, 25, 3, 3, 'F');
@@ -402,22 +402,22 @@ export function useExportPDFNew() {
       const finalPage = pdf.getNumberOfPages();
       for (let i = 1; i <= finalPage; i++) {
         pdf.setPage(i);
-        
+
         // Adicionar footer
         pdf.setFillColor(17, 24, 39);
         pdf.rect(0, pageHeight - 20, pageWidth, 20, 'F');
         pdf.setTextColor(107, 114, 128);
         pdf.setFontSize(8);
         pdf.setFont('helvetica', 'normal');
-        pdf.text('Este relatório foi gerado automaticamente pelo sistema GranaZap', pageWidth / 2, pageHeight - 12, { align: 'center' });
+        pdf.text('Este relatório foi gerado automaticamente pelo sistema Assistente Julia', pageWidth / 2, pageHeight - 12, { align: 'center' });
         pdf.setFontSize(7);
-        pdf.text(`© ${new Date().getFullYear()} GranaZap - Gestão Financeira Inteligente`, pageWidth / 2, pageHeight - 7, { align: 'center' });
+        pdf.text(`© ${new Date().getFullYear()} Assistente Julia - Gestão Financeira Inteligente`, pageWidth / 2, pageHeight - 7, { align: 'center' });
         pdf.text(`Página ${i} de ${finalPage}`, pageWidth - margin, pageHeight - 7, { align: 'right' });
       }
 
       // Salvar PDF
       pdf.save(filename);
-      
+
       return true;
     } catch (error) {
       return false;

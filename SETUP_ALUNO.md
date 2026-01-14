@@ -1,4 +1,4 @@
-# 🚀 SETUP INICIAL - GRANAZAP
+# 🚀 SETUP INICIAL - Assistente Julia
 
 ## 📝 INSTRUÇÕES PARA O ALUNO
 
@@ -24,7 +24,7 @@ SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY_HERE
 
 **Exemplo de preenchimento:**
 ```
-MEU_GITHUB_URL=https://github.com/joaosilva/granazap-app.git
+MEU_GITHUB_URL=https://github.com/joaosilva/Assistente Julia-app.git
 GITHUB_TOKEN=ghp_1234567890abcdefghijklmnopqrstuvwxyz
 
 SUPABASE_PROJECT_URL=https://xyzabc123.supabase.co
@@ -36,7 +36,7 @@ SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI..
 📌 **GitHub Token:**
 1. Acesse: https://github.com/settings/tokens
 2. Clique em "Generate new token" > "Generate new token (classic)"
-3. Nome: "GranaZap Setup"
+3. Nome: "Assistente Julia Setup"
 4. Marque: ✅ repo (acesso total aos repositórios)
 5. Clique em "Generate token"
 6. **COPIE O TOKEN** (você só verá uma vez!)
@@ -58,9 +58,9 @@ Quando o aluno arrastar este arquivo e pedir para executar, a IA deve:
    - Executar: `git branch -M main`
    - Executar: `git push -u origin main`
    
-   **Exemplo:** Se MEU_GITHUB_URL = `https://github.com/joaosilva/granazap-app.git`
+   **Exemplo:** Se MEU_GITHUB_URL = `https://github.com/joaosilva/Assistente Julia-app.git`
    E GITHUB_TOKEN = `ghp_abc123`
-   Então: `git remote add origin https://ghp_abc123@github.com/joaosilva/granazap-app.git`
+   Então: `git remote add origin https://ghp_abc123@github.com/joaosilva/Assistente Julia-app.git`
 
 2. **Configurar arquivo SQL (supabase/setup_cron_jobs.sql):**
    - Abrir arquivo: `supabase/setup_cron_jobs.sql`

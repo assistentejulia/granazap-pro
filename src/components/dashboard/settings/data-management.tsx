@@ -27,22 +27,22 @@ export function DataManagement() {
   const [showClearSuccessModal, setShowClearSuccessModal] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  
+
   const supabase = createClient();
-  
+
   // Bloquear acesso para dependentes
   const isDependente = profile?.is_dependente === true;
 
   const confirmExport = async () => {
     if (!user) return;
     setExporting(true);
-    
+
     try {
       // Buscar categorias
       const { data: categorias } = await supabase
         .from('categoria_trasacoes')
         .select('id, descricao');
-      
+
       const categoriasMap = new Map(
         categorias?.map(c => [c.id, c.descricao]) || []
       );
@@ -129,16 +129,16 @@ export function DataManagement() {
       // Função para converter JSON para CSV
       const jsonToCSV = (data: any[], title: string) => {
         if (!data || data.length === 0) return '';
-        
+
         const headers = Object.keys(data[0]);
         const csvRows = [
           `\n=== ${title} ===`,
           headers.join(','),
-          ...data.map(row => 
+          ...data.map(row =>
             headers.map(header => {
               const value = row[header];
-              return typeof value === 'string' && value.includes(',') 
-                ? `"${value}"` 
+              return typeof value === 'string' && value.includes(',')
+                ? `"${value}"`
                 : value;
             }).join(',')
           )
@@ -147,24 +147,24 @@ export function DataManagement() {
       };
 
       // Criar conteúdo CSV
-      let csvContent = `Exportação de Dados - ${settings.appName || 'GranaZap'}\nData: ${new Date().toLocaleDateString('pt-BR')}\n`;
-      
+      let csvContent = `Exportação de Dados - ${settings.appName || 'Assistente Julia'}\nData: ${new Date().toLocaleDateString('pt-BR')}\n`;
+
       if (receitasFormatadas.length > 0) {
         csvContent += jsonToCSV(receitasFormatadas, 'Receitas');
       }
-      
+
       if (despesasFormatadas.length > 0) {
         csvContent += jsonToCSV(despesasFormatadas, 'Despesas');
       }
-      
+
       if (lancamentosFuturosFormatados.length > 0) {
         csvContent += jsonToCSV(lancamentosFuturosFormatados, 'Lançamentos Futuros');
       }
-      
+
       if (contasFormatadas.length > 0) {
         csvContent += jsonToCSV(contasFormatadas, 'Contas Bancárias');
       }
-      
+
       if (cartoesFormatados.length > 0) {
         csvContent += jsonToCSV(cartoesFormatados, 'Cartões de Crédito');
       }
@@ -178,7 +178,7 @@ export function DataManagement() {
       }
 
       // Gerar arquivo CSV
-      const fileName = `${(settings.appName || 'granazap').toLowerCase().replace(/\s+/g, '_')}_dados_completos_${new Date().toISOString().split('T')[0]}.csv`;
+      const fileName = `${(settings.appName || 'Assistente Julia').toLowerCase().replace(/\s+/g, '_')}_dados_completos_${new Date().toISOString().split('T')[0]}.csv`;
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       link.href = URL.createObjectURL(blob);
@@ -209,13 +209,13 @@ export function DataManagement() {
     try {
       // IMPORTANTE: Deletar na ordem correta para evitar erros de foreign key
       // Ordem: dados dependentes primeiro, depois os pais (contas, cartões, categorias)
-      
+
       // 1. Deletar transações (dependem de contas/cartões/categorias)
       const { error: tError } = await supabase
         .from('transacoes')
         .delete()
         .eq('usuario_id', profile.id);
-      
+
       if (tError) throw new Error(`Erro ao deletar transações: ${tError.message}`);
 
       // 2. Deletar lançamentos futuros (dependem de contas/cartões/categorias)
@@ -296,7 +296,7 @@ export function DataManagement() {
                 Acesso Restrito
               </h4>
               <p className="text-sm text-zinc-400">
-                Apenas o administrador da conta pode gerenciar dados e realizar exportações. 
+                Apenas o administrador da conta pode gerenciar dados e realizar exportações.
                 Entre em contato com o administrador para realizar essas ações.
               </p>
             </div>
@@ -327,7 +327,7 @@ export function DataManagement() {
               </p>
             </div>
           </div>
-          
+
           <button
             onClick={() => setShowExportModal(true)}
             disabled={exporting}

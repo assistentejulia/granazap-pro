@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { 
-  MessageCircle, 
+import {
+  MessageCircle,
   Sparkles,
   ArrowRight,
   Copy,
@@ -34,12 +34,12 @@ export function WhatsAppAgentPage() {
       /api\.whatsapp\.com\/send\?phone=(\d+)/, // https://api.whatsapp.com/send?phone=5591986122789
       /whatsapp\.com\/send\?phone=(\d+)/, // https://whatsapp.com/send?phone=5591986122789
     ];
-    
+
     for (const pattern of patterns) {
       const match = url.match(pattern);
       if (match && match[1]) return match[1];
     }
-    
+
     return '';
   };
 
@@ -62,7 +62,7 @@ export function WhatsAppAgentPage() {
   // Dados do usuário e app
   const userName = profile?.nome?.split(' ')[0] || 'Usuário';
   const userPhone = profile?.celular || '';
-  const appName = settings.appName || 'GranaZap';
+  const appName = settings.appName || 'Assistente Julia';
 
   const handleCopyPhone = () => {
     navigator.clipboard.writeText(agentPhone);
@@ -73,7 +73,7 @@ export function WhatsAppAgentPage() {
   const handleOpenWhatsApp = () => {
     if (!whatsappConfig?.whatsapp_contact_url) return;
     const message = encodeURIComponent(`Olá! Sou ${userName} e gostaria de usar o assistente do ${appName}.`);
-    const url = whatsappConfig.whatsapp_contact_url.includes('?') 
+    const url = whatsappConfig.whatsapp_contact_url.includes('?')
       ? `${whatsappConfig.whatsapp_contact_url}&text=${message}`
       : `${whatsappConfig.whatsapp_contact_url}?text=${message}`;
     window.open(url, '_blank');
@@ -200,11 +200,11 @@ export function WhatsAppAgentPage() {
               <Sparkles className="w-4 h-4 text-green-400" />
               <span className="text-xs font-medium text-green-400">Powered by AI</span>
             </div>
-            
+
             <h2 className="text-3xl font-bold text-white">
               Olá, {userName}!
             </h2>
-            
+
             <p className="text-zinc-300 leading-relaxed">
               Converse com nosso assistente inteligente e gerencie suas finanças de forma simples e rápida pelo WhatsApp.
             </p>
@@ -218,7 +218,7 @@ export function WhatsAppAgentPage() {
                 <span>Iniciar Conversa</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
-              
+
               <button
                 onClick={handleCopyPhone}
                 className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium border border-white/10 transition-all flex items-center justify-center gap-2"
@@ -245,7 +245,7 @@ export function WhatsAppAgentPage() {
               </div>
               <h3 className="font-semibold text-white">Informações de Contato</h3>
             </div>
-            
+
             <div className="space-y-3">
               <div>
                 <p className="text-xs text-zinc-500 mb-1">Número do Assistente</p>
@@ -260,9 +260,9 @@ export function WhatsAppAgentPage() {
                   <p className="text-sm text-yellow-400">Não configurado no painel admin</p>
                 )}
               </div>
-              
+
               <div className="h-px bg-white/5" />
-              
+
               <div>
                 <p className="text-xs text-zinc-500 mb-1">Seu Número Cadastrado</p>
                 {userPhone ? (
@@ -271,7 +271,7 @@ export function WhatsAppAgentPage() {
                   <p className="text-sm text-zinc-500 italic">Cadastre seu telefone no perfil</p>
                 )}
               </div>
-              
+
               <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 mt-4">
                 <p className="text-xs text-blue-300 leading-relaxed">
                   💡 <strong>Dica:</strong> Salve o número do assistente como "{appName}" na sua agenda para não perder as mensagens!
@@ -306,10 +306,10 @@ export function WhatsAppAgentPage() {
           <Zap className="w-5 h-5 text-yellow-500" />
           <h2 className="text-xl font-bold text-white">O que você pode fazer</h2>
         </div>
-        
+
         <div className="grid md:grid-cols-2 gap-4">
           {features.map((feature, idx) => (
-            <div 
+            <div
               key={idx}
               className="bg-[#111827] border border-white/5 rounded-xl p-5 hover:border-white/10 transition-all group"
             >
@@ -317,10 +317,10 @@ export function WhatsAppAgentPage() {
                 {feature.title}
               </h3>
               <p className="text-sm text-zinc-400 mb-4">{feature.description}</p>
-              
+
               <div className="space-y-2">
                 {feature.examples.map((example, i) => (
-                  <div 
+                  <div
                     key={i}
                     className="flex items-start gap-2 text-xs text-zinc-500 bg-[#0A0F1C] rounded-lg px-3 py-2 border border-white/5"
                   >
@@ -387,7 +387,7 @@ export function WhatsAppAgentPage() {
             <span className="text-2xl">🔹</span>
             Entenda a Diferença: Gastei vs Paguei vs Tenho que Pagar
           </h3>
-          
+
           <div className="space-y-4">
             <div className="bg-[#0A0F1C] rounded-lg p-4 border border-white/5">
               <h4 className="font-semibold text-green-400 mb-2">✅ "GASTEI" - Transação Imediata (Já Aconteceu)</h4>
@@ -454,7 +454,7 @@ export function WhatsAppAgentPage() {
             <span className="text-2xl">💳</span>
             Cartão de Débito vs Crédito
           </h3>
-          
+
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-[#0A0F1C] rounded-lg p-4 border border-white/5">
               <h4 className="font-semibold text-green-400 mb-2">Débito - Desconta Agora</h4>
@@ -494,7 +494,7 @@ export function WhatsAppAgentPage() {
             <span className="text-2xl">📊</span>
             Parcelamento em Cartão de Crédito
           </h3>
-          
+
           <div className="space-y-2">
             <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
               <Send className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
@@ -517,7 +517,7 @@ export function WhatsAppAgentPage() {
             <span className="text-2xl">🏦</span>
             Transações em Conta Bancária Específica
           </h3>
-          
+
           <p className="text-sm text-zinc-400 mb-3">Mencione a conta para vincular a transação:</p>
           <div className="space-y-2">
             <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
@@ -541,7 +541,7 @@ export function WhatsAppAgentPage() {
             <span className="text-2xl">🔄</span>
             Lançamentos Recorrentes
           </h3>
-          
+
           <p className="text-sm text-zinc-400 mb-3">Configure pagamentos que se repetem todo mês:</p>
           <div className="space-y-2">
             <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
@@ -565,7 +565,7 @@ export function WhatsAppAgentPage() {
             <span className="text-2xl">📈</span>
             Consultas e Relatórios Avançados
           </h3>
-          
+
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-3">
               <h4 className="font-semibold text-yellow-400 text-sm">Saldo de Contas:</h4>

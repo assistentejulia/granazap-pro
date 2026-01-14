@@ -24,7 +24,7 @@ async function fetchFutureTransactions(
     .from('lancamentos_futuros')
     .select(`
       *,
-      categoria:categoria_trasacoes!inner(descricao, icon_key)
+      categoria:categoria_trasacoes(descricao, icon_key)
     `)
     .eq('usuario_id', userId)
     .eq('tipo_conta', accountFilter);
@@ -76,7 +76,7 @@ export function useFutureTransactionsQuery(
   });
 
   // Filtrar por tipo no CLIENTE (não no servidor)
-  const filteredTransactions = tipo 
+  const filteredTransactions = tipo
     ? (query.data || []).filter(t => t.tipo === tipo)
     : (query.data || []);
 
@@ -110,7 +110,7 @@ export function useFutureTransactionMutations() {
 
   const invalidateAll = () => {
     // Invalidar apenas queries de futureTransactions, mas manter o cache
-    queryClient.invalidateQueries({ 
+    queryClient.invalidateQueries({
       queryKey: ['futureTransactions'],
       refetchType: 'active' // Só refetch queries ativas
     });

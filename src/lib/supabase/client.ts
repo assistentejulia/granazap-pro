@@ -15,7 +15,7 @@ export function createClient() {
       },
       global: {
         headers: {
-          'x-client-info': 'granazap-web',
+          'x-client-info': 'Assistente Julia-web',
         },
       },
     }

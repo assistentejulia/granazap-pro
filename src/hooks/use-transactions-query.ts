@@ -41,12 +41,12 @@ async function fetchTransactions(
   userFilter?: 'todos' | 'principal' | number | null
 ): Promise<{ transactions: Transaction[]; stats: TransactionStats }> {
   const supabase = createClient();
-  
+
   // Calcular período
   const now = new Date();
   let startDate = new Date();
   let endDate = new Date();
-  
+
   if (period === 'custom' && customRange) {
     startDate = new Date(customRange.start);
     endDate = new Date(customRange.end);
@@ -94,7 +94,7 @@ async function fetchTransactions(
     .from('transacoes')
     .select(`
       *,
-      categoria:categoria_trasacoes!inner(descricao, icon_key)
+      categoria:categoria_trasacoes(descricao, icon_key)
     `)
     .eq('usuario_id', userId)
     .eq('tipo_conta', accountFilter)
@@ -123,7 +123,7 @@ async function fetchTransactions(
   const income = transactions
     .filter(t => t.tipo === 'entrada')
     .reduce((sum, t) => sum + Number(t.valor), 0);
-  
+
   const expenses = transactions
     .filter(t => t.tipo === 'saida')
     .reduce((sum, t) => sum + Number(t.valor), 0);

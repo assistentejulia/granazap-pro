@@ -2,9 +2,9 @@
 
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { 
-  TrendingUp, 
-  TrendingDown, 
+import {
+  TrendingUp,
+  TrendingDown,
   Wallet,
   BarChart3,
   PieChart as PieChartIcon,
@@ -465,10 +465,10 @@ export function PDFReportTemplate({
           fontSize: '12px'
         }}>
           <p style={{ margin: '0 0 8px 0', fontSize: '13px' }}>
-            Este relatório foi gerado automaticamente pelo sistema GranaZap
+            Este relatório foi gerado automaticamente pelo sistema Assistente Julia
           </p>
           <p style={{ margin: 0, fontSize: '11px', opacity: 0.7 }}>
-            © {new Date().getFullYear()} GranaZap - Gestão Financeira Inteligente
+            © {new Date().getFullYear()} Assistente Julia - Gestão Financeira Inteligente
           </p>
         </div>
       </div>

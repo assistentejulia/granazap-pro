@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { 
+import {
   Download,
   Smartphone,
   Zap,
@@ -17,14 +17,14 @@ export function PWAInstallPage() {
   const { t } = useLanguage();
   const { settings } = useBranding();
   const { data: whatsappConfig } = useWhatsAppConfig();
-  const appName = settings.appName || 'GranaZap';
-  
+  const appName = settings.appName || 'Assistente Julia';
+
   // URL do vídeo tutorial puxada do painel admin
   const videoUrl = whatsappConfig?.video_url_instalacao || '';
-  
+
   // Get hostname only on client side to avoid hydration mismatch
   const [hostname, setHostname] = useState('seu-dominio.com');
-  
+
   useEffect(() => {
     setHostname(window.location.hostname);
   }, []);
@@ -118,7 +118,7 @@ export function PWAInstallPage() {
               <div className="relative bg-zinc-950 rounded-[3rem] p-3 shadow-2xl border-8 border-zinc-900">
                 {/* Notch */}
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-zinc-950 rounded-b-3xl z-10" />
-                
+
                 {/* Screen */}
                 <div className="relative bg-zinc-900 rounded-[2.5rem] overflow-hidden" style={{ aspectRatio: '9/19.5' }}>
                   <iframe
@@ -160,7 +160,7 @@ export function PWAInstallPage() {
 
         <div className="space-y-4">
           {steps.map((step, idx) => (
-            <div 
+            <div
               key={idx}
               className="bg-[#0A0F1C] border border-white/5 rounded-xl p-5 hover:border-white/10 transition-all"
             >
@@ -202,7 +202,7 @@ export function PWAInstallPage() {
 
         <div className="grid md:grid-cols-2 gap-4">
           {benefits.map((benefit, idx) => (
-            <div 
+            <div
               key={idx}
               className="flex items-start gap-3 bg-[#0A0F1C] border border-orange-500/10 rounded-lg p-4"
             >
@@ -225,7 +225,7 @@ export function PWAInstallPage() {
           <div className="flex-1">
             <h3 className="font-semibold text-blue-400 mb-2">Dica Importante</h3>
             <p className="text-sm text-zinc-300 leading-relaxed">
-              Após instalar, você pode usar o {appName} como um aplicativo normal, mesmo sem conexão com a internet para visualizar dados já carregados. 
+              Após instalar, você pode usar o {appName} como um aplicativo normal, mesmo sem conexão com a internet para visualizar dados já carregados.
               A instalação não ocupa espaço significativo no seu celular!
             </p>
           </div>

@@ -1,4 +1,4 @@
-# 📱 Guia Completo - GranaZap WhatsApp
+# 📱 Guia Completo - Assistente Julia WhatsApp
 
 ## ℹ️ Entenda como funciona Pessoal vs PJ
 
@@ -204,7 +204,7 @@ Quando você registra uma transação, o sistema retorna um ID:
 - ✅ "Excluir transação 12345"
 
 **Se não conseguir excluir pelo WhatsApp:**
-- Acesse: https://grana-zap.com/dashboard
+- Acesse: https://www.assistentejulia.com.br/dashboard
 - Encontre a transação e clique em "Excluir"
 
 ### 🔹 Diferença PF e PJ
@@ -222,7 +222,7 @@ Quando você registra uma transação, o sistema retorna um ID:
 
 ## 🌐 Funcionalidades Exclusivas da Plataforma Web
 
-Acesse: **https://grana-zap.com/dashboard**
+Acesse: **https://www.assistentejulia.com.br/dashboard**
 
 ### 📊 Gráficos e Dashboards
 - Visualize seus gastos em gráficos interativos
@@ -230,27 +230,27 @@ Acesse: **https://grana-zap.com/dashboard**
 - Compare períodos
 
 ### 💰 Gestão de Investimentos
-**Onde:** https://pro.grana-zap.com/dashboard/investimentos
+**Onde:** https://www.assistentejulia.com.br/dashboard/investimentos
 - Registre posições em ações
 - Acompanhe criptomoedas
 - Gerencie fundos de investimento (FI)
 - Visualize rentabilidade
 
 ### 🎯 Metas Financeiras
-**Onde:** https://pro.grana-zap.com/dashboard/metas
+**Onde:** https://www.assistentejulia.com.br/dashboard/metas
 - Meta de gastos (ex: gastar no máximo R$ 2.000 com alimentação)
 - Meta de ganhos (ex: receber pelo menos R$ 10.000 este mês)
 - Meta por categoria (ex: limitar transporte a R$ 500)
 
 ### 💳 Gestão Completa de Cartões
-**Onde:** https://pro.grana-zap.com/dashboard/cartoes/
+**Onde:** https://www.assistentejulia.com.br/dashboard/cartoes/
 - Ver extrato completo da fatura
 - Pagar/Fechar fatura do mês
 - Visualizar histórico de faturas
 - Gerenciar múltiplos cartões
 
 ### 🏦 Gestão de Contas Bancárias
-**Onde:** https://grana-zap.com/dashboard
+**Onde:** https://www.assistentejulia.com.br/dashboard
 - Visualizar todas as suas contas
 - **Separação automática:** Contas PF e PJ organizadas separadamente
 - Ver saldo de cada conta
@@ -258,7 +258,7 @@ Acesse: **https://grana-zap.com/dashboard**
 - Adicionar, editar ou remover contas
 
 ### 👥 Plano Casal - Compartilhamento
-**Onde:** https://pro.grana-zap.com/dashboard/configuracoes
+**Onde:** https://www.assistentejulia.com.br/dashboard/configuracoes
 1. Acesse Configurações > Compartilhamento
 2. Adicione o telefone do seu cônjuge
 3. Defina as permissões
@@ -266,14 +266,14 @@ Acesse: **https://grana-zap.com/dashboard**
 5. Pronto! Vocês compartilham as informações financeiras
 
 ### 👔 Adicionar Funcionário (PJ)
-**Onde:** https://pro.grana-zap.com/dashboard/configuracoes
+**Onde:** https://www.assistentejulia.com.br/dashboard/configuracoes
 - Mesmo processo do Plano Casal
 - Adicione telefone do funcionário
 - Defina autorizações específicas
 - Funcionário se cadastra com os mesmos dados
 
 ### 🔔 Lembretes Automáticos
-**Onde:** https://pro.grana-zap.com/dashboard/configuracoes
+**Onde:** https://www.assistentejulia.com.br/dashboard/configuracoes
 - Ative notificações de contas a pagar (CP) e receber (CR)
 - Defina quando lembrar:
   - No dia do vencimento
@@ -282,7 +282,7 @@ Acesse: **https://grana-zap.com/dashboard**
   - 1 semana antes
 
 ### 🌍 Configurações Regionais
-**Onde:** https://pro.grana-zap.com/dashboard/configuracoes
+**Onde:** https://www.assistentejulia.com.br/dashboard/configuracoes
 
 **Idiomas disponíveis:**
 - 🇧🇷 Português (Brasil)
@@ -297,11 +297,11 @@ Acesse: **https://grana-zap.com/dashboard**
 - EUR (Euro)
 
 ### 📱 Instalar como Aplicativo (PWA)
-**Instruções:** https://pro.grana-zap.com/dashboard/instalacao
+**Instruções:** https://www.assistentejulia.com.br/dashboard/instalacao
 1. Acesse a plataforma pelo navegador do celular
 2. No menu, procure "Adicionar à tela inicial"
 3. Confirme
-4. Pronto! Ícone do GranaZap na tela inicial
+4. Pronto! Ícone do Assistente Julia na tela inicial
 
 ---
 
@@ -330,16 +330,16 @@ Acesse: **https://grana-zap.com/dashboard**
 ## ❓ Resolvendo Problemas Comuns
 
 **"Não consegui excluir uma transação pelo WhatsApp"**
-→ Acesse https://grana-zap.com/dashboard e exclua por lá
+→ Acesse https://www.assistentejulia.com.br/dashboard e exclua por lá
 
 **"A categoria está errada"**
-→ Edite pela plataforma web em https://grana-zap.com/dashboard
+→ Edite pela plataforma web em https://www.assistentejulia.com.br/dashboard
 
 **"Não recebi o lembrete"**
-→ Verifique se as notificações estão ativadas em https://pro.grana-zap.com/dashboard/configuracoes
+→ Verifique se as notificações estão ativadas em https://www.assistentejulia.com.br/dashboard/configuracoes
 
 **"Minha fatura não está correta"**
-→ Acesse https://pro.grana-zap.com/dashboard/cartoes/ e verifique o extrato completo
+→ Acesse https://www.assistentejulia.com.br/dashboard/cartoes/ e verifique o extrato completo
 
 **"Não consigo acessar a plataforma web"**
 → Certifique-se de usar o **mesmo e-mail e telefone** do WhatsApp no cadastro
@@ -351,20 +351,20 @@ Acesse: **https://grana-zap.com/dashboard**
 → **"GASTEI"** = já aconteceu agora | **"PAGUEI"** = confirmar algo agendado | **"TENHO QUE PAGAR"** = agendar futuro
 
 **"Onde vejo minhas contas bancárias?"**
-→ Acesse https://grana-zap.com/dashboard - todas as contas estão lá, separadas por PF e PJ
+→ Acesse https://www.assistentejulia.com.br/dashboard - todas as contas estão lá, separadas por PF e PJ
 
 ---
 
 ## 🔗 Links Importantes
 
-- 🏠 **Dashboard Principal:** https://grana-zap.com/dashboard
-- 📝 **Cadastro:** https://grana-zap.com/auth/register
-- 🏦 **Gestão de Contas:** https://grana-zap.com/dashboard
-- 💳 **Cartões:** https://pro.grana-zap.com/dashboard/cartoes/
-- 📈 **Investimentos:** https://pro.grana-zap.com/dashboard/investimentos
-- 🎯 **Metas:** https://pro.grana-zap.com/dashboard/metas
-- ⚙️ **Configurações:** https://pro.grana-zap.com/dashboard/configuracoes
-- 📱 **Instalação:** https://pro.grana-zap.com/dashboard/instalacao
+- 🏠 **Dashboard Principal:** https://www.assistentejulia.com.br/dashboard
+- 📝 **Cadastro:** https://www.assistentejulia.com.br/cadastro
+- 🏦 **Gestão de Contas:** https://www.assistentejulia.com.br/dashboard
+- 💳 **Cartões:** https://www.assistentejulia.com.br/dashboard/cartoes/
+- 📈 **Investimentos:** https://www.assistentejulia.com.br/dashboard/investimentos
+- 🎯 **Metas:** https://www.assistentejulia.com.br/dashboard/metas
+- ⚙️ **Configurações:** https://www.assistentejulia.com.br/dashboard/configuracoes
+- 📱 **Instalação:** https://www.assistentejulia.com.br/dashboard/instalacao
 
 ---
 

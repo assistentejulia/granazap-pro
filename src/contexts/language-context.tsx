@@ -75,7 +75,7 @@ const translations = {
     'reset.avoidObvious': 'Evite senhas óbvias',
 
     // Features
-    'features.welcome': 'Bem-vindo ao GranaZap',
+    'features.welcome': 'Bem-vindo a Assistente Julia',
     'features.description': 'Gerencie suas finanças de forma simples e eficiente',
     'features.track': 'Acompanhe suas despesas e receitas',
     'features.trackSub': 'em tempo real',
@@ -1127,7 +1127,7 @@ const translations = {
     'error.confirmPassword': 'Por favor confirma tu contraseña',
 
     // Features
-    'features.welcome': 'Bienvenido a GranaZap',
+    'features.welcome': 'Bienvenido a Assistente Julia',
     'features.description': 'Control financiero completo en la palma de tu mano',
     'features.track': 'Rastrea tus finanzas',
     'features.trackSub': 'Registra ingresos y gastos fácilmente',
@@ -2091,7 +2091,7 @@ const translations = {
     'error.confirmPassword': 'Please confirm your password',
 
     // Features
-    'features.welcome': 'Welcome to GranaZap',
+    'features.welcome': 'Welcome to Assistente Julia',
     'features.description': 'Complete financial control in the palm of your hand',
     'features.track': 'Track your finances',
     'features.trackSub': 'Record income and expenses easily',

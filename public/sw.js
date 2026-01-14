@@ -1,5 +1,5 @@
-const CACHE_NAME = 'granazap-v1';
-const RUNTIME_CACHE = 'granazap-runtime';
+const CACHE_NAME = 'Assistente Julia-v1';
+const RUNTIME_CACHE = 'Assistente Julia-runtime';
 
 // Assets to cache on install
 const PRECACHE_ASSETS = [
@@ -107,7 +107,7 @@ async function syncTransactions() {
 // Push notifications
 self.addEventListener('push', (event) => {
   const data = event.data ? event.data.json() : {};
-  const title = data.title || 'GranaZap';
+  const title = data.title || 'Assistente Julia';
   const options = {
     body: data.body || 'Nova notificação',
     icon: '/icon-192.png',

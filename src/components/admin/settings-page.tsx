@@ -19,11 +19,11 @@ interface WhiteLabelSettings {
 
 export function SettingsPage() {
   const [settings, setSettings] = useState<WhiteLabelSettings>({
-    app_name: "GranaZap",
+    app_name: "Assistente Julia",
     app_logo_url: "",
     primary_color: "#22C55E",
     secondary_color: "#0A0F1C",
-    support_email: "suporte@granazap.com",
+    support_email: "suporte@Assistente Julia.com",
   });
   const [saving, setSaving] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -36,19 +36,19 @@ export function SettingsPage() {
   const loadSettings = async () => {
     try {
       const { data, error } = await supabase.rpc('get_system_settings');
-      
+
       if (error) throw error;
-      
+
       // A RPC pode retornar um array ou objeto direto
       const settingsData = Array.isArray(data) ? data[0] : data;
-      
+
       if (settingsData) {
         const newSettings = {
-          app_name: settingsData.app_name || "GranaZap",
+          app_name: settingsData.app_name || "Assistente Julia",
           app_logo_url: settingsData.app_logo_url || "",
           primary_color: settingsData.primary_color || "#22C55E",
           secondary_color: settingsData.secondary_color || "#0A0F1C",
-          support_email: settingsData.support_email || "suporte@granazap.com",
+          support_email: settingsData.support_email || "suporte@Assistente Julia.com",
         };
         setSettings(newSettings);
       }
@@ -59,7 +59,7 @@ export function SettingsPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      
+
       const result = await supabase.rpc('update_system_settings', {
         p_app_name: settings.app_name,
         p_app_logo_url: settings.app_logo_url,
@@ -78,7 +78,7 @@ export function SettingsPage() {
       if (response && !response.success) {
         throw new Error(response.message || 'Erro ao salvar configurações');
       }
-      
+
       setShowSuccessModal(true);
       // Recarregar a página para aplicar as mudanças globais
       setTimeout(() => {
@@ -93,7 +93,7 @@ export function SettingsPage() {
 
   const themes = [
     {
-      name: "GranaZap Original",
+      name: "Assistente Julia Original",
       primary: "#22C55E",
       secondary: "#0A0F1C",
       preview: "bg-[#22C55E]"

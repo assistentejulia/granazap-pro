@@ -75,7 +75,7 @@ const translations = {
     'reset.avoidObvious': 'Evite senhas óbvias',
     
     // Features
-    'features.welcome': 'Bem-vindo ao GranaZap',
+    'features.welcome': 'Bem-vindo a Assistente Julia',
     'features.description': 'Gerencie suas finanças de forma simples e eficiente',
     'features.track': 'Acompanhe suas despesas e receitas',
     'features.trackSub': 'em tempo real',
@@ -426,7 +426,7 @@ const translations = {
     'reset.avoidObvious': 'Evita contraseñas obvias',
     
     // Features
-    'features.welcome': 'Bienvenido a GranaZap',
+    'features.welcome': 'Bienvenido a Assistente Julia',
     'features.description': 'Gestiona tus finanzas de forma simple y eficiente',
     'features.track': 'Rastrea tus gastos e ingresos',
     'features.trackSub': 'en tiempo real',
@@ -777,7 +777,7 @@ const translations = {
     'reset.avoidObvious': 'Avoid obvious passwords',
     
     // Features
-    'features.welcome': 'Welcome to GranaZap',
+    'features.welcome': 'Welcome to Assistente Julia',
     'features.description': 'Manage your finances simply and efficiently',
     'features.track': 'Track your expenses and income',
     'features.trackSub': 'in real time',
@@ -1127,7 +1127,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     'reset.avoidObvious': 'Evite senhas óbvias',
     
     // Features
-    'features.welcome': 'Bem-vindo ao GranaZap',
+    'features.welcome': 'Bem-vindo a Assistente Julia',
     'features.description': 'Gerencie suas finanças de forma simples e eficiente',
     'features.track': 'Acompanhe suas despesas e receitas',
     'features.trackSub': 'em tempo real',
@@ -1487,7 +1487,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     'reset.avoidObvious': 'Evita contraseñas obvias',
     
     // Features
-    'features.welcome': 'Bienvenido a GranaZap',
+    'features.welcome': 'Bienvenido a Assistente Julia',
     'features.description': 'Gestiona tus finanzas de forma simple y eficiente',
     'features.track': 'Rastrea tus gastos e ingresos',
     'features.trackSub': 'en tiempo real',
@@ -1838,7 +1838,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     'reset.avoidObvious': 'Avoid obvious passwords',
     
     // Features
-    'features.welcome': 'Welcome to GranaZap',
+    'features.welcome': 'Welcome to Assistente Julia',
     'features.description': 'Manage your finances simply and efficiently',
     'features.track': 'Track your expenses and income',
     'features.trackSub': 'in real time',

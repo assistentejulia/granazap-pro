@@ -11,7 +11,7 @@
 export const brandingConfig = {
   // Informações da Marca
   brand: {
-    name: "GranaZap",
+    name: "Assistente Julia",
     logoText: "G", // Inicial para o logo
     tagline: "Transforme sua relação com o dinheiro e alcance seus objetivos financeiros",
     taglineSignup: "A melhor decisão que tomei para organizar minhas finanças",
@@ -22,7 +22,7 @@ export const brandingConfig = {
     primary: "var(--primary)", // Verde principal
     primaryDark: "var(--primary-dark)", // Verde escuro (se existir)
     primaryLight: "var(--primary-light)", // Verde claro
-    
+
     background: {
       main: "#0F172A", // Background principal
       card: "#1E293B", // Background dos cards
