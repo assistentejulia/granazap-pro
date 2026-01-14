@@ -3,6 +3,7 @@
 import { useState, useMemo, useDeferredValue } from "react";
 import { Plus, Search, Filter, Download, Pencil, Trash2, Loader2, Calendar } from "lucide-react";
 import { useTransactionsQuery } from "@/hooks/use-transactions-query";
+import { useTransactionsExport } from "@/hooks/use-transactions-export";
 import { useAccountFilter } from "@/hooks/use-account-filter";
 import { usePeriodFilter } from "@/hooks/use-period-filter";
 import { cn } from "@/lib/utils";
@@ -27,6 +28,7 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
   const { formatCurrency } = useCurrency();
   const { period, customRange, setCustomDateRange } = usePeriodFilter();
   const { transactions, loading, refetch } = useTransactionsQuery(period as any, customRange);
+  const { exportTransactionsToPDF } = useTransactionsExport();
   const { filter: accountFilter } = useAccountFilter();
 
   const [searchTerm, setSearchTerm] = useState("");
@@ -181,7 +183,10 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <button className="flex items-center gap-2 px-3 md:px-4 py-2 min-h-[44px] bg-[#111827] text-zinc-300 rounded-lg hover:bg-white/5 transition-colors border border-white/5 text-xs md:text-sm font-medium">
+          <button
+            onClick={() => exportTransactionsToPDF(filteredTransactions, formatCurrency)}
+            className="flex items-center gap-2 px-3 md:px-4 py-2 min-h-[44px] bg-[#111827] text-zinc-300 rounded-lg hover:bg-white/5 transition-colors border border-white/5 text-xs md:text-sm font-medium"
+          >
             <Download className="w-4 h-4" />
             <span className="hidden sm:inline">{t('common.export')}</span>
           </button>
