@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/contexts/language-context";
 import { CurrencyProvider } from "@/contexts/currency-context";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { QueryProvider } from "@/components/providers/query-provider";
 import { BrandingProvider } from "@/contexts/branding-context";
 import { BrandingStyleInjector } from "@/components/branding-style-injector";
@@ -89,17 +90,24 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <QueryProvider>
-          <LanguageProvider>
-            <CurrencyProvider>
-              <BrandingProvider>
-                <DynamicMetadata />
-                <PWARegister />
-                {children}
-              </BrandingProvider>
-            </CurrencyProvider>
-          </LanguageProvider>
-        </QueryProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <QueryProvider>
+            <LanguageProvider>
+              <CurrencyProvider>
+                <BrandingProvider>
+                  <DynamicMetadata />
+                  <PWARegister />
+                  {children}
+                </BrandingProvider>
+              </CurrencyProvider>
+            </LanguageProvider>
+          </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

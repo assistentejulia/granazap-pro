@@ -119,7 +119,7 @@ export function DashboardSidebar() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "bg-[#111827] border-r border-white/5 flex flex-col transition-all duration-300",
+          "bg-sidebar border-r border-sidebar-border flex flex-col transition-all duration-300",
           "fixed md:static inset-y-0 left-0 z-50",
           "md:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full",
@@ -127,7 +127,7 @@ export function DashboardSidebar() {
         )}
       >
         {/* Logo & Brand */}
-        <div className="p-4 border-b border-white/5 flex items-center justify-between">
+        <div className="p-4 border-b border-sidebar-border flex items-center justify-between">
           {!collapsed && (
             <Link href="/dashboard" className="flex items-center gap-3">
               {/* Mostrar logo se habilitado */}
@@ -145,13 +145,13 @@ export function DashboardSidebar() {
               )}
               {/* Mostrar nome se habilitado */}
               {settings.show_sidebar_name !== false && (
-                <span className="text-xl font-bold text-white">{settings.appName}</span>
+                <span className="text-xl font-bold text-sidebar-foreground">{settings.appName}</span>
               )}
             </Link>
           )}
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+            className="p-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-lg transition-colors"
           >
             {collapsed ? (
               <ChevronRight className="w-5 h-5" />
@@ -164,7 +164,7 @@ export function DashboardSidebar() {
         {/* Account Filter Toggle */}
         {!collapsed && permiteModoPJ && (podeVerPessoal || podeVerPJ) && (
           <div className="p-4">
-            <div className="flex gap-2 p-1 bg-[#0A0F1C] rounded-lg">
+            <div className="flex gap-2 p-1 bg-sidebar-accent/50 rounded-lg">
               {podeVerPessoal && (
                 <button
                   onClick={() => handleAccountFilterChange("pessoal")}
@@ -172,7 +172,7 @@ export function DashboardSidebar() {
                     "flex-1 px-3 py-2 rounded-md text-sm font-medium transition-all",
                     accountFilter === "pessoal"
                       ? "bg-blue-500 text-white shadow-lg shadow-blue-500/20"
-                      : "text-zinc-400 hover:text-white hover:bg-white/5"
+                      : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
                   )}
                 >
                   👤 {t('sidebar.personal')}
@@ -185,7 +185,7 @@ export function DashboardSidebar() {
                     "flex-1 px-3 py-2 rounded-md text-sm font-medium transition-all",
                     accountFilter === "pj"
                       ? "bg-purple-500 text-white shadow-lg shadow-purple-500/20"
-                      : "text-zinc-400 hover:text-white hover:bg-white/5"
+                      : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
                   )}
                 >
                   🏢 {t('sidebar.pj')}
@@ -206,8 +206,8 @@ export function DashboardSidebar() {
                 className={cn(
                   "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
                   isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-zinc-400 hover:text-white hover:bg-white/5"
+                    ? "bg-sidebar-accent text-sidebar-primary"
+                    : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
                 )}
                 title={collapsed ? item.name : undefined}
               >
@@ -218,7 +218,7 @@ export function DashboardSidebar() {
           })}
 
           {/* Divider */}
-          <div className="my-4 border-t border-white/5" />
+          <div className="my-4 border-t border-sidebar-border" />
 
           {/* Settings */}
           <Link
@@ -226,8 +226,8 @@ export function DashboardSidebar() {
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
               pathname === "/dashboard/configuracoes"
-                ? "bg-primary/10 text-primary"
-                : "text-zinc-400 hover:text-white hover:bg-white/5"
+                ? "bg-sidebar-accent text-sidebar-primary"
+                : "text-sidebar-foreground/70 hover:text-sidebar-foreground hover:bg-sidebar-accent"
             )}
             title={collapsed ? t('sidebar.settings') : undefined}
           >
@@ -292,7 +292,7 @@ export function DashboardSidebar() {
         </nav>
 
         {/* User Section */}
-        <div className="p-4 border-t border-white/5 space-y-3">
+        <div className="p-4 border-t border-sidebar-border space-y-3">
           {/* User Info */}
           {!collapsed && profile && (
             <div className="flex items-center gap-3 px-3 py-2">
@@ -300,8 +300,8 @@ export function DashboardSidebar() {
                 {profile.nome.charAt(0).toUpperCase()}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{profile.nome}</p>
-                <p className="text-xs text-zinc-500 truncate">{profile.email}</p>
+                <p className="text-sm font-medium truncate text-sidebar-foreground">{profile.nome}</p>
+                <p className="text-xs text-sidebar-foreground/70 truncate">{profile.email}</p>
               </div>
             </div>
           )}

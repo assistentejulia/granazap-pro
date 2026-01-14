@@ -45,7 +45,7 @@ export function BottomNav() {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-[#111827] border-t border-white/5 safe-area-inset-bottom">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 bg-background border-t border-border safe-area-inset-bottom">
       <div className="flex items-center justify-around px-2 py-2">
         {navigation.map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
@@ -57,7 +57,7 @@ export function BottomNav() {
                 "flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-all min-w-[64px]",
                 isActive
                   ? "text-primary bg-primary/10"
-                  : "text-zinc-400 hover:text-white hover:bg-white/5"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
               )}
             >
               <item.icon className={cn("w-5 h-5", isActive && "scale-110")} />

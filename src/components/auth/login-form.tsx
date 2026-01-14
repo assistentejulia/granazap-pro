@@ -27,14 +27,14 @@ export function LoginForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [errorTitle, setErrorTitle] = useState("Erro ao fazer login");
   const [pendingEmail, setPendingEmail] = useState("");
-  
+
   // Schema for validation with translations
   const loginSchema = z.object({
     email: z.string().email({ message: t('error.invalidEmail') }),
     password: z.string().min(6, { message: t('error.passwordMin') }),
     rememberMe: z.boolean(),
   });
-  
+
   const {
     register,
     handleSubmit,
@@ -53,7 +53,7 @@ export function LoginForm() {
     try {
       // Importar dinamicamente para evitar problemas de SSR
       const { loginUser } = await import('@/lib/auth/login');
-      
+
       const result = await loginUser({
         email: data.email,
         password: data.password,
@@ -62,14 +62,14 @@ export function LoginForm() {
 
       if (!result.success) {
         // Verificar se o erro é de email não confirmado
-        if (result.error?.includes('confirme seu email') || 
-            result.error?.includes('Email not confirmed') ||
-            result.error?.toLowerCase().includes('confirm')) {
+        if (result.error?.includes('confirme seu email') ||
+          result.error?.includes('Email not confirmed') ||
+          result.error?.toLowerCase().includes('confirm')) {
           setPendingEmail(data.email);
           setShowEmailPendingModal(true);
           return;
         }
-        
+
         // Definir título dinâmico baseado no tipo de erro
         let title = "Erro ao fazer login";
         if (result.error?.includes('não encontrado')) {
@@ -79,7 +79,7 @@ export function LoginForm() {
         } else if (result.error?.includes('Muitas tentativas')) {
           title = "Limite de tentativas excedido";
         }
-        
+
         // Mostrar modal de erro
         setErrorTitle(title);
         setErrorMessage(result.error || 'Email ou senha incorretos. Verifique suas credenciais.');
@@ -89,7 +89,7 @@ export function LoginForm() {
 
       // Sucesso! Redirecionar para dashboard
       window.location.href = '/dashboard';
-      
+
     } catch (error: any) {
       setErrorTitle('Erro ao fazer login');
       setErrorMessage(error?.message || 'Erro ao fazer login. Tente novamente.');
@@ -101,7 +101,7 @@ export function LoginForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-5">
       {/* Email Input */}
       <div className="flex flex-col w-full space-y-2">
-        <label className="text-sm font-medium leading-none text-white" htmlFor="email">
+        <label className="text-sm font-medium leading-none text-foreground" htmlFor="email">
           {t('login.email')}
         </label>
         <Input
@@ -121,7 +121,7 @@ export function LoginForm() {
 
       {/* Password Input */}
       <div className="flex flex-col w-full space-y-2">
-        <label className="text-sm font-medium leading-none text-white" htmlFor="password">
+        <label className="text-sm font-medium leading-none text-foreground" htmlFor="password">
           {t('login.password')}
         </label>
         <Input
@@ -134,7 +134,7 @@ export function LoginForm() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-zinc-500 hover:text-white focus:outline-none transition-colors"
+              className="text-muted-foreground hover:text-foreground focus:outline-none transition-colors"
             >
               {showPassword ? (
                 <EyeOff className="h-5 w-5" />
@@ -163,7 +163,7 @@ export function LoginForm() {
               />
             )}
           />
-          <span className="text-sm text-zinc-400 select-none">{t('login.rememberMe')}</span>
+          <span className="text-sm text-muted-foreground select-none">{t('login.rememberMe')}</span>
         </label>
         <Link className="text-sm text-primary hover:text-primary/80 font-medium transition-colors" href="/esqueci-senha">
           {t('login.forgotPassword')}

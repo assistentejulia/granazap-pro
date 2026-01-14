@@ -32,9 +32,9 @@ export function AuthLayout({
   showBackToLogin = false,
 }: AuthLayoutProps) {
   const { settings } = useBranding();
-  
+
   return (
-    <div className="min-h-screen flex bg-[#0F172A] text-white overflow-hidden font-sans">
+    <div className="min-h-screen flex bg-background text-foreground overflow-hidden font-sans">
       {/* --- LEFT PANEL (60% Desktop, Hidden Mobile) --- */}
       <div className="relative hidden w-full lg:flex lg:w-[60%] flex-col justify-between p-8 xl:p-12 bg-gradient-to-br from-[#1E3A2F] via-[#0F172A] to-[#0F172A]">
         {/* Decorative Background Orbs */}
@@ -68,7 +68,7 @@ export function AuthLayout({
         {/* Features */}
         <div className="relative flex-1 flex items-center justify-center py-8">
           <div className="relative w-full max-w-[600px] space-y-8">
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -112,15 +112,15 @@ export function AuthLayout({
       </div>
 
       {/* --- RIGHT PANEL (40% Desktop, Full Mobile) --- */}
-      <div className="w-full lg:w-[40%] flex flex-col items-center justify-center p-6 lg:p-8 xl:p-12 bg-[#0F172A] lg:border-l border-white/5 relative min-h-screen">
-        
+      <div className="w-full lg:w-[40%] flex flex-col items-center justify-center p-6 lg:p-8 xl:p-12 bg-background lg:border-l border-border relative min-h-screen">
+
         {/* Mobile Background Decoration */}
         <div className="absolute inset-0 lg:hidden pointer-events-none overflow-hidden">
           <div className="absolute top-[10%] right-[10%] w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px]" />
         </div>
 
         <div className="w-full max-w-[440px] space-y-6 relative z-10">
-          
+
           {/* Brand Name (Mobile/Right Panel) */}
           <div className="text-center lg:text-left lg:hidden mb-8">
             <Link href="/" className="flex items-center justify-center gap-3">
