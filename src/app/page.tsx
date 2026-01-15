@@ -1,5 +1,6 @@
 import { Navbar } from "@/components/landing/navbar";
 import { HeroSection } from "@/components/landing/hero-section";
+import { WebFeatureSection } from "@/components/landing/web-feature-section";
 import { ProblemSection } from "@/components/landing/problem-section";
 import { SolutionSection } from "@/components/landing/solution-section";
 import { TechSection } from "@/components/landing/tech-section";
@@ -12,6 +13,7 @@ export default function LandingPage() {
     <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30">
       <Navbar />
       <HeroSection />
+      <WebFeatureSection />
       <ProblemSection />
       <SolutionSection />
       <TechSection />
