@@ -272,23 +272,7 @@ export function DashboardSidebar() {
           </Link>
 
           {/* Admin Link - Only visible to admins */}
-          {profile?.is_admin && (
-            <Link
-              href="/admin/users"
-              className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
-                pathname.startsWith('/admin')
-                  ? "bg-red-500/10 text-red-600 dark:text-red-500"
-                  : "text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-500/10"
-              )}
-              title={collapsed ? 'Admin' : undefined}
-            >
-              <User className="w-5 h-5 flex-shrink-0" />
-              {!collapsed && (
-                <span className="text-sm font-medium">Gestão de Usuários</span>
-              )}
-            </Link>
-          )}
+
         </nav>
 
         {/* User Section */}
