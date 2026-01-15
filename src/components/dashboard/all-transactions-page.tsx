@@ -16,11 +16,12 @@ import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { InfoCard } from "@/components/ui/info-card";
 import { EmptyStateEducational } from "@/components/ui/empty-state-educational";
+import { ExportDropdown } from "./export-dropdown";
 
 export function AllTransactionsPage() {
   const { t, language } = useLanguage();
   const { formatCurrency } = useCurrency();
-  const { exportTransactionsToPDF } = useTransactionsExport();
+  const { exportTransactionsToPDF, exportTransactionsToExcel } = useTransactionsExport();
   const router = useRouter();
   const searchParams = useSearchParams();
   const contaIdParam = searchParams.get('conta_id');
@@ -29,6 +30,9 @@ export function AllTransactionsPage() {
   const { transactions, loading, refetch } = useAllTransactions(period as any, customRange);
   const { filter: accountFilter } = useAccountFilter();
   const { accounts } = useAccounts(accountFilter);
+
+
+  const [isExporting, setIsExporting] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -136,13 +140,27 @@ export function AllTransactionsPage() {
     window.dispatchEvent(new CustomEvent('periodFilterChange', { detail: 'month' }));
   };
 
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    exportTransactionsToPDF(filteredTransactions, formatCurrency);
+    setIsExporting(false);
+  };
+
+  const handleExportExcel = async () => {
+    setIsExporting(true);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    exportTransactionsToExcel(filteredTransactions, formatCurrency);
+    setIsExporting(false);
+  };
+
   return (
     <div className="space-y-4 md:space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 md:gap-3">
-            <h1 className="text-xl md:text-2xl font-bold text-white">{t('sidebar.transactions')}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-foreground">{t('sidebar.transactions')}</h1>
             <span className={cn(
               "px-2 md:px-3 py-1 rounded-full text-xs font-semibold",
               accountFilter === 'pessoal'
@@ -158,13 +176,11 @@ export function AllTransactionsPage() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <button
-            onClick={() => exportTransactionsToPDF(filteredTransactions, formatCurrency)}
-            className="flex items-center gap-2 px-3 md:px-4 py-2 min-h-[44px] bg-[#111827] text-zinc-300 rounded-lg hover:bg-white/5 transition-colors border border-white/5 text-xs md:text-sm font-medium"
-          >
-            <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('common.export')}</span>
-          </button>
+          <ExportDropdown
+            onExportPDF={handleExportPDF}
+            onExportExcel={handleExportExcel}
+            isExporting={isExporting}
+          />
           <button
             onClick={() => setIsModalOpen(true)}
             className="flex items-center gap-2 px-3 md:px-4 py-2 min-h-[44px] bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors text-xs md:text-sm font-medium"
@@ -177,23 +193,23 @@ export function AllTransactionsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4">
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
-          <p className="text-xs md:text-sm text-zinc-400 mb-2">{t('transactions.income')}</p>
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6">
+          <p className="text-xs md:text-sm text-muted-foreground mb-2">{t('transactions.income')}</p>
           <p className="text-xl md:text-2xl font-bold font-mono text-primary">
             {formatCurrency(totalIncome)}
           </p>
         </div>
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
-          <p className="text-xs md:text-sm text-zinc-400 mb-2">{t('transactions.expenses')}</p>
-          <p className="text-xl md:text-2xl font-bold font-mono text-red-500">
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6">
+          <p className="text-xs md:text-sm text-muted-foreground mb-2">{t('transactions.expenses')}</p>
+          <p className="text-xl md:text-2xl font-bold font-mono text-destructive">
             {formatCurrency(totalExpense)}
           </p>
         </div>
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6 sm:col-span-2 lg:col-span-1">
-          <p className="text-xs md:text-sm text-zinc-400 mb-2">{t('dashboard.stats.balance')}</p>
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6 sm:col-span-2 lg:col-span-1">
+          <p className="text-xs md:text-sm text-muted-foreground mb-2">{t('dashboard.stats.balance')}</p>
           <p className={cn(
             "text-xl md:text-2xl font-bold font-mono",
-            balance >= 0 ? "text-primary" : "text-red-500"
+            balance >= 0 ? "text-primary" : "text-destructive"
           )}>
             {formatCurrency(Math.abs(balance))}
           </p>
@@ -202,15 +218,15 @@ export function AllTransactionsPage() {
 
       {/* Filters & Search */}
       <div className="space-y-4">
-        <div className="flex flex-col md:flex-row gap-4 bg-[#111827] border border-white/5 rounded-xl p-4">
+        <div className="flex flex-col md:flex-row gap-4 bg-card border border-border rounded-xl p-4">
           <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder={t('common.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-10 pr-4 py-2 text-sm text-white placeholder:text-zinc-500 focus:outline-none focus:border-primary"
+              className="w-full bg-background border border-input rounded-lg pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             />
           </div>
           <button
@@ -219,7 +235,7 @@ export function AllTransactionsPage() {
               "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors border text-sm font-medium",
               showFilters
                 ? "bg-primary text-primary-foreground border-primary"
-                : "bg-[#0A0F1C] text-zinc-300 border-white/10 hover:bg-white/5"
+                : "bg-background text-muted-foreground border-input hover:bg-muted"
             )}
           >
             <Filter className="w-4 h-4" />
@@ -230,13 +246,14 @@ export function AllTransactionsPage() {
         {/* Active Filters Badges */}
         {filteredAccount && (
           <div className="flex items-center gap-2">
-            <span className="text-sm text-zinc-400">Filtrando por:</span>
+            <span className="text-sm text-muted-foreground">Filtrando por:</span>
             <div className="flex items-center gap-2 px-3 py-1.5 bg-blue-500/10 border border-blue-500/20 rounded-full">
               <Wallet className="w-3.5 h-3.5 text-blue-400" />
               <span className="text-sm font-medium text-blue-400">{filteredAccount.nome}</span>
               <button
                 onClick={clearAccountFilter}
                 className="ml-1 text-blue-400/60 hover:text-blue-400 transition-colors"
+                aria-label="Remover filtro"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -261,9 +278,9 @@ export function AllTransactionsPage() {
 
         {/* Advanced Filters Panel */}
         {showFilters && (
-          <div className="bg-[#111827] border border-white/5 rounded-xl p-6 space-y-4">
+          <div className="bg-card border border-border rounded-xl p-6 space-y-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
                 <Calendar className="w-5 h-5" />
                 {t('filters.advanced')}
               </h3>
@@ -271,7 +288,7 @@ export function AllTransactionsPage() {
                 onClick={() => {
                   setShowFilters(false);
                 }}
-                className="text-sm text-zinc-400 hover:text-white"
+                className="text-sm text-muted-foreground hover:text-foreground"
               >
                 {t('filters.clear')}
               </button>
@@ -279,15 +296,15 @@ export function AllTransactionsPage() {
 
             {/* Transaction Type Filter */}
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-400">Tipo de Transação</label>
-              <div className="flex items-center gap-2 bg-[#0A0F1C] border border-white/10 rounded-lg p-1">
+              <label className="text-sm font-medium text-muted-foreground">Tipo de Transação</label>
+              <div className="flex items-center gap-2 bg-background border border-border rounded-lg p-1">
                 <button
                   onClick={() => setTypeFilter('all')}
                   className={cn(
                     "flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all",
                     typeFilter === 'all'
-                      ? "bg-blue-600 text-white shadow-lg"
-                      : "text-zinc-400 hover:text-white hover:bg-white/5"
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   )}
                 >
                   📊 Todas
@@ -297,8 +314,8 @@ export function AllTransactionsPage() {
                   className={cn(
                     "flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all",
                     typeFilter === 'normal'
-                      ? "bg-green-600 text-white shadow-lg"
-                      : "text-zinc-400 hover:text-white hover:bg-white/5"
+                      ? "bg-green-600 text-white shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   )}
                 >
                   💰 Receitas/Despesas
@@ -308,8 +325,8 @@ export function AllTransactionsPage() {
                   className={cn(
                     "flex-1 px-3 py-2 rounded-md text-xs font-medium transition-all",
                     typeFilter === 'transfers'
-                      ? "bg-purple-600 text-white shadow-lg"
-                      : "text-zinc-400 hover:text-white hover:bg-white/5"
+                      ? "bg-purple-600 text-white shadow-sm"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
                   )}
                 >
                   🔄 Transferência entre contas
@@ -319,29 +336,29 @@ export function AllTransactionsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-400">{t('filters.startDate')}</label>
+                <label className="text-sm font-medium text-muted-foreground">{t('filters.startDate')}</label>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full h-10 px-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-white focus:outline-none focus:border-primary [color-scheme:dark]"
+                  className="w-full h-10 px-4 rounded-lg bg-background border border-input text-foreground focus:outline-none focus:border-primary"
                 />
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-medium text-zinc-400">{t('filters.endDate')}</label>
+                <label className="text-sm font-medium text-muted-foreground">{t('filters.endDate')}</label>
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full h-10 px-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-white focus:outline-none focus:border-primary [color-scheme:dark]"
+                  className="w-full h-10 px-4 rounded-lg bg-background border border-input text-foreground focus:outline-none focus:border-primary"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+            <div className="flex justify-end gap-3 pt-4 border-t border-border">
               <button
                 onClick={handleClearFilters}
-                className="px-4 py-2 text-sm text-zinc-400 hover:text-white transition-colors"
+                className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
                 {t('common.cancel')}
               </button>
@@ -361,39 +378,39 @@ export function AllTransactionsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl overflow-hidden">
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-white/5 bg-white/[0.02]">
-                <th className="text-left py-4 px-6 text-xs font-medium text-zinc-400 uppercase tracking-wider">{t('form.type')}</th>
-                <th className="text-left py-4 px-6 text-xs font-medium text-zinc-400 uppercase tracking-wider">{t('table.description')}</th>
-                <th className="text-left py-4 px-6 text-xs font-medium text-zinc-400 uppercase tracking-wider">{t('table.category')}</th>
-                <th className="text-left py-4 px-6 text-xs font-medium text-zinc-400 uppercase tracking-wider">{t('table.date')}</th>
-                <th className="text-right py-4 px-6 text-xs font-medium text-zinc-400 uppercase tracking-wider">{t('table.amount')}</th>
-                <th className="text-center py-4 px-6 text-xs font-medium text-zinc-400 uppercase tracking-wider">{t('table.status')}</th>
-                <th className="text-right py-4 px-6 text-xs font-medium text-zinc-400 uppercase tracking-wider">{t('table.actions')}</th>
+              <tr className="border-b border-border bg-muted/50">
+                <th className="text-left py-4 px-6 text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('form.type')}</th>
+                <th className="text-left py-4 px-6 text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('table.description')}</th>
+                <th className="text-left py-4 px-6 text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('table.category')}</th>
+                <th className="text-left py-4 px-6 text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('table.date')}</th>
+                <th className="text-right py-4 px-6 text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('table.amount')}</th>
+                <th className="text-center py-4 px-6 text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('table.status')}</th>
+                <th className="text-right py-4 px-6 text-xs font-medium text-muted-foreground uppercase tracking-wider">{t('table.actions')}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-border">
               {loading ? (
                 [...Array(5)].map((_, i) => (
                   <tr key={i} className="animate-pulse">
-                    <td className="py-4 px-6"><div className="h-4 bg-white/5 rounded w-16" /></td>
-                    <td className="py-4 px-6"><div className="h-4 bg-white/5 rounded w-32" /></td>
-                    <td className="py-4 px-6"><div className="h-4 bg-white/5 rounded w-24" /></td>
-                    <td className="py-4 px-6"><div className="h-4 bg-white/5 rounded w-24" /></td>
-                    <td className="py-4 px-6"><div className="h-4 bg-white/5 rounded w-20 ml-auto" /></td>
-                    <td className="py-4 px-6"><div className="h-4 bg-white/5 rounded w-16 mx-auto" /></td>
-                    <td className="py-4 px-6"><div className="h-4 bg-white/5 rounded w-8 ml-auto" /></td>
+                    <td className="py-4 px-6"><div className="h-4 bg-muted rounded w-16" /></td>
+                    <td className="py-4 px-6"><div className="h-4 bg-muted rounded w-32" /></td>
+                    <td className="py-4 px-6"><div className="h-4 bg-muted rounded w-24" /></td>
+                    <td className="py-4 px-6"><div className="h-4 bg-muted rounded w-24" /></td>
+                    <td className="py-4 px-6"><div className="h-4 bg-muted rounded w-20 ml-auto" /></td>
+                    <td className="py-4 px-6"><div className="h-4 bg-muted rounded w-16 mx-auto" /></td>
+                    <td className="py-4 px-6"><div className="h-4 bg-muted rounded w-8 ml-auto" /></td>
                   </tr>
                 ))
               ) : filteredTransactions.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="py-16">
                     {searchTerm || contaIdParam ? (
-                      <div className="text-center text-zinc-500">
-                        <Calendar className="w-12 h-12 mx-auto mb-3 text-zinc-700" />
+                      <div className="text-center text-muted-foreground">
+                        <Calendar className="w-12 h-12 mx-auto mb-3 text-muted-foreground/50" />
                         <p>{t('common.noTransactions')}</p>
                       </div>
                     ) : (
@@ -420,7 +437,7 @@ export function AllTransactionsPage() {
                 </tr>
               ) : (
                 paginatedTransactions.map((transaction) => (
-                  <tr key={transaction.id} className="hover:bg-white/[0.02] transition-colors">
+                  <tr key={transaction.id} className="hover:bg-muted/50 transition-colors">
                     <td className="py-4 px-6">
                       <span className={cn(
                         "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium",
@@ -431,16 +448,16 @@ export function AllTransactionsPage() {
                         {transaction.tipo === 'entrada' ? t('transactions.income') : t('transactions.expenses')}
                       </span>
                     </td>
-                    <td className="py-4 px-6 text-sm text-white font-medium">
+                    <td className="py-4 px-6 text-sm text-foreground font-medium">
                       {transaction.descricao}
                     </td>
-                    <td className="py-4 px-6 text-sm text-zinc-400">
+                    <td className="py-4 px-6 text-sm text-muted-foreground">
                       <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-white/20" />
+                        <span className="w-2 h-2 rounded-full bg-muted-foreground/20" />
                         {transaction.categoria?.descricao || t('dashboard.recent.noCategory')}
                       </div>
                     </td>
-                    <td className="py-4 px-6 text-sm text-zinc-400">
+                    <td className="py-4 px-6 text-sm text-muted-foreground">
                       {(() => {
                         const dateStr = transaction.data.split('T')[0];
                         const [year, month, day] = dateStr.split('-');
@@ -468,14 +485,14 @@ export function AllTransactionsPage() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => handleEdit(transaction)}
-                          className="p-2 text-zinc-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                          className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
                           title={t('common.edit')}
                         >
                           <Pencil className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(transaction)}
-                          className="p-2 text-zinc-400 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"
+                          className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
                           title={t('common.delete')}
                           disabled={deletingId === transaction.id}
                         >
@@ -496,8 +513,8 @@ export function AllTransactionsPage() {
 
         {/* Paginação */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-white/5">
-            <div className="text-sm text-zinc-400">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-border">
+            <div className="text-sm text-muted-foreground">
               {t('pagination.showing')} {startIndex + 1} {t('pagination.to')} {Math.min(endIndex, filteredTransactions.length)} {t('pagination.of')} {filteredTransactions.length} {t('pagination.transactions')}
             </div>
             <div className="flex items-center gap-2">
@@ -507,8 +524,8 @@ export function AllTransactionsPage() {
                 className={cn(
                   "px-3 py-1 rounded-lg text-sm font-medium transition-colors",
                   currentPage === 1
-                    ? "bg-white/5 text-zinc-600 cursor-not-allowed"
-                    : "bg-white/10 text-white hover:bg-white/20"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-muted text-foreground hover:bg-muted/80"
                 )}
               >
                 {t('pagination.previous')}
@@ -529,15 +546,15 @@ export function AllTransactionsPage() {
                         className={cn(
                           "w-8 h-8 rounded-lg text-sm font-medium transition-colors",
                           currentPage === page
-                            ? "bg-[#22C55E] text-white"
-                            : "bg-white/10 text-zinc-400 hover:bg-white/20 hover:text-white"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                         )}
                       >
                         {page}
                       </button>
                     );
                   } else if (page === currentPage - 2 || page === currentPage + 2) {
-                    return <span key={page} className="text-zinc-600">...</span>;
+                    return <span key={page} className="text-muted-foreground">...</span>;
                   }
                   return null;
                 })}
@@ -549,8 +566,8 @@ export function AllTransactionsPage() {
                 className={cn(
                   "px-3 py-1 rounded-lg text-sm font-medium transition-colors",
                   currentPage === totalPages
-                    ? "bg-white/5 text-zinc-600 cursor-not-allowed"
-                    : "bg-white/10 text-white hover:bg-white/20"
+                    ? "bg-muted text-muted-foreground cursor-not-allowed"
+                    : "bg-muted text-foreground hover:bg-muted/80"
                 )}
               >
                 {t('pagination.next')}

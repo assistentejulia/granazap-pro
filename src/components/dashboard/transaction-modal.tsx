@@ -47,10 +47,10 @@ interface TransactionModalProps {
   preSelectedCardId?: string;
 }
 
-export function TransactionModal({ 
-  isOpen, 
-  onClose, 
-  onSuccess, 
+export function TransactionModal({
+  isOpen,
+  onClose,
+  onSuccess,
   type,
   transactionToEdit,
   preSelectedCardId
@@ -62,7 +62,7 @@ export function TransactionModal({
   const { categories: allCategories, loading: loadingCategories } = useCategoriesQuery();
   const { accounts, loading: loadingAccounts } = useAccounts(accountFilter);
   const { cards } = useCreditCards();
-  
+
   const transactionSchema = useMemo(() => z.object({
     descricao: z.string().min(1, t('validation.descriptionRequired')),
     valor: z.string().min(1, t('validation.valueRequired')),
@@ -73,9 +73,9 @@ export function TransactionModal({
     cartao_id: z.string().optional(),
     parcelas: z.string().optional(),
   }), [t]);
-  
+
   const categories = allCategories.filter(c => c.tipo === (type === 'receita' ? 'entrada' : 'saida'));
-  
+
   const [showNewCategory, setShowNewCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [creatingCategory, setCreatingCategory] = useState(false);
@@ -91,7 +91,7 @@ export function TransactionModal({
     cardName: string;
     firstDueDate: Date;
   } | null>(null);
-  
+
   const {
     register,
     handleSubmit,
@@ -123,16 +123,16 @@ export function TransactionModal({
   const handleValorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // Remove tudo exceto números
     const numbers = e.target.value.replace(/\D/g, '');
-    
+
     if (!numbers) {
       setValorDisplay('');
       setValue('valor', '');
       return;
     }
-    
+
     // Converte para número e divide por 100 (centavos)
     const amount = parseFloat(numbers) / 100;
-    
+
     // Formata como moeda baseada no idioma
     const formatted = amount.toLocaleString(locales[language], {
       minimumFractionDigits: 2,
@@ -162,7 +162,7 @@ export function TransactionModal({
       } else {
         // Tentar encontrar uma conta padrão para pré-selecionar
         const defaultAccount = accounts.find(acc => acc.is_default);
-        
+
         reset({
           descricao: "",
           valor: "",
@@ -171,7 +171,7 @@ export function TransactionModal({
           conta_id: defaultAccount ? defaultAccount.id : "",
         });
         setValorDisplay("");
-        
+
         // Se preSelectedCardId for fornecido, pré-selecionar cartão de crédito
         if (preSelectedCardId && type === 'despesa') {
           setFormaPagamento('credito');
@@ -192,7 +192,7 @@ export function TransactionModal({
     try {
       setCreatingCategory(true);
       const supabase = createClient();
-      
+
       const { data, error } = await supabase
         .from('categoria_trasacoes')
         .insert([{
@@ -210,7 +210,7 @@ export function TransactionModal({
       setValue('categoria_id', String(data.id));
       setShowNewCategory(false);
       setNewCategoryName("");
-      
+
       // Recarregar categorias sem fechar o modal
       // Disparar evento para forçar refresh do hook useCategories
       window.dispatchEvent(new CustomEvent('categoriesChanged'));
@@ -230,46 +230,46 @@ export function TransactionModal({
       // Mas se veio do edit sem alteração, já é string numérica também.
       // Se tiver problemas, garantir parseFloat
       const valor = parseFloat(data.valor);
-      
+
       // Se for cartão de crédito, criar lançamentos futuros
       if (formaPagamento === 'credito' && data.cartao_id && type === 'despesa') {
         const numeroParcelas = parseInt(data.parcelas || '1');
         const valorParcela = valor / numeroParcelas;
-        
+
         // Buscar informações do cartão para calcular fatura correta
         const cartaoSelecionado = cards.find(c => c.id === data.cartao_id);
         if (!cartaoSelecionado) {
           alert(t('validation.cardNotFound'));
           return;
         }
-        
+
         // Criar lançamentos futuros (parcelas)
         const lancamentos = [];
-        
+
         // Calcular a data da primeira parcela considerando o fechamento
         const dataCompra = new Date(data.data);
         const diaCompra = dataCompra.getDate();
         let dataPrimeiraParcela = new Date(dataCompra);
-        
+
         // Se comprou depois do fechamento, primeira parcela vai para próximo mês
         if (diaCompra > cartaoSelecionado.dia_fechamento) {
           dataPrimeiraParcela.setMonth(dataPrimeiraParcela.getMonth() + 1);
         }
-        
+
         // Ajustar para o dia de vencimento
         dataPrimeiraParcela.setDate(cartaoSelecionado.dia_vencimento);
-        
+
         // Criar cada parcela a partir da primeira
         for (let i = 0; i < numeroParcelas; i++) {
           const dataFatura = new Date(dataPrimeiraParcela);
           dataFatura.setMonth(dataPrimeiraParcela.getMonth() + i);
-          
+
           lancamentos.push({
             usuario_id: profile.id,
             dependente_id: profile.is_dependente ? profile.dependente_id : null, // Adicionar dependente_id
             tipo: 'saida',
             valor: valorParcela,
-            descricao: numeroParcelas > 1 
+            descricao: numeroParcelas > 1
               ? `${data.descricao} (${i + 1}/${numeroParcelas})`
               : data.descricao,
             categoria_id: parseInt(data.categoria_id),
@@ -285,16 +285,16 @@ export function TransactionModal({
             tipo_conta: accountFilter,
           });
         }
-        
+
         const { error } = await supabase
           .from('lancamentos_futuros')
           .insert(lancamentos);
-          
+
         if (error) throw error;
-        
+
         // Disparar evento de atualização de lançamentos futuros
         window.dispatchEvent(new CustomEvent('futureTransactionsChanged'));
-        
+
         // Preparar dados para o modal de sucesso
         setInstallmentData({
           description: data.descricao,
@@ -304,14 +304,14 @@ export function TransactionModal({
           cardName: cartaoSelecionado.nome,
           firstDueDate: dataPrimeiraParcela
         });
-        
+
         // Mostrar modal de sucesso
         setIsSuccessModalOpen(true);
       } else {
         // Transação normal (dinheiro ou débito)
         const mesFormatado = data.data.substring(0, 7);
         const dataFormatada = `${data.data}T00:00:00`;
-        
+
         const transactionData = {
           descricao: data.descricao,
           valor,
@@ -347,7 +347,7 @@ export function TransactionModal({
       window.dispatchEvent(new CustomEvent('creditCardsChanged'));
       window.dispatchEvent(new CustomEvent('transactionsChanged'));
       window.dispatchEvent(new CustomEvent('futureTransactionsChanged'));
-      
+
       // Se não for cartão de crédito, fechar modal normalmente
       if (formaPagamento !== 'credito') {
         onSuccess();
@@ -369,13 +369,13 @@ export function TransactionModal({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Descrição */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-white">
+          <label className="text-sm font-medium text-foreground">
             {t('form.description')} <span className="text-red-400">*</span>
           </label>
           <Input
             {...register("descricao")}
             placeholder={t(type === 'receita' ? 'form.placeholderIncome' : 'form.placeholderExpense')}
-            className="bg-[#0A0F1C] border-white/10 text-white placeholder:text-zinc-500 h-11"
+            className="bg-background border-border text-foreground placeholder:text-muted-foreground h-11"
           />
           {errors.descricao && (
             <p className="text-xs text-red-400 flex items-center gap-1">
@@ -387,11 +387,11 @@ export function TransactionModal({
         {/* Valor e Data */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               {t('form.value')} <span className="text-red-400">*</span>
             </label>
             <div className="relative">
-              <span 
+              <span
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold"
                 style={{ color: accentColor }}
               >
@@ -402,31 +402,29 @@ export function TransactionModal({
                 value={valorDisplay}
                 onChange={handleValorChange}
                 placeholder="0,00"
-                className="w-full h-11 pl-10 pr-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-white placeholder:text-zinc-500 focus:outline-none transition-colors font-mono text-lg"
-                style={{ 
-                  borderColor: 'rgba(255, 255, 255, 0.1)',
-                  '--focus-color': accentColor 
+                className="w-full h-11 pl-10 pr-4 rounded-lg bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none transition-colors font-mono text-lg"
+                style={{
+                  '--focus-color': accentColor
                 } as React.CSSProperties}
                 onFocus={(e) => e.target.style.borderColor = accentColor}
-                onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+                onBlur={(e) => e.target.style.borderColor = ''}
               />
             </div>
             {errors.valor && (
               <p className="text-xs text-red-400">{errors.valor.message}</p>
             )}
           </div>
-          
+
           <div className="space-y-2">
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               {t('form.date')} <span className="text-red-400">*</span>
             </label>
             <input
               {...register("data")}
               type="date"
-              className="w-full h-11 px-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-white transition-colors [color-scheme:dark]"
-              style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+              className="w-full h-11 px-4 rounded-lg bg-background border border-border text-foreground transition-colors [color-scheme:light] dark:[color-scheme:dark]"
               onFocus={(e) => e.target.style.borderColor = accentColor}
-              onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+              onBlur={(e) => e.target.style.borderColor = ''}
             />
             {errors.data && (
               <p className="text-xs text-red-400">{errors.data.message}</p>
@@ -437,7 +435,7 @@ export function TransactionModal({
         {/* Categoria */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               {t('form.category')} <span className="text-red-400">*</span>
             </label>
             {!showNewCategory && (
@@ -456,16 +454,16 @@ export function TransactionModal({
           </div>
 
           {showNewCategory ? (
-            <div className="space-y-3 p-4 bg-[#0A0F1C] border border-white/10 rounded-lg">
+            <div className="space-y-3 p-4 bg-muted/50 border border-border rounded-lg">
               <div className="flex items-center justify-between">
-                <p className="text-sm text-zinc-400">{t('form.createCategory')}</p>
+                <p className="text-sm text-muted-foreground">{t('form.createCategory')}</p>
                 <button
                   type="button"
                   onClick={() => {
                     setShowNewCategory(false);
                     setNewCategoryName("");
                   }}
-                  className="text-zinc-500 hover:text-white transition-colors"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -475,7 +473,7 @@ export function TransactionModal({
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
                   placeholder={t('form.categoryName')}
-                  className="bg-[#111827] border-white/10 text-white flex-1 h-10"
+                  className="bg-background border-border text-foreground flex-1 h-10"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
@@ -488,7 +486,7 @@ export function TransactionModal({
                   onClick={handleCreateCategory}
                   disabled={!newCategoryName.trim() || creatingCategory}
                   className="text-white h-10 px-4"
-                  style={{ 
+                  style={{
                     backgroundColor: accentColor,
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = accentColorHover}
@@ -508,20 +506,19 @@ export function TransactionModal({
                 {...register("categoria_id")}
                 disabled={loadingCategories}
                 className={cn(
-                  "w-full h-11 px-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-sm text-white",
+                  "w-full h-11 px-4 rounded-lg bg-background border border-border text-sm text-foreground",
                   "focus:outline-none transition-colors",
                   "appearance-none cursor-pointer",
-                  !selectedCategory && "text-zinc-500"
+                  !selectedCategory && "text-muted-foreground"
                 )}
-                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
                 onFocus={(e) => e.target.style.borderColor = accentColor}
-                onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+                onBlur={(e) => e.target.style.borderColor = ''}
               >
-                <option value="" className="text-zinc-500">
+                <option value="" className="text-muted-foreground">
                   {loadingCategories ? t('common.loading') : t('form.selectCategory')}
                 </option>
                 {categories.map(cat => (
-                  <option key={cat.id} value={cat.id} className="text-white bg-[#111827]">
+                  <option key={cat.id} value={cat.id} className="text-foreground bg-popover">
                     {cat.descricao}
                   </option>
                 ))}
@@ -540,56 +537,55 @@ export function TransactionModal({
 
         {/* Conta Bancária */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-white flex items-center justify-between">
+          <label className="text-sm font-medium text-foreground flex items-center justify-between">
             {t('form.account')}
-            <span className="text-xs font-normal text-zinc-500 bg-zinc-800 px-2 py-0.5 rounded-full">
+            <span className="text-xs font-normal text-muted-foreground bg-muted px-2 py-0.5 rounded-full">
               {accountFilter === 'pessoal' ? t('sidebar.personal') : t('sidebar.pj')} {t('form.optional')}
             </span>
           </label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
               <Wallet className="w-4 h-4" />
             </div>
             <select
               {...register("conta_id")}
               disabled={loadingAccounts}
               className={cn(
-                "w-full h-11 pl-10 pr-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-sm text-white",
+                "w-full h-11 pl-10 pr-4 rounded-lg bg-background border border-border text-sm text-foreground",
                 "focus:outline-none transition-colors",
                 "appearance-none cursor-pointer",
-                !selectedAccount && "text-zinc-500"
+                !selectedAccount && "text-muted-foreground"
               )}
-              style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
               onFocus={(e) => e.target.style.borderColor = accentColor}
-              onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+              onBlur={(e) => e.target.style.borderColor = ''}
             >
-              <option value="" className="text-zinc-500">
+              <option value="" className="text-muted-foreground">
                 {loadingAccounts ? t('common.loading') : t('form.noAccount')}
               </option>
               {accounts.map(acc => (
-                <option key={acc.id} value={acc.id} className="text-white bg-[#111827]">
+                <option key={acc.id} value={acc.id} className="text-foreground bg-popover">
                   {acc.nome} {acc.saldo_atual !== undefined ? `(${getCurrencySymbol()} ${acc.saldo_atual.toLocaleString(locales[language], { minimumFractionDigits: 2 })})` : ''}
                 </option>
               ))}
             </select>
             <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-              <svg className="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </div>
           </div>
-          <p className="text-[10px] text-zinc-500 pl-1">
+          <p className="text-[10px] text-muted-foreground pl-1">
             {t(type === 'receita' ? 'form.accountHintIncome' : 'form.accountHintExpense')}
           </p>
         </div>
 
         {/* Forma de Pagamento (só para despesas) */}
         {type === 'despesa' && !transactionToEdit && (
-          <div className="space-y-4 p-4 bg-[#0A0F1C] border border-white/10 rounded-lg">
-            <label className="text-sm font-medium text-white">
+          <div className="space-y-4 p-4 bg-muted/50 border border-border rounded-lg">
+            <label className="text-sm font-medium text-foreground">
               {t('form.paymentMethod')}
             </label>
-            
+
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
@@ -601,7 +597,7 @@ export function TransactionModal({
                   "px-4 py-3 rounded-lg border-2 transition-all text-sm font-medium",
                   formaPagamento === 'dinheiro'
                     ? "border-purple-500 bg-purple-500/10 text-purple-400"
-                    : "border-white/10 bg-white/5 text-zinc-400 hover:border-white/20"
+                    : "border-border bg-card text-muted-foreground hover:border-foreground/20"
                 )}
               >
                 💵 {t('form.money')}
@@ -615,8 +611,8 @@ export function TransactionModal({
                 className={cn(
                   "px-4 py-3 rounded-lg border-2 transition-all text-sm font-medium",
                   formaPagamento === 'debito'
-                    ? "border-blue-500 bg-blue-500/10 text-blue-400"
-                    : "border-white/10 bg-white/5 text-zinc-400 hover:border-white/20"
+                    ? "border-blue-600 bg-blue-500/10 text-blue-500"
+                    : "border-border bg-card text-muted-foreground hover:border-foreground/20"
                 )}
               >
                 🏦 {t('form.debit')}
@@ -630,8 +626,8 @@ export function TransactionModal({
                 className={cn(
                   "px-4 py-3 rounded-lg border-2 transition-all text-sm font-medium",
                   formaPagamento === 'credito'
-                    ? "border-green-500 bg-green-500/10 text-green-400"
-                    : "border-white/10 bg-white/5 text-zinc-400 hover:border-white/20"
+                    ? "border-green-600 bg-green-500/10 text-green-500"
+                    : "border-border bg-card text-muted-foreground hover:border-foreground/20"
                 )}
               >
                 💳 {t('form.credit')}
@@ -640,23 +636,23 @@ export function TransactionModal({
 
             {/* Se for cartão de crédito */}
             {formaPagamento === 'credito' && (
-              <div className="space-y-4 pt-4 border-t border-white/5">
+              <div className="space-y-4 pt-4 border-t border-border">
                 {/* Seleção de Cartão */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-white">
+                  <label className="text-sm font-medium text-foreground">
                     {t('form.creditCard')} <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none">
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
                       <CreditCard className="w-4 h-4" />
                     </div>
                     <select
                       {...register("cartao_id")}
-                      className="w-full h-11 pl-10 pr-4 rounded-lg bg-[#111827] border border-white/10 text-sm text-white focus:outline-none focus:border-green-500 transition-colors appearance-none cursor-pointer"
+                      className="w-full h-11 pl-10 pr-4 rounded-lg bg-background border border-border text-sm text-foreground focus:outline-none focus:border-green-500 transition-colors appearance-none cursor-pointer"
                     >
-                      <option value="">{t('form.selectCard')}</option>
+                      <option value="" className="text-muted-foreground">{t('form.selectCard')}</option>
                       {cards.map(card => (
-                        <option key={card.id} value={card.id} className="text-white bg-[#111827]">
+                        <option key={card.id} value={card.id} className="text-foreground bg-popover">
                           {card.nome} - Limite: {getCurrencySymbol()} {card.limite_total.toLocaleString(locales[language], { minimumFractionDigits: 2 })}
                         </option>
                       ))}
@@ -671,7 +667,7 @@ export function TransactionModal({
 
                 {/* Parcelamento */}
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-white">
+                  <label className="text-sm font-medium text-foreground">
                     {t('form.installments')}
                   </label>
                   <div className="flex gap-2">
@@ -685,7 +681,7 @@ export function TransactionModal({
                         "flex-1 px-4 py-2 rounded-lg border-2 transition-all text-sm font-medium",
                         !parcelado
                           ? "border-green-500 bg-green-500/10 text-green-400"
-                          : "border-white/10 bg-white/5 text-zinc-400"
+                          : "border-border bg-card text-muted-foreground hover:bg-muted"
                       )}
                     >
                       {t('form.cash')}
@@ -697,7 +693,7 @@ export function TransactionModal({
                         "flex-1 px-4 py-2 rounded-lg border-2 transition-all text-sm font-medium",
                         parcelado
                           ? "border-green-500 bg-green-500/10 text-green-400"
-                          : "border-white/10 bg-white/5 text-zinc-400"
+                          : "border-border bg-card text-muted-foreground hover:bg-muted"
                       )}
                     >
                       {t('form.installment')}
@@ -708,20 +704,20 @@ export function TransactionModal({
                 {/* Número de Parcelas */}
                 {parcelado && (
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-white">
+                    <label className="text-sm font-medium text-foreground">
                       {t('form.installmentsCount')}
                     </label>
                     <select
                       {...register("parcelas")}
-                      className="w-full h-11 px-4 rounded-lg bg-[#111827] border border-white/10 text-sm text-white focus:outline-none focus:border-green-500 transition-colors appearance-none cursor-pointer"
+                      className="w-full h-11 px-4 rounded-lg bg-background border border-border text-sm text-foreground focus:outline-none focus:border-green-500 transition-colors appearance-none cursor-pointer"
                     >
                       {[...Array(12)].map((_, i) => {
                         const parcela = i + 1;
-                        const valorParcela = valorDisplay ? 
-                          (parseFloat(valorDisplay.replace(/\./g, '').replace(',', '.')) / parcela).toLocaleString(locales[language], { minimumFractionDigits: 2 }) 
+                        const valorParcela = valorDisplay ?
+                          (parseFloat(valorDisplay.replace(/\./g, '').replace(',', '.')) / parcela).toLocaleString(locales[language], { minimumFractionDigits: 2 })
                           : '0,00';
                         return (
-                          <option key={parcela} value={parcela} className="text-white bg-[#111827]">
+                          <option key={parcela} value={parcela} className="text-foreground bg-popover">
                             {parcela}x de {getCurrencySymbol()} {valorParcela}
                           </option>
                         );
@@ -730,7 +726,7 @@ export function TransactionModal({
                   </div>
                 )}
 
-                <p className="text-xs text-zinc-500">
+                <p className="text-xs text-muted-foreground">
                   💡 {t('form.installmentHint')}
                 </p>
               </div>
@@ -739,11 +735,11 @@ export function TransactionModal({
         )}
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+        <div className="flex justify-end gap-3 pt-4 border-t border-border">
           <Button
             type="button"
             onClick={onClose}
-            className="px-6 bg-transparent border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+            className="px-6 bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             {t('common.cancel')}
           </Button>

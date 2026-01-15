@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
+    "@jerry619/react-export-table-to-excel": "^1.0.9",
     "@radix-ui/react-checkbox": "^1.3.3",
     "@radix-ui/react-slot": "^1.2.4",
     "@supabase/ssr": "^0.8.0",
@@ -33,6 +34,7 @@
     "react-hook-form": "^7.68.0",
     "recharts": "^3.5.1",
     "tailwind-merge": "^3.4.0",
+    "xlsx": "^0.18.5",
     "zod": "^4.1.13",
     "zustand": "^5.0.9"
   },

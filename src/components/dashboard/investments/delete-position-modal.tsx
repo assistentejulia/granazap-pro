@@ -56,19 +56,19 @@ export function DeletePositionModal({
 
         {/* Título */}
         <div className="space-y-2">
-          <h3 className="text-2xl font-bold text-white">
+          <h3 className="text-2xl font-bold text-foreground">
             {t('investments.modal.deletePosition')}
           </h3>
-          <p className="text-zinc-400">
-            {t('investments.modal.deleteConfirm')} <span className="font-semibold text-white">{position.ticker}</span>?
+          <p className="text-muted-foreground">
+            {t('investments.modal.deleteConfirm')} <span className="font-semibold text-foreground">{position.ticker}</span>?
           </p>
         </div>
 
         {/* Informações da Posição */}
-        <div className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 space-y-2 text-left">
+        <div className="w-full bg-card border border-border rounded-lg p-4 space-y-2 text-left">
           <div className="flex justify-between text-sm">
-            <span className="text-zinc-400">{t('investments.modal.quantityInfo')}</span>
-            <span className="text-white font-medium">
+            <span className="text-muted-foreground">{t('investments.modal.quantityInfo')}</span>
+            <span className="text-foreground font-medium">
               {Number(position.quantidade).toLocaleString('pt-BR', {
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 8
@@ -76,8 +76,8 @@ export function DeletePositionModal({
             </span>
           </div>
           <div className="flex justify-between text-sm">
-            <span className="text-zinc-400">{t('investments.modal.investedValue')}</span>
-            <span className="text-white font-medium">
+            <span className="text-muted-foreground">{t('investments.modal.investedValue')}</span>
+            <span className="text-foreground font-medium">
               R$ {position.valor_investido.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
             </span>
           </div>

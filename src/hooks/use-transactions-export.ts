@@ -1,7 +1,7 @@
-
 import { useCallback } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import * as XLSX from 'xlsx';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 
@@ -10,7 +10,8 @@ interface Transaction {
     descricao: string;
     valor: number | string;
     tipo: string;
-    data: string;
+    data?: string;
+    data_prevista?: string;
     categoria?: { descricao: string };
     is_transferencia?: boolean;
     status?: string;
@@ -35,7 +36,7 @@ export function useTransactionsExport() {
             doc.text(`Gerado em: ${format(new Date(), "dd/MM/yyyy 'às' HH:mm", { locale: ptBR })}`, 14, 30);
 
             const tableData = transactions.map(t => {
-                const dateStr = t.data.split('T')[0];
+                const dateStr = (t.data || t.data_prevista || '').split('T')[0];
                 const [year, month, day] = dateStr.split('-');
                 const date = new Date(Number(year), Number(month) - 1, Number(day));
 
@@ -106,5 +107,51 @@ export function useTransactionsExport() {
         }
     }, []);
 
-    return { exportTransactionsToPDF };
+    const exportTransactionsToExcel = useCallback((transactions: Transaction[], formatCurrency: (val: number) => string) => {
+        try {
+            // Preparar dados para o Excel
+            const data = transactions.map(t => {
+                const dateStr = (t.data || t.data_prevista || '').split('T')[0];
+                const [year, month, day] = dateStr.split('-');
+
+                return {
+                    'Data': `${day}/${month}/${year}`,
+                    'Descrição': t.descricao,
+                    'Categoria': t.categoria?.descricao || 'Sem categoria',
+                    'Tipo': t.tipo === 'entrada' ? 'Receita' : 'Despesa',
+                    'Valor': Number(t.valor), // Manter como número para cálculos no Excel
+                    'Status': t.tipo === 'entrada' ? 'Recebido' : 'Pago',
+                    'Conta': t.conta?.nome || '-'
+                };
+            });
+
+            // Criar workbook e worksheet
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.json_to_sheet(data);
+
+            // Ajustar largura das colunas
+            const colWidths = [
+                { wch: 12 }, // Data
+                { wch: 40 }, // Descrição
+                { wch: 20 }, // Categoria
+                { wch: 10 }, // Tipo
+                { wch: 15 }, // Valor
+                { wch: 12 }, // Status
+                { wch: 20 }  // Conta
+            ];
+            ws['!cols'] = colWidths;
+
+            // Adicionar worksheet ao workbook
+            XLSX.utils.book_append_sheet(wb, ws, "Transações");
+
+            // Gerar arquivo
+            XLSX.writeFile(wb, `transacoes_${format(new Date(), 'dd-MM-yyyy')}.xlsx`);
+            return true;
+        } catch (error) {
+            console.error('Error exporting transactions to Excel:', error);
+            return false;
+        }
+    }, []);
+
+    return { exportTransactionsToPDF, exportTransactionsToExcel };
 }

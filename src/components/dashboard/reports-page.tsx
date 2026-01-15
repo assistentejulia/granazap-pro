@@ -40,7 +40,10 @@ import { format, isAfter, isBefore, isSameDay, startOfDay, endOfDay } from "date
 import { ptBR } from 'date-fns/locale';
 import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
+
 import { useTransactionsQuery } from "@/hooks/use-transactions-query";
+import { ExportDropdown } from "@/components/dashboard/export-dropdown";
+import * as XLSX from 'xlsx';
 import { useFutureTransactionsQuery } from "@/hooks/use-future-transactions-query";
 import { useAccounts } from "@/hooks/use-accounts";
 import { usePeriodFilter } from "@/hooks/use-period-filter";
@@ -115,6 +118,78 @@ export function ReportsPage() {
     } catch (error) {
       console.error('Erro inesperado ao exportar:', error);
       alert('Ocorreu um erro inesperado ao tentar exportar.');
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
+  const handleExportExcel = async () => {
+    setIsExporting(true);
+    try {
+      // 1. Sheet: Resumo
+      const resumoData = [
+        ['Resumo Financeiro', ''],
+        ['Período', period === 'custom' && customRange ? `${format(new Date(customRange.start), 'dd/MM/yyyy')} - ${format(new Date(customRange.end), 'dd/MM/yyyy')}` : period],
+        ['Tipo de Conta', accountFilter === 'pessoal' ? 'Pessoal' : 'PJ'],
+        [''],
+        ['Receitas Totais', stats.income],
+        ['Despesas Totais', stats.expenses],
+        ['Saldo do Período', stats.balance],
+        ['Taxa de Economia', `${stats.savingsRate.toFixed(2)}%`]
+      ];
+      const wsResumo = XLSX.utils.aoa_to_sheet(resumoData);
+
+      // 2. Sheet: Evolução Mensal/Diária
+      const evolucaoData = evolutionData.map(item => ({
+        'Data/Período': item.name,
+        'Receitas': item.Receitas,
+        'Despesas': item.Despesas,
+        'Saldo': item.Saldo
+      }));
+      const wsEvolucao = XLSX.utils.json_to_sheet(evolucaoData);
+
+      // 3. Sheet: Categorias Receitas
+      const wsRecCat = XLSX.utils.json_to_sheet(incomeCategories.map(c => ({ 'Categoria': c.name, 'Valor': c.value })));
+
+      // 4. Sheet: Categorias Despesas
+      const wsDespCat = XLSX.utils.json_to_sheet(expenseCategories.map(c => ({ 'Categoria': c.name, 'Valor': c.value })));
+
+      // 5. Sheet: Previsões (Pendentes)
+      const pendingData = [
+        ...forecastData.incomes.map(i => ({
+          'Tipo': 'Receita',
+          'Descrição': i.descricao,
+          'Data Prevista': format(new Date(i.data_prevista), 'dd/MM/yyyy'),
+          'Valor': Number(i.valor),
+          'Categoria': i.categoria?.descricao
+        })),
+        ...forecastData.expenses.map(i => ({
+          'Tipo': 'Despesa',
+          'Descrição': i.descricao,
+          'Data Prevista': format(new Date(i.data_prevista), 'dd/MM/yyyy'),
+          'Valor': Number(i.valor),
+          'Categoria': i.categoria?.descricao
+        }))
+      ];
+      const wsPendentes = XLSX.utils.json_to_sheet(pendingData);
+
+      // Criar Workbook
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, wsResumo, "Resumo");
+      XLSX.utils.book_append_sheet(wb, wsEvolucao, "Evolução");
+      XLSX.utils.book_append_sheet(wb, wsRecCat, "Categ. Receitas");
+      XLSX.utils.book_append_sheet(wb, wsDespCat, "Categ. Despesas");
+      XLSX.utils.book_append_sheet(wb, wsPendentes, "Pendentes");
+
+      const periodLabel = period === 'custom' && customRange
+        ? `${format(new Date(customRange.start), 'dd-MM-yyyy')}_${format(new Date(customRange.end), 'dd-MM-yyyy')}`
+        : format(new Date(), 'dd-MM-yyyy');
+
+      XLSX.writeFile(wb, `Relatorio_Financeiro_${periodLabel}.xlsx`);
+
+    } catch (error) {
+      console.error('Erro ao exportar Excel:', error);
+      alert('Erro ao gerar Excel.');
     } finally {
       setIsExporting(false);
     }
@@ -278,7 +353,7 @@ export function ReportsPage() {
       <div className="flex flex-col md:flex-row justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-white">{t('reports.title')}</h1>
+            <h1 className="text-2xl font-bold text-foreground">{t('reports.title')}</h1>
             <span className={cn(
               "px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1",
               accountFilter === 'pessoal'
@@ -288,39 +363,21 @@ export function ReportsPage() {
               {accountFilter === 'pessoal' ? '👤 Pessoal' : '🏢 PJ'}
             </span>
           </div>
-          <p className="text-zinc-400 text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1">
             {t('reports.description')}
           </p>
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-          {/* Export PDF Button */}
-          <button
-            onClick={handleExportPDF}
-            disabled={isExporting || loading}
-            className={cn(
-              "px-4 py-2 rounded-lg font-medium transition-all flex items-center justify-center gap-2",
-              "bg-gradient-to-r from-[#22C55E] to-[#16A34A] hover:from-[#16A34A] hover:to-[#15803D]",
-              "text-white shadow-lg shadow-[#22C55E]/20",
-              "disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none",
-              "min-w-[140px]"
-            )}
-          >
-            {isExporting ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                <span className="text-sm">Exportando...</span>
-              </>
-            ) : (
-              <>
-                <Download className="w-4 h-4" />
-                <span className="text-sm">Exportar PDF</span>
-              </>
-            )}
-          </button>
+          {/* Export Dropdown */}
+          <ExportDropdown
+            onExportPDF={handleExportPDF}
+            onExportExcel={handleExportExcel}
+            isExporting={isExporting}
+          />
 
           {/* Filters */}
-          <div className="flex items-center gap-2 bg-[#111827] p-1 rounded-lg border border-white/10">
+          <div className="flex items-center gap-2 bg-muted p-1 rounded-lg border border-border">
             {(['month', 'year'] as const).map((p) => (
               <button
                 key={p}
@@ -328,8 +385,8 @@ export function ReportsPage() {
                 className={cn(
                   "px-4 py-2 rounded-md text-sm font-medium transition-all",
                   period === p
-                    ? "bg-white/10 text-white"
-                    : "text-zinc-400 hover:text-white hover:bg-white/5"
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-background/50"
                 )}
               >
                 {p === 'month' ? t('reports.month') : t('reports.year')}
@@ -342,7 +399,7 @@ export function ReportsPage() {
                 "px-4 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2",
                 period === 'custom'
                   ? "bg-[#22C55E]/20 text-[#22C55E]"
-                  : "text-zinc-400 hover:text-white hover:bg-white/5"
+                  : "text-muted-foreground hover:text-foreground hover:bg-background/50"
               )}
             >
               <Calendar className="w-4 h-4" />
@@ -354,24 +411,24 @@ export function ReportsPage() {
 
       {/* Date Range Picker Panel */}
       {showFilters && (
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 animate-in fade-in slide-in-from-top-2">
+        <div className="bg-card border border-border rounded-xl p-4 animate-in fade-in slide-in-from-top-2">
           <div className="flex flex-col md:flex-row gap-4 items-end">
             <div className="space-y-2 flex-1">
-              <label className="text-sm font-medium text-zinc-400">{t('reports.startDate')}</label>
+              <label className="text-sm font-medium text-muted-foreground">{t('reports.startDate')}</label>
               <input
                 type="date"
                 value={startDateInput}
                 onChange={(e) => setStartDateInput(e.target.value)}
-                className="w-full h-10 px-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-white focus:outline-none focus:border-[#22C55E] [color-scheme:dark]"
+                className="w-full h-10 px-4 rounded-lg bg-background border border-border text-foreground focus:outline-none focus:border-[#22C55E]"
               />
             </div>
             <div className="space-y-2 flex-1">
-              <label className="text-sm font-medium text-zinc-400">{t('reports.endDate')}</label>
+              <label className="text-sm font-medium text-muted-foreground">{t('reports.endDate')}</label>
               <input
                 type="date"
                 value={endDateInput}
                 onChange={(e) => setEndDateInput(e.target.value)}
-                className="w-full h-10 px-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-white focus:outline-none focus:border-[#22C55E] [color-scheme:dark]"
+                className="w-full h-10 px-4 rounded-lg bg-background border border-border text-foreground focus:outline-none focus:border-[#22C55E]"
               />
             </div>
             <button
@@ -387,52 +444,52 @@ export function ReportsPage() {
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6 relative overflow-hidden">
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <TrendingUp className="w-16 h-16 md:w-24 md:h-24 text-[#22C55E]" />
           </div>
           <div className="relative z-10">
-            <div className="text-xs md:text-sm text-zinc-400 mb-2 flex items-center gap-2">
+            <div className="text-xs md:text-sm text-muted-foreground mb-2 flex items-center gap-2">
               <div className="p-1.5 bg-[#22C55E]/10 rounded-lg">
                 <ArrowUpRight className="w-3 h-3 md:w-4 md:h-4 text-[#22C55E]" />
               </div>
               {t('reports.totalIncome')}
             </div>
-            <p className="text-2xl md:text-3xl font-bold font-mono text-white">
+            <p className="text-2xl md:text-3xl font-bold font-mono text-foreground">
               {formatCurrency(stats.income)}
             </p>
-            <p className="text-[10px] md:text-xs text-zinc-500 mt-1">
+            <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
               {stats.incomeCount} {t('reports.transactionsRegistered')}
             </p>
           </div>
         </div>
 
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6 relative overflow-hidden">
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <TrendingDown className="w-16 h-16 md:w-24 md:h-24 text-[#EF4444]" />
           </div>
           <div className="relative z-10">
-            <div className="text-xs md:text-sm text-zinc-400 mb-2 flex items-center gap-2">
+            <div className="text-xs md:text-sm text-muted-foreground mb-2 flex items-center gap-2">
               <div className="p-1.5 bg-[#EF4444]/10 rounded-lg">
                 <ArrowDownRight className="w-3 h-3 md:w-4 md:h-4 text-[#EF4444]" />
               </div>
               {t('reports.totalExpenses')}
             </div>
-            <p className="text-2xl md:text-3xl font-bold font-mono text-white">
+            <p className="text-2xl md:text-3xl font-bold font-mono text-foreground">
               {formatCurrency(stats.expenses)}
             </p>
-            <p className="text-[10px] md:text-xs text-zinc-500 mt-1">
+            <p className="text-[10px] md:text-xs text-muted-foreground mt-1">
               {stats.expensesCount} {t('reports.transactionsRegistered')}
             </p>
           </div>
         </div>
 
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6 relative overflow-hidden sm:col-span-2 lg:col-span-1">
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6 relative overflow-hidden sm:col-span-2 lg:col-span-1">
           <div className="absolute top-0 right-0 p-4 opacity-10">
             <Wallet className="w-16 h-16 md:w-24 md:h-24 text-blue-500" />
           </div>
           <div className="relative z-10">
-            <div className="text-xs md:text-sm text-zinc-400 mb-2 flex items-center gap-2">
+            <div className="text-xs md:text-sm text-muted-foreground mb-2 flex items-center gap-2">
               <div className="p-1.5 bg-blue-500/10 rounded-lg">
                 <Wallet className="w-3 h-3 md:w-4 md:h-4 text-blue-500" />
               </div>
@@ -445,7 +502,7 @@ export function ReportsPage() {
               {formatCurrency(stats.balance)}
             </p>
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-[10px] md:text-xs text-zinc-500">
+              <span className="text-[10px] md:text-xs text-muted-foreground">
                 {t('reports.savings')}:
               </span>
               <span className={cn(
@@ -461,9 +518,9 @@ export function ReportsPage() {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
         {/* Evolution Chart */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <BarChart3 className="w-5 h-5 text-zinc-400" />
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
+            <BarChart3 className="w-5 h-5 text-muted-foreground" />
             {t('reports.incomeVsExpenses')}
           </h3>
           <div className="w-full" style={{ height: '320px' }}>
@@ -504,9 +561,9 @@ export function ReportsPage() {
         </div>
 
         {/* Cumulative Flow Chart */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <LineChartIcon className="w-5 h-5 text-zinc-400" />
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
+            <LineChartIcon className="w-5 h-5 text-muted-foreground" />
             {t('reports.cumulativeCashFlow')}
           </h3>
           <div className="w-full" style={{ height: '320px' }}>
@@ -553,8 +610,8 @@ export function ReportsPage() {
       </div>
 
       {/* Forecast Section */}
-      <div className="pt-8 border-t border-white/10">
-        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
+      <div className="pt-8 border-t border-border">
+        <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
           <CalendarClock className="w-6 h-6 text-blue-500" />
           {t('reports.forecast')} ({t('reports.noPending').replace('Nenhum lançamento pendente', 'Pendentes')})
         </h2>
@@ -562,9 +619,9 @@ export function ReportsPage() {
         {/* Forecast Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           {/* Total a Receber */}
-          <div className="bg-[#111827] border border-white/5 rounded-xl p-6 relative overflow-hidden">
+          <div className="bg-card border border-border rounded-xl p-6 relative overflow-hidden">
             <div className="relative z-10">
-              <div className="text-sm text-zinc-400 mb-2 flex items-center gap-2">
+              <div className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
                 <div className="p-1.5 bg-[#22C55E]/10 rounded-lg">
                   <ArrowUpRight className="w-4 h-4 text-[#22C55E]" />
                 </div>
@@ -573,16 +630,16 @@ export function ReportsPage() {
               <p className="text-3xl font-bold font-mono text-[#22C55E]">
                 {formatCurrency(forecastData.pendingIncome)}
               </p>
-              <p className="text-xs text-zinc-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {format(dateRange.start, 'dd/MM/yyyy')} - {format(dateRange.end, 'dd/MM/yyyy')}
               </p>
             </div>
           </div>
 
           {/* Total a Pagar */}
-          <div className="bg-[#111827] border border-white/5 rounded-xl p-6 relative overflow-hidden">
+          <div className="bg-card border border-border rounded-xl p-6 relative overflow-hidden">
             <div className="relative z-10">
-              <div className="text-sm text-zinc-400 mb-2 flex items-center gap-2">
+              <div className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
                 <div className="p-1.5 bg-[#EF4444]/10 rounded-lg">
                   <ArrowDownRight className="w-4 h-4 text-[#EF4444]" />
                 </div>
@@ -591,16 +648,16 @@ export function ReportsPage() {
               <p className="text-3xl font-bold font-mono text-[#EF4444]">
                 {formatCurrency(forecastData.pendingExpense)}
               </p>
-              <p className="text-xs text-zinc-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {format(dateRange.start, 'dd/MM/yyyy')} - {format(dateRange.end, 'dd/MM/yyyy')}
               </p>
             </div>
           </div>
 
           {/* Saldo Previsto */}
-          <div className="bg-[#111827] border border-white/5 rounded-xl p-6 relative overflow-hidden">
+          <div className="bg-card border border-border rounded-xl p-6 relative overflow-hidden">
             <div className="relative z-10">
-              <div className="text-sm text-zinc-400 mb-2 flex items-center gap-2">
+              <div className="text-sm text-muted-foreground mb-2 flex items-center gap-2">
                 <div className="p-1.5 bg-blue-500/10 rounded-lg">
                   <Wallet className="w-4 h-4 text-blue-500" />
                 </div>
@@ -612,7 +669,7 @@ export function ReportsPage() {
               )}>
                 {formatCurrency(forecastData.projectedBalance)}
               </p>
-              <p className="text-xs text-zinc-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 {t('reports.projectedFormula')}
               </p>
             </div>
@@ -622,11 +679,11 @@ export function ReportsPage() {
         {/* Forecast Lists */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Receitas Pendentes */}
-          <div className="bg-[#111827] border border-white/5 rounded-xl p-6 flex flex-col h-[400px]">
+          <div className="bg-card border border-border rounded-xl p-6 flex flex-col h-[400px]">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h3 className="text-lg font-semibold text-white">{t('reports.pendingIncomeTitle')}</h3>
-                <p className="text-sm text-zinc-400">{t('reports.toReceiveLabel')}</p>
+                <h3 className="text-lg font-semibold text-foreground">{t('reports.pendingIncomeTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('reports.toReceiveLabel')}</p>
               </div>
               <span className="px-2 py-1 bg-[#22C55E]/10 text-[#22C55E] text-xs rounded border border-[#22C55E]/20">
                 {t('reports.incomeLabel')}
@@ -635,10 +692,10 @@ export function ReportsPage() {
 
             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
               {forecastData.incomes.map((item) => (
-                <div key={item.id} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/5 flex justify-between items-center">
+                <div key={item.id} className="p-3 rounded-lg bg-background hover:bg-muted/50 transition-colors border border-border flex justify-between items-center">
                   <div className="flex flex-col gap-1">
-                    <span className="text-sm font-medium text-white line-clamp-1">{item.descricao}</span>
-                    <div className="flex items-center gap-2 text-xs text-zinc-500">
+                    <span className="text-sm font-medium text-foreground line-clamp-1">{item.descricao}</span>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span>{format(new Date(item.data_prevista), "dd/MM/yyyy", { locale: ptBR })}</span>
                       <span className="px-1.5 py-0.5 rounded bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/20">
                         {item.categoria?.descricao || 'Outros'}
@@ -652,7 +709,7 @@ export function ReportsPage() {
               ))}
 
               {forecastData.incomes.length === 0 && (
-                <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-2">
+                <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
                   <Receipt className="w-8 h-8 opacity-50" />
                   <p className="text-sm">{t('reports.noPendingIncome')}</p>
                 </div>
@@ -661,11 +718,11 @@ export function ReportsPage() {
           </div>
 
           {/* Despesas Pendentes */}
-          <div className="bg-[#111827] border border-white/5 rounded-xl p-6 flex flex-col h-[400px]">
+          <div className="bg-card border border-border rounded-xl p-6 flex flex-col h-[400px]">
             <div className="flex justify-between items-center mb-4">
               <div>
-                <h3 className="text-lg font-semibold text-white">{t('reports.pendingExpensesTitle')}</h3>
-                <p className="text-sm text-zinc-400">{t('reports.toPayLabel')}</p>
+                <h3 className="text-lg font-semibold text-foreground">{t('reports.pendingExpensesTitle')}</h3>
+                <p className="text-sm text-muted-foreground">{t('reports.toPayLabel')}</p>
               </div>
               <span className="px-2 py-1 bg-[#EF4444]/10 text-[#EF4444] text-xs rounded border border-[#EF4444]/20">
                 {t('reports.expenseLabel')}
@@ -674,10 +731,10 @@ export function ReportsPage() {
 
             <div className="flex-1 overflow-y-auto custom-scrollbar space-y-3 pr-2">
               {forecastData.expenses.map((item) => (
-                <div key={item.id} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/5 flex justify-between items-center">
+                <div key={item.id} className="p-3 rounded-lg bg-background hover:bg-muted/50 transition-colors border border-border flex justify-between items-center">
                   <div className="flex flex-col gap-1">
-                    <span className="text-sm font-medium text-white line-clamp-1">{item.descricao}</span>
-                    <div className="flex items-center gap-2 text-xs text-zinc-500">
+                    <span className="text-sm font-medium text-foreground line-clamp-1">{item.descricao}</span>
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span>{format(new Date(item.data_prevista), "dd/MM/yyyy", { locale: ptBR })}</span>
                       <span className="px-1.5 py-0.5 rounded bg-[#EF4444]/10 text-[#EF4444] border border-[#EF4444]/20">
                         {item.categoria?.descricao || 'Outros'}
@@ -691,7 +748,7 @@ export function ReportsPage() {
               ))}
 
               {forecastData.expenses.length === 0 && (
-                <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-2">
+                <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
                   <Receipt className="w-8 h-8 opacity-50" />
                   <p className="text-sm">{t('reports.noPendingExpense')}</p>
                 </div>
@@ -704,9 +761,9 @@ export function ReportsPage() {
       {/* Category Analysis Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Income Categories */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6 flex flex-col">
-          <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <PieChartIcon className="w-5 h-5 text-zinc-400" />
+        <div className="bg-card border border-border rounded-xl p-6 flex flex-col">
+          <h3 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
+            <PieChartIcon className="w-5 h-5 text-muted-foreground" />
             {t('reports.incomeOrigin')}
           </h3>
 
@@ -735,7 +792,7 @@ export function ReportsPage() {
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <p className="text-zinc-400 font-bold text-xl">{stats.income > 0 ? '100%' : '0%'}</p>
+              <p className="text-muted-foreground font-bold text-xl">{stats.income > 0 ? '100%' : '0%'}</p>
             </div>
           </div>
 
@@ -744,11 +801,11 @@ export function ReportsPage() {
               <div key={index} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: cat.color }} />
-                  <span className="text-sm text-zinc-400">{cat.name}</span>
+                  <span className="text-sm text-muted-foreground">{cat.name}</span>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-white">{formatCurrency(cat.value)}</p>
-                  <p className="text-xs text-zinc-500">
+                  <p className="text-sm font-medium text-foreground">{formatCurrency(cat.value)}</p>
+                  <p className="text-xs text-muted-foreground">
                     {stats.income > 0 ? ((cat.value / stats.income) * 100).toFixed(1) : 0}%
                   </p>
                 </div>
@@ -761,9 +818,9 @@ export function ReportsPage() {
         </div>
 
         {/* Expense Categories */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6 flex flex-col">
-          <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
-            <PieChartIcon className="w-5 h-5 text-zinc-400" />
+        <div className="bg-card border border-border rounded-xl p-6 flex flex-col">
+          <h3 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
+            <PieChartIcon className="w-5 h-5 text-muted-foreground" />
             {t('reports.expenseDestination')}
           </h3>
 
@@ -818,24 +875,24 @@ export function ReportsPage() {
         </div>
 
         {/* Top Expenses List */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6 flex flex-col">
-          <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+        <div className="bg-card border border-border rounded-xl p-6 flex flex-col">
+          <h3 className="text-lg font-semibold text-foreground mb-6 flex items-center gap-2">
             <Receipt className="w-5 h-5 text-[#EF4444]" />
             {t('reports.topExpenses')}
           </h3>
 
           <div className="flex-1 overflow-y-auto max-h-[400px] custom-scrollbar space-y-3 pr-2">
             {topExpenses.map((expense) => (
-              <div key={expense.id} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors border border-white/5">
+              <div key={expense.id} className="p-3 rounded-lg bg-background hover:bg-muted/50 transition-colors border border-border">
                 <div className="flex justify-between items-start mb-1">
-                  <span className="text-sm font-medium text-white line-clamp-1">
+                  <span className="text-sm font-medium text-foreground line-clamp-1">
                     {expense.descricao}
                   </span>
                   <span className="text-sm font-bold text-[#EF4444] whitespace-nowrap">
                     {formatCurrency(expense.valor)}
                   </span>
                 </div>
-                <div className="flex justify-between items-center text-xs text-zinc-500">
+                <div className="flex justify-between items-center text-xs text-muted-foreground">
                   <span>{format(new Date(expense.data), "dd/MM/yyyy", { locale: ptBR })}</span>
                   <span className="px-1.5 py-0.5 rounded bg-[#EF4444]/10 text-[#EF4444] border border-[#EF4444]/20">
                     {expense.categoria?.descricao || 'Outros'}
@@ -845,7 +902,7 @@ export function ReportsPage() {
             ))}
 
             {topExpenses.length === 0 && (
-              <div className="h-full flex flex-col items-center justify-center text-zinc-500 gap-2">
+              <div className="h-full flex flex-col items-center justify-center text-muted-foreground gap-2">
                 <Receipt className="w-8 h-8 opacity-50" />
                 <p className="text-sm">{t('reports.noExpensesInPeriod')}</p>
               </div>

@@ -10,8 +10,8 @@ const CategoriesPageDynamic = dynamic(
     loading: () => (
       <div className="p-6">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 w-48 bg-zinc-800/50 rounded" />
-          <div className="h-4 w-32 bg-zinc-800/50 rounded" />
+          <div className="h-8 w-48 bg-muted/50 rounded" />
+          <div className="h-4 w-32 bg-muted/50 rounded" />
         </div>
       </div>
     )

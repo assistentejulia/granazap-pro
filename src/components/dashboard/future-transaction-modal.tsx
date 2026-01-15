@@ -400,7 +400,7 @@ export function FutureTransactionModal({
         {/* ... (Header Badges - kept same) */}
         <div className="flex justify-center gap-2">
           {!transactionToEdit ? (
-            <div className="flex bg-[#0A0F1C] p-1 rounded-full border border-white/10">
+            <div className="flex bg-card p-1 rounded-full border border-border">
               <button
                 type="button"
                 onClick={() => onTypeChange?.('entrada')}
@@ -408,7 +408,7 @@ export function FutureTransactionModal({
                   "px-4 py-1.5 rounded-full text-xs font-medium transition-all",
                   type === 'entrada'
                     ? "bg-[#22C55E]/20 text-[#22C55E] shadow-sm"
-                    : "text-zinc-400 hover:text-white"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 💰 {t('future.toReceive')}
@@ -438,11 +438,11 @@ export function FutureTransactionModal({
           )}
 
           {accountFilter === 'pj' ? (
-            <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/30">
+            <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/30">
               💼 PJ
             </span>
           ) : (
-            <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-green-500/10 text-green-400 border border-green-500/30">
+            <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/30">
               👤 {t('future.personal')}
             </span>
           )}
@@ -451,13 +451,13 @@ export function FutureTransactionModal({
         {/* Informações Básicas */}
         <div className="space-y-2">
           <div>
-            <label className="text-xs font-medium text-zinc-400">
+            <label className="text-xs font-medium text-muted-foreground">
               {t('future.description')} <span className="text-red-400">*</span>
             </label>
             <Input
               {...register("descricao")}
               placeholder="Ex: IPTU, Salário, Energia..."
-              className="mt-1 bg-[#0A0F1C] border-white/10 text-white h-9 text-sm"
+              className="mt-1 bg-background border-border text-foreground h-9 text-sm placeholder:text-muted-foreground"
             />
             {errors.descricao && (
               <p className="text-xs text-red-400 mt-0.5">{errors.descricao.message}</p>
@@ -465,7 +465,7 @@ export function FutureTransactionModal({
           </div>
 
           <div>
-            <label className="text-xs font-medium text-zinc-400">
+            <label className="text-xs font-medium text-muted-foreground">
               {t('future.value')} <span className="text-red-400">*</span>
             </label>
             <Input
@@ -473,7 +473,7 @@ export function FutureTransactionModal({
               type="number"
               step="0.01"
               placeholder="Ex: 1.500,00"
-              className="mt-1 bg-[#0A0F1C] border-white/10 text-white h-9 text-sm"
+              className="mt-1 bg-background border-border text-foreground h-9 text-sm placeholder:text-muted-foreground"
             />
             {errors.valor && (
               <p className="text-xs text-red-400 mt-0.5">{errors.valor.message}</p>
@@ -483,22 +483,22 @@ export function FutureTransactionModal({
 
         {/* Conta Bancária */}
         <div>
-          <label className="text-xs font-medium text-zinc-400 flex justify-between items-center">
+          <label className="text-xs font-medium text-muted-foreground flex justify-between items-center">
             {t('future.bankAccount')}
-            <span className="text-[10px] text-zinc-500">{accountFilter === 'pessoal' ? t('future.personal') : t('future.business')}</span>
+            <span className="text-[10px] text-muted-foreground">{accountFilter === 'pessoal' ? t('future.personal') : t('future.business')}</span>
           </label>
           <div className="relative mt-1">
-            <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none">
+            <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
               <Wallet className="w-3.5 h-3.5" />
             </div>
             <select
               {...register("conta_id")}
               disabled={loadingAccounts}
-              className="w-full h-9 pl-8 pr-2 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/20 appearance-none"
+              className="w-full h-9 pl-8 pr-2 bg-background border border-border rounded-lg text-foreground text-sm focus:outline-none focus:border-border appearance-none"
             >
               <option value="">{t('future.noAccountLinked')}</option>
               {accounts.map((acc) => (
-                <option key={acc.id} value={acc.id}>
+                <option key={acc.id} value={acc.id} className="bg-popover text-foreground">
                   {acc.nome} {acc.saldo_atual !== undefined ? `(${getCurrencySymbol()} ${acc.saldo_atual.toLocaleString('pt-BR', { minimumFractionDigits: 2 })})` : ''}
                 </option>
               ))}
@@ -509,22 +509,22 @@ export function FutureTransactionModal({
         {/* Cartão de Crédito */}
         {type === 'saida' && (
           <div>
-            <label className="text-xs font-medium text-zinc-400 flex justify-between items-center">
+            <label className="text-xs font-medium text-muted-foreground flex justify-between items-center">
               Cartão de Crédito
-              <span className="text-[10px] text-zinc-500">Opcional</span>
+              <span className="text-[10px] text-muted-foreground">Opcional</span>
             </label>
             <div className="relative mt-1">
-              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-zinc-500 pointer-events-none">
+              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
                 <CreditCard className="w-3.5 h-3.5" />
               </div>
               <select
                 {...register("cartao_id")}
                 disabled={loadingCards}
-                className="w-full h-9 pl-8 pr-2 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/20 appearance-none"
+                className="w-full h-9 pl-8 pr-2 bg-background border border-border rounded-lg text-foreground text-sm focus:outline-none focus:border-border appearance-none"
               >
                 <option value="">Sem cartão vinculado</option>
                 {cards.map((card) => (
-                  <option key={card.id} value={card.id}>
+                  <option key={card.id} value={card.id} className="bg-popover text-foreground">
                     {card.nome} {card.ultimos_digitos ? `(****${card.ultimos_digitos})` : ''}
                   </option>
                 ))}
@@ -537,13 +537,13 @@ export function FutureTransactionModal({
         <div className="space-y-3">
           {/* Categoria */}
           <div>
-            <label className="text-xs font-medium text-zinc-400 flex items-center justify-between">
+            <label className="text-xs font-medium text-muted-foreground flex items-center justify-between">
               <span>{t('future.category')} <span className="text-red-400">*</span></span>
               {!showNewCategory && (
                 <button
                   type="button"
                   onClick={() => setShowNewCategory(true)}
-                  className="text-xs flex items-center gap-1 hover:text-white transition-colors"
+                  className="text-xs flex items-center gap-1 hover:text-foreground transition-colors"
                   style={{ color: accentColor }}
                 >
                   <Plus className="w-3 h-3" />
@@ -559,7 +559,7 @@ export function FutureTransactionModal({
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
                   placeholder={type === 'entrada' ? 'Ex: Salário, Freelance...' : 'Ex: Alimentação, Transporte...'}
-                  className="flex-1 h-9 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/20"
+                  className="flex-1 h-9 px-3 bg-background border border-border rounded-lg text-foreground text-sm focus:outline-none focus:border-border"
                   autoFocus
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -590,7 +590,7 @@ export function FutureTransactionModal({
                       setShowNewCategory(false);
                       setNewCategoryName("");
                     }}
-                    className="h-9 px-3 bg-white/5 hover:bg-white/10 rounded-lg text-zinc-400 hover:text-white transition-colors"
+                    className="h-9 px-3 bg-secondary hover:bg-secondary/80 rounded-lg text-muted-foreground hover:text-foreground transition-colors"
                   >
                     <X className="w-4 h-4" />
                   </button>
@@ -599,11 +599,11 @@ export function FutureTransactionModal({
             ) : (
               <select
                 {...register("categoria_id", { valueAsNumber: true })}
-                className="mt-1 w-full h-9 px-2 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/20"
+                className="mt-1 w-full h-9 px-2 bg-background border border-border rounded-lg text-foreground text-sm focus:outline-none focus:border-border"
               >
                 <option value={0}>{t('future.select')}</option>
                 {categories.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
+                  <option key={cat.id} value={cat.id} className="bg-popover text-foreground">
                     {cat.descricao}
                   </option>
                 ))}
@@ -619,11 +619,16 @@ export function FutureTransactionModal({
             <label className="text-xs font-medium text-zinc-400">
               {type === 'entrada' ? t('future.payer') : t('future.receiver')}
             </label>
-            <Input
-              {...register("pagador_recebedor")}
-              placeholder={t('future.optional')}
-              className="mt-1 bg-[#0A0F1C] border-white/10 text-white h-9 text-sm"
-            />
+            <div className="relative">
+              <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
+                <Wallet className="w-3.5 h-3.5" />
+              </div>
+              <Input
+                {...register("pagador_recebedor")}
+                placeholder={t('future.optional')}
+                className="mt-1 pl-8 bg-background border-border text-foreground h-9 text-sm placeholder:text-muted-foreground"
+              />
+            </div>
           </div>
         </div>
 
@@ -637,10 +642,7 @@ export function FutureTransactionModal({
           <input
             {...register("data_prevista")}
             type="date"
-            className="mt-1 w-full h-9 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-white/20 [color-scheme:dark]"
-            style={{
-              colorScheme: 'dark',
-            }}
+            className="mt-1 w-full h-9 px-3 bg-background border border-border rounded-lg text-foreground text-sm focus:outline-none focus:border-primary"
           />
           {errors.data_prevista && (
             <p className="text-xs text-red-400 mt-0.5">{errors.data_prevista.message}</p>
@@ -651,10 +653,10 @@ export function FutureTransactionModal({
           <div className="space-y-2">
             {/* Recorrente and Parcelado sections - kept same */}
             <div className="space-y-1.5">
-              <label className="flex items-center justify-between p-2 bg-[#0A0F1C] rounded-lg cursor-pointer hover:bg-[#111827] transition-colors border border-white/10">
+              <label className="flex items-center justify-between p-2 bg-card rounded-lg cursor-pointer hover:bg-muted transition-colors border border-border">
                 <div className="flex items-center gap-2">
                   <Repeat className="w-3.5 h-3.5 text-blue-400" />
-                  <span className="text-xs font-medium text-white">{t('future.recurring')}</span>
+                  <span className="text-xs font-medium text-foreground">{t('future.recurring')}</span>
                 </div>
                 <input
                   type="checkbox"
@@ -670,11 +672,11 @@ export function FutureTransactionModal({
               {isRecurrent && (
                 <div className="pl-6 space-y-1.5">
                   <div>
-                    <label className="text-xs font-medium text-zinc-400">{t('common.frequency')}</label>
+                    <label className="text-xs font-medium text-muted-foreground">{t('common.frequency')}</label>
                     <select
                       value={periodicidade}
                       onChange={(e) => setPeriodicidade(e.target.value)}
-                      className="mt-1 w-full h-8 px-2 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-xs"
+                      className="mt-1 w-full h-8 px-2 bg-background border border-border rounded-lg text-foreground text-xs"
                     >
                       <option value="diario">{t('common.daily')}</option>
                       <option value="semanal">{t('common.weekly')}</option>
@@ -688,17 +690,14 @@ export function FutureTransactionModal({
                   </div>
 
                   <div>
-                    <label className="text-xs font-medium text-zinc-400">
+                    <label className="text-xs font-medium text-muted-foreground">
                       📅 {t('common.until')} <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="date"
                       value={dataFinal}
                       onChange={(e) => setDataFinal(e.target.value)}
-                      className="mt-1 w-full h-8 px-2 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-xs focus:outline-none focus:border-white/20 [color-scheme:dark]"
-                      style={{
-                        colorScheme: 'dark',
-                      }}
+                      className="mt-1 w-full h-8 px-2 bg-background border border-border rounded-lg text-foreground text-xs focus:outline-none focus:border-border"
                     />
                   </div>
                 </div>
@@ -706,10 +705,10 @@ export function FutureTransactionModal({
             </div>
 
             <div className="space-y-1.5">
-              <label className="flex items-center justify-between p-2 bg-[#0A0F1C] rounded-lg cursor-pointer hover:bg-[#111827] transition-colors border border-white/10">
+              <label className="flex items-center justify-between p-2 bg-card rounded-lg cursor-pointer hover:bg-muted transition-colors border border-border">
                 <div className="flex items-center gap-2">
                   <CreditCard className="w-3.5 h-3.5 text-purple-400" />
-                  <span className="text-xs font-medium text-white">{t('future.installment')}</span>
+                  <span className="text-xs font-medium text-foreground">{t('future.installment')}</span>
                 </div>
                 <input
                   type="checkbox"
@@ -724,7 +723,7 @@ export function FutureTransactionModal({
 
               {isInstallment && (
                 <div className="pl-6">
-                  <label className="text-xs font-medium text-zinc-400">
+                  <label className="text-xs font-medium text-muted-foreground">
                     {t('common.installments')} <span className="text-red-400">*</span>
                   </label>
                   <Input
@@ -734,7 +733,7 @@ export function FutureTransactionModal({
                     value={numeroParcelas}
                     onChange={(e) => setNumeroParcelas(e.target.value)}
                     placeholder="Ex: 12"
-                    className="mt-1 bg-[#0A0F1C] border-white/10 text-white h-8 text-xs"
+                    className="mt-1 bg-background border-border text-foreground h-8 text-xs placeholder:text-muted-foreground"
                   />
                 </div>
               )}
@@ -743,11 +742,11 @@ export function FutureTransactionModal({
         )}
 
         {/* Footer - kept same */}
-        <div className="flex justify-end gap-3 pt-3 border-t border-white/5">
+        <div className="flex justify-end gap-3 pt-3 border-t border-border">
           <Button
             type="button"
             onClick={onClose}
-            className="px-6 bg-transparent border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+            className="px-6 bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             {t('future.cancel')}
           </Button>

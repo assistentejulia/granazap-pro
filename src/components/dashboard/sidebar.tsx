@@ -242,8 +242,8 @@ export function DashboardSidebar() {
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
                 pathname === '/dashboard/whatsapp-agent'
-                  ? "bg-white/10 text-green-400"
-                  : "text-green-400 hover:text-green-300 hover:bg-green-500/10"
+                  ? "bg-green-500/10 text-green-600 dark:text-green-400"
+                  : "text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 hover:bg-green-500/10"
               )}
               title={collapsed ? whatsappConfig.whatsapp_contact_text : undefined}
             >
@@ -260,8 +260,8 @@ export function DashboardSidebar() {
             className={cn(
               "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
               pathname === '/dashboard/instalacao'
-                ? "bg-white/10 text-orange-400"
-                : "text-orange-400 hover:text-orange-300 hover:bg-orange-500/10"
+                ? "bg-orange-500/10 text-orange-600 dark:text-orange-400"
+                : "text-orange-600 dark:text-orange-400 hover:text-orange-700 dark:hover:text-orange-300 hover:bg-orange-500/10"
             )}
             title={collapsed ? 'Instalar App' : undefined}
           >
@@ -278,8 +278,8 @@ export function DashboardSidebar() {
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
                 pathname.startsWith('/admin')
-                  ? "bg-red-500/10 text-red-500"
-                  : "text-red-500 hover:text-red-400 hover:bg-red-500/10"
+                  ? "bg-red-500/10 text-red-600 dark:text-red-500"
+                  : "text-red-600 dark:text-red-500 hover:text-red-700 dark:hover:text-red-400 hover:bg-red-500/10"
               )}
               title={collapsed ? 'Admin' : undefined}
             >
@@ -316,7 +316,7 @@ export function DashboardSidebar() {
             }}
             className={cn(
               "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors",
-              "text-red-400 hover:text-red-300 hover:bg-red-500/10"
+              "text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:bg-red-500/10"
             )}
             title={collapsed ? "Sair da Conta" : undefined}
           >

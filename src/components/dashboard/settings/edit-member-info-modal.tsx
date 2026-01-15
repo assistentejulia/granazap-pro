@@ -38,7 +38,7 @@ export function EditMemberInfoModal({ isOpen, onClose, member, onSave }: EditMem
 
   const handleSave = async () => {
     if (!member) return;
-    
+
     // Validações
     if (!nome.trim()) {
       alert('Nome é obrigatório');
@@ -52,7 +52,7 @@ export function EditMemberInfoModal({ isOpen, onClose, member, onSave }: EditMem
       alert('Telefone é obrigatório');
       return;
     }
-    
+
     setLoading(true);
     try {
       await onSave(member.id, { nome, email, telefone });
@@ -77,7 +77,7 @@ export function EditMemberInfoModal({ isOpen, onClose, member, onSave }: EditMem
       <div className="space-y-4">
         {/* Nome */}
         <div>
-          <label className="block text-sm font-medium text-white mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             <User className="w-4 h-4 inline mr-2" />
             Nome Completo
           </label>
@@ -85,7 +85,7 @@ export function EditMemberInfoModal({ isOpen, onClose, member, onSave }: EditMem
             type="text"
             value={nome}
             onChange={(e) => setNome(e.target.value)}
-            className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500"
             placeholder="Nome completo"
             disabled={loading}
           />
@@ -93,7 +93,7 @@ export function EditMemberInfoModal({ isOpen, onClose, member, onSave }: EditMem
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-white mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             <Mail className="w-4 h-4 inline mr-2" />
             Email
           </label>
@@ -101,18 +101,18 @@ export function EditMemberInfoModal({ isOpen, onClose, member, onSave }: EditMem
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500"
             placeholder="email@exemplo.com"
             disabled={loading}
           />
-          <p className="text-xs text-zinc-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             ⚠️ Alterar o email pode afetar o login do usuário
           </p>
         </div>
 
         {/* Telefone */}
         <div>
-          <label className="block text-sm font-medium text-white mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             <Phone className="w-4 h-4 inline mr-2" />
             Telefone
           </label>
@@ -120,7 +120,7 @@ export function EditMemberInfoModal({ isOpen, onClose, member, onSave }: EditMem
             type="tel"
             value={telefone}
             onChange={(e) => setTelefone(e.target.value)}
-            className="w-full px-3 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500"
+            className="w-full px-3 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500"
             placeholder="+55 11 99999-9999"
             disabled={loading}
           />

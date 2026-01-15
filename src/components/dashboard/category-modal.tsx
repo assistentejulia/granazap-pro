@@ -26,12 +26,12 @@ interface CategoryModalProps {
   categoryToEdit?: any;
 }
 
-export function CategoryModal({ 
-  isOpen, 
-  onClose, 
-  onSuccess, 
+export function CategoryModal({
+  isOpen,
+  onClose,
+  onSuccess,
   type,
-  categoryToEdit 
+  categoryToEdit
 }: CategoryModalProps) {
   const { t } = useLanguage();
   const { profile } = useUser();
@@ -40,12 +40,12 @@ export function CategoryModal({
   const [keywords, setKeywords] = useState<string[]>([]);
   const [keywordInput, setKeywordInput] = useState('');
   const [selectedType, setSelectedType] = useState<'entrada' | 'saida' | 'ambos'>(type);
-  
+
   // Schema dinâmico com tradução
   const categorySchema = z.object({
     descricao: z.string().min(1, t('categories.modal.nameRequired')),
   });
-  
+
   const {
     register,
     handleSubmit,
@@ -83,7 +83,7 @@ export function CategoryModal({
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setValue('descricao', value);
-    
+
     // Se não tem ícone selecionado e está digitando, sugerir
     if (!selectedIcon && value.length > 2) {
       const suggested = suggestIcon(value, selectedType === 'ambos' ? 'entrada' : selectedType);
@@ -160,7 +160,7 @@ export function CategoryModal({
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Aviso de Contexto: Conta Pessoal/PJ + Tipo */}
-        <div className="flex flex-col items-center gap-2 pb-2 border-b border-white/5">
+        <div className="flex flex-col items-center gap-2 pb-2 border-b border-border">
           <div className="flex items-center gap-2">
             <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/30">
               {accountFilter === 'pessoal' ? `👤 ${t('categories.modal.contextPersonal')}` : `🏢 ${t('categories.modal.contextPJ')}`}
@@ -170,8 +170,8 @@ export function CategoryModal({
               selectedType === 'entrada'
                 ? "bg-[#22C55E]/10 text-[#22C55E] border border-[#22C55E]/30"
                 : selectedType === 'saida'
-                ? "bg-red-500/10 text-red-500 border border-red-500/30"
-                : "bg-blue-500/10 text-blue-400 border border-blue-500/30"
+                  ? "bg-red-500/10 text-red-500 border border-red-500/30"
+                  : "bg-blue-500/10 text-blue-400 border border-blue-500/30"
             )}>
               {selectedType === 'entrada' ? t('categories.modal.typeIncome') : selectedType === 'saida' ? t('categories.modal.typeExpense') : 'Ambos'}
             </span>
@@ -184,7 +184,7 @@ export function CategoryModal({
         {/* Seletor de Tipo (apenas ao editar) */}
         {categoryToEdit && (
           <div className="space-y-2">
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               Tipo da Categoria <span className="text-red-400">*</span>
             </label>
             <div className="grid grid-cols-3 gap-2">
@@ -195,7 +195,7 @@ export function CategoryModal({
                   "px-4 py-3 rounded-lg text-sm font-medium transition-all border-2",
                   selectedType === 'entrada'
                     ? "bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E]"
-                    : "bg-[#0A0F1C] border-white/10 text-zinc-400 hover:border-white/20"
+                    : "bg-card border-border text-muted-foreground hover:border-foreground/20"
                 )}
               >
                 💰 Receita
@@ -207,7 +207,7 @@ export function CategoryModal({
                   "px-4 py-3 rounded-lg text-sm font-medium transition-all border-2",
                   selectedType === 'saida'
                     ? "bg-red-500/10 border-red-500 text-red-500"
-                    : "bg-[#0A0F1C] border-white/10 text-zinc-400 hover:border-white/20"
+                    : "bg-card border-border text-muted-foreground hover:border-foreground/20"
                 )}
               >
                 💸 Despesa
@@ -219,18 +219,18 @@ export function CategoryModal({
                   "px-4 py-3 rounded-lg text-sm font-medium transition-all border-2",
                   selectedType === 'ambos'
                     ? "bg-blue-500/10 border-blue-500 text-blue-400"
-                    : "bg-[#0A0F1C] border-white/10 text-zinc-400 hover:border-white/20"
+                    : "bg-card border-border text-muted-foreground hover:border-foreground/20"
                 )}
               >
                 🔄 Ambos
               </button>
             </div>
-            <p className="text-xs text-zinc-400">
-              {selectedType === 'ambos' 
+            <p className="text-xs text-muted-foreground">
+              {selectedType === 'ambos'
                 ? '⚠️ Categoria aparecerá tanto em Receitas quanto em Despesas'
                 : selectedType === 'entrada'
-                ? '✅ Categoria aparecerá apenas em Receitas'
-                : '✅ Categoria aparecerá apenas em Despesas'
+                  ? '✅ Categoria aparecerá apenas em Receitas'
+                  : '✅ Categoria aparecerá apenas em Despesas'
               }
             </p>
           </div>
@@ -238,17 +238,17 @@ export function CategoryModal({
 
         {/* Nome da Categoria */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-white">
+          <label className="text-sm font-medium text-foreground">
             {t('categories.modal.categoryName')} <span className="text-red-400">*</span>
           </label>
           <Input
             {...register("descricao")}
             onChange={handleDescriptionChange}
             placeholder={selectedType === 'entrada' ? t('categories.modal.placeholderIncome') : selectedType === 'saida' ? t('categories.modal.placeholderExpense') : 'Ex: Transferência, Ajuste'}
-            className="bg-[#0A0F1C] border-white/10 text-white placeholder:text-zinc-500 h-11"
-            style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+            className="bg-background border-border text-foreground placeholder:text-muted-foreground h-11"
+            style={{ borderColor: '' }}
             onFocus={(e) => e.target.style.borderColor = accentColor}
-            onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+            onBlur={(e) => e.target.style.borderColor = ''}
           />
           {errors.descricao && (
             <p className="text-xs text-red-400">{errors.descricao.message}</p>
@@ -265,30 +265,30 @@ export function CategoryModal({
         {/* Palavras-chave para IA */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               {t('categories.modal.keywordsLabel')}
             </label>
-            <span className="text-xs text-zinc-500 bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
+            <span className="text-xs text-muted-foreground bg-blue-500/10 px-2 py-0.5 rounded-full border border-blue-500/20">
               🤖 IA
             </span>
           </div>
-          <p className="text-xs text-zinc-400 leading-relaxed">
+          <p className="text-xs text-muted-foreground leading-relaxed">
             {t('categories.modal.keywordsDescription')}
           </p>
 
           {/* Keywords Tags */}
           {keywords.length > 0 && (
-            <div className="flex flex-wrap gap-2 p-3 bg-[#0A0F1C] border border-white/5 rounded-lg">
+            <div className="flex flex-wrap gap-2 p-3 bg-card border border-border rounded-lg">
               {keywords.map((keyword) => (
                 <span
                   key={keyword}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-zinc-800 text-zinc-300 text-sm rounded-full border border-white/10 hover:border-red-500/30 transition-colors group"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-muted text-foreground text-sm rounded-full border border-border hover:border-red-500/30 transition-colors group"
                 >
                   {keyword}
                   <button
                     type="button"
                     onClick={() => handleRemoveKeyword(keyword)}
-                    className="text-zinc-500 hover:text-red-400 transition-colors"
+                    className="text-muted-foreground hover:text-red-400 transition-colors"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -304,10 +304,10 @@ export function CategoryModal({
               onChange={(e) => setKeywordInput(e.target.value)}
               onKeyPress={handleKeywordKeyPress}
               placeholder={t('categories.modal.keywordPlaceholder')}
-              className="flex-1 bg-[#0A0F1C] border-white/10 text-white placeholder:text-zinc-500 h-10 text-sm"
-              style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+              className="flex-1 bg-background border-border text-foreground placeholder:text-muted-foreground h-10 text-sm"
+              style={{ borderColor: '' }}
               onFocus={(e) => e.target.style.borderColor = accentColor}
-              onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+              onBlur={(e) => e.target.style.borderColor = ''}
             />
             <Button
               type="button"
@@ -324,11 +324,11 @@ export function CategoryModal({
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 pt-3 border-t border-white/5">
+        <div className="flex justify-end gap-3 pt-3 border-t border-border">
           <Button
             type="button"
             onClick={onClose}
-            className="px-6 bg-transparent border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+            className="px-6 bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             {t('common.cancel')}
           </Button>

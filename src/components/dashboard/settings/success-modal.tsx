@@ -13,12 +13,12 @@ interface SuccessModalProps {
   appName: string;
 }
 
-export function SuccessModal({ 
-  isOpen, 
-  onClose, 
-  memberName, 
+export function SuccessModal({
+  isOpen,
+  onClose,
+  memberName,
   memberEmail,
-  appName 
+  appName
 }: SuccessModalProps) {
   const [copied, setCopied] = useState(false);
 
@@ -43,31 +43,31 @@ export function SuccessModal({
 
         {/* Título */}
         <div className="space-y-2">
-          <h3 className="text-2xl font-bold text-white">
+          <h3 className="text-2xl font-bold text-foreground">
             Membro Adicionado!
           </h3>
-          <p className="text-zinc-400">
+          <p className="text-muted-foreground">
             {memberName} foi adicionado à sua equipe
           </p>
         </div>
 
         {/* Card com Instruções */}
-        <div className="w-full bg-zinc-900/50 border border-zinc-800 rounded-lg p-4 space-y-4">
+        <div className="w-full bg-muted/50 border border-border rounded-lg p-4 space-y-4">
           <div className="flex items-start gap-3 text-left">
             <Mail className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
             <div className="space-y-1 flex-1">
-              <p className="text-sm font-medium text-white">
+              <p className="text-sm font-medium text-foreground">
                 Próximo Passo
               </p>
-              <p className="text-sm text-zinc-400">
-                Peça para <span className="text-white font-medium">{memberName}</span> criar uma conta no {appName} usando o e-mail:
+              <p className="text-sm text-muted-foreground">
+                Peça para <span className="text-foreground font-medium">{memberName}</span> criar uma conta no {appName} usando o e-mail:
               </p>
             </div>
           </div>
 
           {/* E-mail com botão de copiar */}
-          <div className="flex items-center gap-2 bg-zinc-800/50 rounded-lg p-3 border border-zinc-700">
-            <span className="text-sm text-white font-mono flex-1 truncate">
+          <div className="flex items-center gap-2 bg-secondary rounded-lg p-3 border border-border">
+            <span className="text-sm text-foreground font-mono flex-1 truncate">
               {memberEmail}
             </span>
             <Button
@@ -75,19 +75,19 @@ export function SuccessModal({
               size="sm"
               variant="ghost"
               onClick={handleCopyEmail}
-              className="h-8 px-3 hover:bg-zinc-700"
+              className="h-8 px-3 hover:bg-accent"
             >
               {copied ? (
                 <CheckCircle2 className="w-4 h-4 text-green-500" />
               ) : (
-                <Copy className="w-4 h-4 text-zinc-400" />
+                <Copy className="w-4 h-4 text-muted-foreground" />
               )}
             </Button>
           </div>
 
           <div className="flex items-start gap-2 text-left">
             <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-2 flex-shrink-0" />
-            <p className="text-xs text-zinc-500">
+            <p className="text-xs text-muted-foreground">
               O acesso será liberado automaticamente quando a conta for criada com este e-mail
             </p>
           </div>

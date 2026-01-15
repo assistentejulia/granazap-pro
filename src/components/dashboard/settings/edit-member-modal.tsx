@@ -70,8 +70,8 @@ export function EditMemberModal({ isOpen, onClose, member, onSave }: EditMemberM
     if (!member) {
       return;
     }
-    
-    
+
+
     setLoading(true);
     try {
       await onSave(member.id, permissoes);
@@ -97,12 +97,12 @@ export function EditMemberModal({ isOpen, onClose, member, onSave }: EditMemberM
     setPermissoes(prev => {
       const tipos = prev.tipos_conta_permitidos || ['pessoal', 'pj'];
       const hasType = tipos.includes(tipo);
-      
+
       // Não permitir desmarcar ambos
       if (hasType && tipos.length === 1) {
         return prev;
       }
-      
+
       return {
         ...prev,
         tipos_conta_permitidos: hasType
@@ -162,39 +162,37 @@ export function EditMemberModal({ isOpen, onClose, member, onSave }: EditMemberM
       <div className="space-y-6 max-h-[70vh] overflow-y-auto pr-2">
         {/* Tipos de Conta Permitidos */}
         <div>
-          <label className="block text-sm font-medium text-white mb-3">
+          <label className="block text-sm font-medium text-foreground mb-3">
             Acesso às Contas
           </label>
-          <div className="text-xs text-zinc-400 mb-3">
+          <div className="text-xs text-muted-foreground mb-3">
             Defina quais tipos de conta este membro pode acessar
           </div>
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
               onClick={() => toggleTipoConta('pessoal')}
-              className={`p-4 rounded-lg border-2 transition-colors ${
-                (permissoes.tipos_conta_permitidos || []).includes('pessoal')
+              className={`p-4 rounded-lg border-2 transition-colors ${(permissoes.tipos_conta_permitidos || []).includes('pessoal')
                   ? 'border-blue-500 bg-blue-500/10'
-                  : 'border-zinc-800 hover:border-zinc-700'
-              }`}
+                  : 'border-input hover:border-accent-foreground/50'
+                }`}
             >
               <div className="flex items-center gap-2 justify-center">
                 <User className="w-4 h-4" />
-                <span className="text-sm font-medium text-white">Conta Pessoal</span>
+                <span className="text-sm font-medium text-foreground">Conta Pessoal</span>
               </div>
             </button>
             <button
               type="button"
               onClick={() => toggleTipoConta('pj')}
-              className={`p-4 rounded-lg border-2 transition-colors ${
-                (permissoes.tipos_conta_permitidos || []).includes('pj')
+              className={`p-4 rounded-lg border-2 transition-colors ${(permissoes.tipos_conta_permitidos || []).includes('pj')
                   ? 'border-blue-500 bg-blue-500/10'
-                  : 'border-zinc-800 hover:border-zinc-700'
-              }`}
+                  : 'border-input hover:border-accent-foreground/50'
+                }`}
             >
               <div className="flex items-center gap-2 justify-center">
                 <Building2 className="w-4 h-4" />
-                <span className="text-sm font-medium text-white">Conta PJ</span>
+                <span className="text-sm font-medium text-foreground">Conta PJ</span>
               </div>
             </button>
           </div>
@@ -202,7 +200,7 @@ export function EditMemberModal({ isOpen, onClose, member, onSave }: EditMemberM
 
         {/* Nível de Acesso Rápido */}
         <div>
-          <label className="block text-sm font-medium text-white mb-3">
+          <label className="block text-sm font-medium text-foreground mb-3">
             Nível de Acesso Rápido
           </label>
           <div className="grid grid-cols-3 gap-3">
@@ -210,13 +208,12 @@ export function EditMemberModal({ isOpen, onClose, member, onSave }: EditMemberM
               <button
                 key={nivel}
                 onClick={() => setNivelAcesso(nivel)}
-                className={`p-3 rounded-lg border-2 transition-colors ${
-                  permissoes.nivel_acesso === nivel
+                className={`p-3 rounded-lg border-2 transition-colors ${permissoes.nivel_acesso === nivel
                     ? 'border-blue-500 bg-blue-500/10'
-                    : 'border-zinc-800 hover:border-zinc-700'
-                }`}
+                    : 'border-input hover:border-accent-foreground/50'
+                  }`}
               >
-                <div className="text-sm font-medium text-white capitalize">
+                <div className="text-sm font-medium text-foreground capitalize">
                   {nivel}
                 </div>
               </button>
@@ -226,7 +223,7 @@ export function EditMemberModal({ isOpen, onClose, member, onSave }: EditMemberM
 
         {/* Permissões Detalhadas */}
         <div>
-          <label className="block text-sm font-medium text-white mb-3">
+          <label className="block text-sm font-medium text-foreground mb-3">
             Permissões Detalhadas
           </label>
           <div className="space-y-2">
@@ -308,7 +305,7 @@ export function EditMemberModal({ isOpen, onClose, member, onSave }: EditMemberM
               label="Convidar novos membros"
               description="Bloqueado - Apenas o admin pode convidar"
               checked={false}
-              onChange={() => {}}
+              onChange={() => { }}
               disabled={true}
             />
           </div>
@@ -356,31 +353,28 @@ function PermissionToggle({
 }) {
   return (
     <div
-      className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${
-        disabled
-          ? 'border-zinc-800 bg-zinc-900/50 opacity-50 cursor-not-allowed'
+      className={`flex items-start gap-3 p-3 rounded-lg border transition-colors ${disabled
+          ? 'border-border bg-muted/50 opacity-50 cursor-not-allowed'
           : checked
-          ? 'border-blue-500/50 bg-blue-500/5'
-          : 'border-zinc-800 hover:border-zinc-700 cursor-pointer'
-      }`}
+            ? 'border-blue-500/50 bg-blue-500/5'
+            : 'border-border hover:border-muted-foreground/50 cursor-pointer'
+        }`}
       onClick={disabled ? undefined : onChange}
     >
-      <div className={`mt-0.5 ${checked ? 'text-blue-500' : 'text-zinc-500'}`}>
+      <div className={`mt-0.5 ${checked ? 'text-blue-500' : 'text-muted-foreground'}`}>
         {icon}
       </div>
       <div className="flex-1">
-        <div className="text-sm font-medium text-white">{label}</div>
-        <div className="text-xs text-zinc-500 mt-0.5">{description}</div>
+        <div className="text-sm font-medium text-foreground">{label}</div>
+        <div className="text-xs text-muted-foreground mt-0.5">{description}</div>
       </div>
       <div
-        className={`w-10 h-6 rounded-full transition-colors ${
-          checked ? 'bg-blue-600' : 'bg-zinc-700'
-        }`}
+        className={`w-10 h-6 rounded-full transition-colors ${checked ? 'bg-blue-600' : 'bg-secondary'
+          }`}
       >
         <div
-          className={`w-4 h-4 rounded-full bg-white mt-1 transition-transform ${
-            checked ? 'translate-x-5' : 'translate-x-1'
-          }`}
+          className={`w-4 h-4 rounded-full bg-white mt-1 transition-transform ${checked ? 'translate-x-5' : 'translate-x-1'
+            }`}
         />
       </div>
     </div>

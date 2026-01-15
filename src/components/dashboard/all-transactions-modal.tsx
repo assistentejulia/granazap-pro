@@ -39,21 +39,21 @@ interface AllTransactionsModalProps {
   transactionToEdit?: any;
 }
 
-export function AllTransactionsModal({ 
-  isOpen, 
-  onClose, 
-  onSuccess, 
-  transactionToEdit 
+export function AllTransactionsModal({
+  isOpen,
+  onClose,
+  onSuccess,
+  transactionToEdit
 }: AllTransactionsModalProps) {
   const { t, language } = useLanguage();
   const { getCurrencySymbol } = useCurrency();
   const { profile } = useUser();
   const { filter: accountFilter } = useAccountFilter();
-  
+
   const [selectedType, setSelectedType] = useState<'entrada' | 'saida'>('entrada');
   const { categories: allCategories, loading: loadingCategories } = useCategoriesQuery();
   const categories = allCategories.filter(c => c.tipo === selectedType);
-  
+
   const [showNewCategory, setShowNewCategory] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [creatingCategory, setCreatingCategory] = useState(false);
@@ -66,7 +66,7 @@ export function AllTransactionsModal({
     categoria_id: z.string().min(1, t('validation.categoryRequired')),
     data: z.string().min(1, t('validation.dateRequired')),
   }), [t]);
-  
+
   const {
     register,
     handleSubmit,
@@ -155,7 +155,7 @@ export function AllTransactionsModal({
     try {
       setCreatingCategory(true);
       const supabase = createClient();
-      
+
       const { data, error } = await supabase
         .from('categoria_trasacoes')
         .insert([{
@@ -187,7 +187,7 @@ export function AllTransactionsModal({
       const supabase = createClient();
       const mesFormatado = data.data.substring(0, 7);
       const dataFormatada = `${data.data}T00:00:00`;
-      
+
       const transactionData = {
         descricao: data.descricao,
         valor: parseFloat(data.valor), // data.valor is already "1234.56" string
@@ -229,7 +229,7 @@ export function AllTransactionsModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={transactionToEdit 
+      title={transactionToEdit
         ? (transactionToEdit.tipo === 'entrada' ? t('modal.editIncome') : t('modal.editExpense'))
         : (transactionToEdit?.tipo === 'entrada' ? t('modal.newIncome') : t('modal.newExpense'))
       }
@@ -242,7 +242,7 @@ export function AllTransactionsModal({
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         {/* Tipo de Transação */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-white">
+          <label className="text-sm font-medium text-foreground">
             {t('form.type')} <span className="text-red-400">*</span>
           </label>
           <div className="grid grid-cols-2 gap-3">
@@ -255,8 +255,8 @@ export function AllTransactionsModal({
               className={cn(
                 "px-4 py-3 rounded-lg text-sm font-medium transition-all border-2",
                 tipo === 'entrada'
-                  ? "bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E]"
-                  : "bg-[#0A0F1C] border-white/10 text-zinc-400 hover:border-white/20"
+                  ? "bg-green-500/10 border-green-500 text-green-500"
+                  : "bg-card border-border text-muted-foreground hover:border-foreground/20 hover:bg-muted"
               )}
             >
               💰 {t('categories.modal.typeIncome')}
@@ -271,7 +271,7 @@ export function AllTransactionsModal({
                 "px-4 py-3 rounded-lg text-sm font-medium transition-all border-2",
                 tipo === 'saida'
                   ? "bg-red-500/10 border-red-500 text-red-500"
-                  : "bg-[#0A0F1C] border-white/10 text-zinc-400 hover:border-white/20"
+                  : "bg-card border-border text-muted-foreground hover:border-foreground/20 hover:bg-muted"
               )}
             >
               💸 {t('categories.modal.typeExpense')}
@@ -281,13 +281,13 @@ export function AllTransactionsModal({
 
         {/* Descrição */}
         <div className="space-y-2">
-          <label className="text-sm font-medium text-white">
+          <label className="text-sm font-medium text-foreground">
             {t('form.description')} <span className="text-red-400">*</span>
           </label>
           <Input
             {...register("descricao")}
             placeholder={tipo === 'entrada' ? t('form.placeholderIncome') : t('form.placeholderExpense')}
-            className="bg-[#0A0F1C] border-white/10 text-white placeholder:text-zinc-500 h-11"
+            className="bg-background border-border text-foreground placeholder:text-muted-foreground h-11"
           />
           {errors.descricao && (
             <p className="text-xs text-red-400 flex items-center gap-1">
@@ -299,11 +299,11 @@ export function AllTransactionsModal({
         {/* Valor e Data */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               {t('form.value')} ({getCurrencySymbol()}) <span className="text-red-400">*</span>
             </label>
             <div className="relative">
-              <span 
+              <span
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-sm font-semibold"
                 style={{ color: accentColor }}
               >
@@ -314,28 +314,28 @@ export function AllTransactionsModal({
                 value={valorDisplay}
                 onChange={handleValorChange}
                 placeholder="0,00"
-                className="w-full h-11 pl-10 pr-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-white placeholder:text-zinc-500 focus:outline-none transition-colors font-mono text-lg"
-                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                className="w-full h-11 pl-10 pr-4 rounded-lg bg-background border border-border text-foreground placeholder:text-muted-foreground focus:outline-none transition-colors font-mono text-lg"
+                style={{ borderColor: '' }}
                 onFocus={(e) => e.target.style.borderColor = accentColor}
-                onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+                onBlur={(e) => e.target.style.borderColor = ''}
               />
             </div>
             {errors.valor && (
               <p className="text-xs text-red-400">{errors.valor.message}</p>
             )}
           </div>
-          
+
           <div className="space-y-2">
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               {t('form.date')} <span className="text-red-400">*</span>
             </label>
             <input
               {...register("data")}
               type="date"
-              className="w-full h-11 px-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-white transition-colors [color-scheme:dark]"
-              style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+              className="w-full h-11 px-4 rounded-lg bg-background border border-border text-foreground transition-colors [color-scheme:light] dark:[color-scheme:dark]"
+              style={{ borderColor: '' }}
               onFocus={(e) => e.target.style.borderColor = accentColor}
-              onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+              onBlur={(e) => e.target.style.borderColor = ''}
             />
             {errors.data && (
               <p className="text-xs text-red-400">{errors.data.message}</p>
@@ -346,7 +346,7 @@ export function AllTransactionsModal({
         {/* Categoria */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               {t('form.category')} <span className="text-red-400">*</span>
             </label>
             {!showNewCategory && (
@@ -365,16 +365,16 @@ export function AllTransactionsModal({
           </div>
 
           {showNewCategory ? (
-            <div className="space-y-3 p-4 bg-[#0A0F1C] border border-white/10 rounded-lg">
+            <div className="space-y-3 p-4 bg-muted border border-border rounded-lg">
               <div className="flex items-center justify-between">
-                <p className="text-sm text-zinc-400">{t('form.createCategory')}</p>
+                <p className="text-sm text-muted-foreground">{t('form.createCategory')}</p>
                 <button
                   type="button"
                   onClick={() => {
                     setShowNewCategory(false);
                     setNewCategoryName("");
                   }}
-                  className="text-zinc-500 hover:text-white transition-colors"
+                  className="text-muted-foreground hover:text-foreground transition-colors"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -384,7 +384,7 @@ export function AllTransactionsModal({
                   value={newCategoryName}
                   onChange={(e) => setNewCategoryName(e.target.value)}
                   placeholder={t('form.categoryName')}
-                  className="bg-[#111827] border-white/10 text-white flex-1 h-10"
+                  className="bg-background border-border text-foreground flex-1 h-10"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
@@ -415,26 +415,26 @@ export function AllTransactionsModal({
                 {...register("categoria_id")}
                 disabled={loadingCategories}
                 className={cn(
-                  "w-full h-11 px-4 rounded-lg bg-[#0A0F1C] border border-white/10 text-sm text-white",
+                  "w-full h-11 px-4 rounded-lg bg-background border border-border text-sm text-foreground",
                   "focus:outline-none transition-colors",
                   "appearance-none cursor-pointer",
-                  !selectedCategory && "text-zinc-500"
+                  !selectedCategory && "text-muted-foreground"
                 )}
-                style={{ borderColor: 'rgba(255, 255, 255, 0.1)' }}
+                style={{ borderColor: '' }}
                 onFocus={(e) => e.target.style.borderColor = accentColor}
-                onBlur={(e) => e.target.style.borderColor = 'rgba(255, 255, 255, 0.1)'}
+                onBlur={(e) => e.target.style.borderColor = ''}
               >
-                <option value="" className="text-zinc-500">
+                <option value="" className="text-muted-foreground">
                   {loadingCategories ? t('common.loading') : t('form.selectCategory')}
                 </option>
                 {categories.map(cat => (
-                  <option key={cat.id} value={cat.id} className="text-white bg-[#111827]">
+                  <option key={cat.id} value={cat.id} className="text-foreground bg-popover">
                     {cat.descricao}
                   </option>
                 ))}
               </select>
               <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                <svg className="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
               </div>
@@ -460,7 +460,7 @@ export function AllTransactionsModal({
               "text-sm font-semibold",
               accountFilter === 'pessoal' ? "text-blue-400" : "text-purple-400"
             )}>
-              {accountFilter === 'pessoal' 
+              {accountFilter === 'pessoal'
                 ? t('cards.modal.contextUsagePersonal')
                 : t('cards.modal.contextUsagePJ')}
             </p>
@@ -468,11 +468,11 @@ export function AllTransactionsModal({
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-white/5">
+        <div className="flex justify-end gap-3 pt-4 border-t border-border">
           <Button
             type="button"
             onClick={onClose}
-            className="px-6 bg-transparent border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+            className="px-6 bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             {t('common.cancel')}
           </Button>

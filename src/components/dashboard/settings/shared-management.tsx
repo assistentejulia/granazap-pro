@@ -29,10 +29,10 @@ export function SharedManagement() {
   const [togglingId, setTogglingId] = useState<number | null>(null);
   const [resendingId, setResendingId] = useState<number | null>(null);
   const { toasts, success, error, removeToast } = useToast();
-  
+
   // Bloquear acesso para dependentes
   const isDependente = profile?.is_dependente === true;
-  
+
   // Limites baseados no plano real do usuário (busca do banco)
   const maxDependentes = profile?.max_usuarios_dependentes || 0;
   const permiteCompartilhamento = profile?.permite_compartilhamento || false;
@@ -53,7 +53,7 @@ export function SharedManagement() {
 
   const handleRemoveMember = async (id: number) => {
     if (!confirm(t('confirm.removeMember'))) return;
-    
+
     setRemovingId(id);
     try {
       const result = await removeMember(id);
@@ -97,7 +97,7 @@ export function SharedManagement() {
 
   const confirmToggleStatus = async () => {
     if (!deactivatingMember) return;
-    
+
     setTogglingId(deactivatingMember.id);
     try {
       const result = await toggleMemberStatus(deactivatingMember.id, deactivatingMember.status);
@@ -143,7 +143,7 @@ export function SharedManagement() {
     return (
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-medium text-white">{t('settings.teamAccess')}</h3>
+          <h3 className="text-lg font-medium text-foreground">{t('settings.teamAccess')}</h3>
           <p className="text-sm text-zinc-400">
             {t('settings.teamAccessDesc')}
           </p>
@@ -156,8 +156,8 @@ export function SharedManagement() {
               <h4 className="text-sm font-medium text-yellow-500 mb-1">
                 Acesso Restrito
               </h4>
-              <p className="text-sm text-zinc-400">
-                Apenas o administrador da conta pode gerenciar membros da equipe. 
+              <p className="text-sm text-muted-foreground">
+                Apenas o administrador da conta pode gerenciar membros da equipe.
                 Entre em contato com o administrador para adicionar ou remover membros.
               </p>
             </div>
@@ -170,9 +170,9 @@ export function SharedManagement() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-white">{t('settings.teamAccess')}</h3>
-        <p className="text-sm text-zinc-400">
-          {t('settings.teamAccessDesc')}<br/>
+        <h3 className="text-lg font-medium text-foreground">{t('settings.teamAccess')}</h3>
+        <p className="text-sm text-muted-foreground">
+          {t('settings.teamAccessDesc')}<br />
           {t('settings.planAllows')} {userLimit} {t('settings.collaborators')}.
         </p>
       </div>
@@ -190,18 +190,18 @@ export function SharedManagement() {
         storageKey="shared-management-tip"
       />
 
-      <div className="bg-[#111827] border border-white/5 rounded-xl overflow-hidden">
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
         {/* Header da Lista */}
-        <div className="p-6 border-b border-white/5 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-zinc-400">
+        <div className="p-6 border-b border-border flex items-center justify-between">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <Users className="w-4 h-4" />
             <span className="text-sm">{currentUsers} de {userLimit} {t('settings.licensesInUse')}</span>
           </div>
-          
+
           <button
             onClick={handleAddUser}
             disabled={currentUsers >= userLimit}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-muted disabled:text-muted-foreground disabled:cursor-not-allowed text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
           >
             <UserPlus className="w-4 h-4" />
             {t('settings.inviteMember')}
@@ -209,80 +209,80 @@ export function SharedManagement() {
         </div>
 
         {/* Lista de Usuários */}
-        <div className="divide-y divide-white/5">
-           {/* Empty State quando não há membros */}
-           {(!members || members.length === 0) && (
-             <div className="p-8">
-               <EmptyStateEducational
-                 icon={UserPlus}
-                 title="Nenhum Membro Adicionado"
-                 description="Convide pessoas para acessar e gerenciar seus dados financeiros com você!"
-                 whatIs="O compartilhamento permite que outras pessoas (funcionários, sócio, cônjuge) tenham acesso aos seus dados financeiros. Você define o nível de permissão de cada um: apenas visualizar, criar transações, ou ter acesso total."
-                 howToUse={[
-                   { step: 1, text: 'Clique em "Convidar Membro" no canto superior direito' },
-                   { step: 2, text: 'Digite o nome e email da pessoa' },
-                   { step: 3, text: 'Compartilhe o email cadastrado com a pessoa' },
-                   { step: 4, text: 'A pessoa deve criar uma conta usando EXATAMENTE este email' },
-                   { step: 5, text: 'Após criar a conta, ela terá acesso automático aos dados compartilhados' }
-                 ]}
-                 example='Exemplo PJ: Você é dono de uma empresa e quer que seu contador registre despesas. Convide ele com permissão "Básico" para criar transações, mas sem poder deletar ou ver relatórios completos. Exemplo Casal: Você e seu cônjuge querem gerenciar as finanças juntos. Convide com acesso "Avançado" para ambos terem controle total.'
-                 actionButton={{
-                   label: '+ Convidar Primeiro Membro',
-                   onClick: handleAddUser
-                 }}
-               />
-             </div>
-           )}
+        <div className="divide-y divide-border">
+          {/* Empty State quando não há membros */}
+          {(!members || members.length === 0) && (
+            <div className="p-8">
+              <EmptyStateEducational
+                icon={UserPlus}
+                title="Nenhum Membro Adicionado"
+                description="Convide pessoas para acessar e gerenciar seus dados financeiros com você!"
+                whatIs="O compartilhamento permite que outras pessoas (funcionários, sócio, cônjuge) tenham acesso aos seus dados financeiros. Você define o nível de permissão de cada um: apenas visualizar, criar transações, ou ter acesso total."
+                howToUse={[
+                  { step: 1, text: 'Clique em "Convidar Membro" no canto superior direito' },
+                  { step: 2, text: 'Digite o nome e email da pessoa' },
+                  { step: 3, text: 'Compartilhe o email cadastrado com a pessoa' },
+                  { step: 4, text: 'A pessoa deve criar uma conta usando EXATAMENTE este email' },
+                  { step: 5, text: 'Após criar a conta, ela terá acesso automático aos dados compartilhados' }
+                ]}
+                example='Exemplo PJ: Você é dono de uma empresa e quer que seu contador registre despesas. Convide ele com permissão "Básico" para criar transações, mas sem poder deletar ou ver relatórios completos. Exemplo Casal: Você e seu cônjuge querem gerenciar as finanças juntos. Convide com acesso "Avançado" para ambos terem controle total.'
+                actionButton={{
+                  label: '+ Convidar Primeiro Membro',
+                  onClick: handleAddUser
+                }}
+              />
+            </div>
+          )}
 
-           {/* Eu (Proprietário) */}
-           <div className="p-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
-             <div className="flex items-center gap-4">
-               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-blue-900/20">
-                 {profile?.nome?.[0] || 'E'}
-               </div>
-               <div>
-                 <p className="text-white font-medium text-sm">{profile?.nome || 'Eu'}</p>
-                 <p className="text-xs text-zinc-500">{profile?.email}</p>
-               </div>
-             </div>
-             <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
-               {t('settings.owner')}
-             </span>
-           </div>
+          {/* Eu (Proprietário) */}
+          <div className="p-4 flex items-center justify-between hover:bg-accent/50 transition-colors">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-600 to-blue-800 text-white flex items-center justify-center font-bold text-sm shadow-lg shadow-blue-900/20">
+                {profile?.nome?.[0] || 'E'}
+              </div>
+              <div>
+                <p className="text-foreground font-medium text-sm">{profile?.nome || 'Eu'}</p>
+                <p className="text-xs text-muted-foreground">{profile?.email}</p>
+              </div>
+            </div>
+            <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400 border border-blue-500/20">
+              {t('settings.owner')}
+            </span>
+          </div>
 
-           {/* Membros Convidados */}
-           {members?.map((member) => (
-             <div key={member.id} className="p-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
-               <div className="flex items-center gap-4">
-                 <div className="w-10 h-10 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center font-bold text-sm">
-                   {member.nome?.[0] || '?'}
-                 </div>
-                 <div>
-                   <p className="text-white font-medium text-sm">{member.nome}</p>
-                   <div className="flex items-center gap-2 text-xs text-zinc-500">
-                     <span>{member.email}</span>
-                     {member.convite_status === 'pendente' && (
-                       <span className="flex items-center gap-1 text-yellow-500 bg-yellow-500/10 px-1.5 rounded">
-                         <Clock className="w-3 h-3" /> Pendente
-                       </span>
-                     )}
-                   </div>
-                 </div>
-               </div>
-               
-               <div className="flex items-center gap-2">
+          {/* Membros Convidados */}
+          {members?.map((member) => (
+            <div key={member.id} className="p-4 flex items-center justify-between hover:bg-accent/50 transition-colors">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-secondary text-muted-foreground flex items-center justify-center font-bold text-sm">
+                  {member.nome?.[0] || '?'}
+                </div>
+                <div>
+                  <p className="text-foreground font-medium text-sm">{member.nome}</p>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <span>{member.email}</span>
+                    {member.convite_status === 'pendente' && (
+                      <span className="flex items-center gap-1 text-yellow-500 bg-yellow-500/10 px-1.5 rounded">
+                        <Clock className="w-3 h-3" /> Pendente
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
                 {/* Badge de Status */}
                 {member.status === 'inativo' && (
                   <span className="px-2 py-1 text-xs font-medium bg-red-500/10 text-red-400 border border-red-500/20 rounded">
                     Inativo
                   </span>
                 )}
-                
+
                 {/* Reenviar Convite WhatsApp */}
-                <button 
+                <button
                   onClick={() => handleResendInvite(member)}
                   disabled={resendingId === member.id}
-                  className="p-2 text-zinc-500 hover:text-green-400 hover:bg-green-500/10 rounded-lg transition-colors disabled:opacity-50"
+                  className="p-2 text-muted-foreground hover:text-green-400 hover:bg-green-500/10 rounded-lg transition-colors disabled:opacity-50"
                   title="Reenviar convite via WhatsApp"
                 >
                   {resendingId === member.id ? (
@@ -291,34 +291,33 @@ export function SharedManagement() {
                     <Send className="w-4 h-4" />
                   )}
                 </button>
-                
+
                 {/* Editar Cadastro */}
-                <button 
+                <button
                   onClick={() => setEditingMemberInfo(member)}
-                  className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
+                  className="p-2 text-muted-foreground hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
                   title="Editar cadastro"
                 >
                   <Edit className="w-4 h-4" />
                 </button>
-                
+
                 {/* Editar Permissões */}
-                <button 
+                <button
                   onClick={() => setEditingMember(member)}
-                  className="p-2 text-zinc-500 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
+                  className="p-2 text-muted-foreground hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition-colors"
                   title="Editar permissões"
                 >
                   <Settings className="w-4 h-4" />
                 </button>
-                
+
                 {/* Ativar/Inativar */}
-                <button 
+                <button
                   onClick={() => handleToggleStatus(member)}
                   disabled={togglingId === member.id}
-                  className={`p-2 rounded-lg transition-colors ${
-                    member.status === 'ativo'
-                      ? 'text-zinc-500 hover:text-orange-400 hover:bg-orange-500/10'
-                      : 'text-zinc-500 hover:text-green-400 hover:bg-green-500/10'
-                  }`}
+                  className={`p-2 rounded-lg transition-colors ${member.status === 'ativo'
+                    ? 'text-muted-foreground hover:text-orange-400 hover:bg-orange-500/10'
+                    : 'text-muted-foreground hover:text-green-400 hover:bg-green-500/10'
+                    }`}
                   title={member.status === 'ativo' ? 'Inativar' : 'Ativar'}
                 >
                   {togglingId === member.id ? (
@@ -329,12 +328,12 @@ export function SharedManagement() {
                     <Power className="w-4 h-4" />
                   )}
                 </button>
-                
+
                 {/* Remover */}
-                <button 
+                <button
                   onClick={() => handleRemoveMember(member.id)}
                   disabled={removingId === member.id}
-                  className="p-2 text-zinc-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                  className="p-2 text-muted-foreground hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
                   title="Remover acesso"
                 >
                   {removingId === member.id ? (
@@ -344,8 +343,8 @@ export function SharedManagement() {
                   )}
                 </button>
               </div>
-             </div>
-           ))}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -359,7 +358,7 @@ export function SharedManagement() {
               </span>
               {t('settings.workAsTeam')}
             </h4>
-            <p className="text-zinc-400 text-sm max-w-md">
+            <p className="text-indigo-200 text-sm max-w-md">
               {t('settings.workAsTeamDesc')}
             </p>
           </div>
@@ -370,7 +369,7 @@ export function SharedManagement() {
         </div>
       )}
 
-      <AddUserModal 
+      <AddUserModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSuccess={() => {

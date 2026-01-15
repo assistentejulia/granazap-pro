@@ -284,8 +284,8 @@ export function DataManagement() {
     return (
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-medium text-white">{t('settings.dataManagement')}</h3>
-          <p className="text-sm text-zinc-400">{t('settings.dataManagementDesc')}</p>
+          <h3 className="text-lg font-medium text-foreground">{t('settings.dataManagement')}</h3>
+          <p className="text-sm text-muted-foreground">{t('settings.dataManagementDesc')}</p>
         </div>
 
         <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-6">
@@ -295,7 +295,7 @@ export function DataManagement() {
               <h4 className="text-sm font-medium text-yellow-500 mb-1">
                 Acesso Restrito
               </h4>
-              <p className="text-sm text-zinc-400">
+              <p className="text-sm text-muted-foreground">
                 Apenas o administrador da conta pode gerenciar dados e realizar exportações.
                 Entre em contato com o administrador para realizar essas ações.
               </p>
@@ -309,20 +309,20 @@ export function DataManagement() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-white">{t('settings.dataManagement')}</h3>
-        <p className="text-sm text-zinc-400">{t('settings.dataManagementDesc')}</p>
+        <h3 className="text-lg font-medium text-foreground">{t('settings.dataManagement')}</h3>
+        <p className="text-sm text-muted-foreground">{t('settings.dataManagementDesc')}</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Exportar */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
+        <div className="bg-card border border-border rounded-xl p-6">
           <div className="flex items-start gap-4 mb-6">
             <div className="p-3 bg-green-500/10 rounded-xl">
               <FileSpreadsheet className="w-6 h-6 text-[#22C55E]" />
             </div>
             <div>
-              <h4 className="font-medium text-white">Exportar Dados Completos</h4>
-              <p className="text-sm text-zinc-400 mt-1">
+              <h4 className="font-medium text-foreground">Exportar Dados Completos</h4>
+              <p className="text-sm text-muted-foreground mt-1">
                 Baixe um arquivo CSV com todas as suas informações financeiras organizadas por seções.
               </p>
             </div>
@@ -331,7 +331,7 @@ export function DataManagement() {
           <button
             onClick={() => setShowExportModal(true)}
             disabled={exporting}
-            className="w-full py-2 bg-[#0A0F1C] border border-white/10 hover:bg-white/5 text-white rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
+            className="w-full py-2 bg-secondary border border-border hover:bg-secondary/80 text-foreground rounded-lg font-medium transition-colors flex items-center justify-center gap-2"
           >
             {exporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
             Exportar Dados
@@ -339,7 +339,7 @@ export function DataManagement() {
         </div>
 
         {/* Zona de Perigo */}
-        <div className="bg-[#111827] border border-red-500/20 rounded-xl p-6 relative overflow-hidden">
+        <div className="bg-card border border-red-500/20 rounded-xl p-6 relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-5">
             <AlertTriangle className="w-24 h-24 text-red-500" />
           </div>
@@ -350,8 +350,8 @@ export function DataManagement() {
                 <Trash2 className="w-6 h-6 text-red-500" />
               </div>
               <div>
-                <h4 className="font-medium text-white">{t('settings.dangerZone')}</h4>
-                <p className="text-sm text-zinc-400 mt-1">
+                <h4 className="font-medium text-foreground">{t('settings.dangerZone')}</h4>
+                <p className="text-sm text-muted-foreground mt-1">
                   Ações irreversíveis. Cuidado.
                 </p>
               </div>
@@ -370,7 +370,7 @@ export function DataManagement() {
               <button
                 onClick={handleDeleteAccount}
                 disabled={deletingAccount}
-                className="w-full py-2 text-zinc-500 hover:text-white transition-colors text-sm"
+                className="w-full py-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
               >
                 Excluir Conta
               </button>

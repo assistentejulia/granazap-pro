@@ -87,7 +87,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
       const detectCountry = async () => {
         // Verificar cache no localStorage
         const cachedCountry = localStorage.getItem('detected_country');
-        
+
         if (cachedCountry) {
           const country = countries.find(c => c.code === cachedCountry);
           if (country) {
@@ -156,32 +156,32 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             <button
               type="button"
               onClick={() => setIsOpen(!isOpen)}
-              className="flex items-center gap-2 h-[48px] px-4 rounded-xl bg-[#1E293B] border border-white/10 hover:bg-[#1E293B]/80 transition-all text-white"
+              className="flex items-center gap-2 h-[48px] px-4 rounded-xl bg-secondary/50 border border-input hover:bg-secondary/80 transition-all text-foreground"
               disabled={isDetecting}
             >
               <span className="text-xl">{selectedCountry.flag}</span>
               <span className="text-sm font-medium">+{selectedCountry.dial}</span>
               <ChevronDown className={cn(
-                "h-4 w-4 text-zinc-500 transition-transform",
+                "h-4 w-4 text-muted-foreground transition-transform",
                 isOpen && "rotate-180"
               )} />
             </button>
 
             {isOpen && (
-              <div className="absolute top-full left-0 mt-2 w-64 bg-[#1E293B] border border-white/10 rounded-xl shadow-2xl z-50 max-h-80 overflow-hidden">
+              <div className="absolute top-full left-0 mt-2 w-64 bg-popover border border-border rounded-xl shadow-2xl z-50 max-h-80 overflow-hidden">
                 {/* Campo de busca */}
-                <div className="p-2 border-b border-white/10 sticky top-0 bg-[#1E293B]">
+                <div className="p-2 border-b border-border sticky top-0 bg-popover">
                   <input
                     ref={searchInputRef}
                     type="text"
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     placeholder="Buscar país..."
-                    className="w-full px-3 py-2 text-sm bg-[#0F172A] border border-white/10 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#22C55E]"
+                    className="w-full px-3 py-2 text-sm bg-background border border-input rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
                     autoFocus
                   />
                 </div>
-                
+
                 {/* Lista de países */}
                 <div className="max-h-64 overflow-y-auto">
                   {filteredCountries.length > 0 ? (
@@ -197,13 +197,13 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
                           onChange?.(`${country.dial}${phoneNumber.replace(/\D/g, "")}`);
                         }}
                         className={cn(
-                          "w-full flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors text-left",
-                          selectedCountry.code === country.code && "bg-[#22C55E]/10"
+                          "w-full flex items-center gap-3 px-4 py-3 hover:bg-muted/50 transition-colors text-left",
+                          selectedCountry.code === country.code && "bg-primary/10"
                         )}
                       >
                         <span className="text-xl">{country.flag}</span>
-                        <span className="text-sm text-white flex-1">{country.name}</span>
-                        <span className="text-sm text-zinc-400">+{country.dial}</span>
+                        <span className="text-sm text-foreground flex-1">{country.name}</span>
+                        <span className="text-sm text-muted-foreground">+{country.dial}</span>
                       </button>
                     ))
                   ) : (
@@ -222,7 +222,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
             value={formatDisplay(phoneNumber)}
             onChange={handlePhoneChange}
             placeholder={placeholder}
-            className="flex-1 h-[48px] px-4 rounded-xl bg-[#1E293B] border border-white/10 focus:border-[#22C55E] focus:ring-2 focus:ring-[#22C55E]/20 transition-all text-white placeholder:text-zinc-500 focus:outline-none"
+            className="flex-1 h-[48px] px-4 rounded-xl bg-secondary/50 border border-input focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all text-foreground placeholder:text-muted-foreground focus:outline-none"
           />
         </div>
 
@@ -230,7 +230,7 @@ export const PhoneInput = React.forwardRef<HTMLInputElement, PhoneInputProps>(
         {showSaveFormat && phoneNumber && (
           <div className="text-xs text-zinc-500 flex items-center gap-2">
             <span>Salvo como:</span>
-            <code className="px-2 py-1 bg-[#1E293B] border border-white/10 rounded text-[#22C55E]">
+            <code className="px-2 py-1 bg-muted border border-border rounded text-primary">
               {fullPhoneValue}
             </code>
           </div>

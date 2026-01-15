@@ -48,7 +48,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   const { blockingLevel } = useSubscriptionStatus();
 
   return (
-    <div className="flex h-screen bg-[#0A0F1C] text-white overflow-hidden">
+    <div className="flex h-screen bg-background text-foreground overflow-hidden">
       {/* Reset Cache Component */}
       <ForceRefresh />
 

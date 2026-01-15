@@ -51,13 +51,13 @@ export function GoalsProgress() {
 
   if (loading) {
     return (
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
+      <div className="bg-card border border-border rounded-xl p-4 md:p-6">
         <div className="flex items-center justify-between mb-4 md:mb-6">
-          <h3 className="text-base md:text-lg font-semibold">{t('dashboard.goals.title')}</h3>
+          <h3 className="text-base md:text-lg font-semibold text-foreground">{t('dashboard.goals.title')}</h3>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-44 bg-white/5 rounded-xl animate-pulse" />
+            <div key={i} className="h-44 bg-muted rounded-xl animate-pulse" />
           ))}
         </div>
       </div>
@@ -65,13 +65,13 @@ export function GoalsProgress() {
   }
 
   return (
-    <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
+    <div className="bg-card border border-border rounded-xl p-4 md:p-6">
       {/* Header */}
       <div className="flex items-center justify-between mb-4 md:mb-6">
-        <h3 className="text-base md:text-lg font-semibold">{t('dashboard.goals.title')}</h3>
-        <button 
+        <h3 className="text-base md:text-lg font-semibold text-foreground">{t('dashboard.goals.title')}</h3>
+        <button
           onClick={() => router.push('/dashboard/metas')}
-          className="text-xs md:text-sm text-[#22C55E] hover:text-[#16A34A] font-medium transition-colors"
+          className="text-xs md:text-sm text-primary hover:text-primary/90 font-medium transition-colors"
         >
           {t('dashboard.recent.viewAll')}
         </button>
@@ -80,7 +80,7 @@ export function GoalsProgress() {
       {/* Goals Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-4">
         {goals.length === 0 ? (
-          <div className="col-span-full text-center text-zinc-500 py-8">
+          <div className="col-span-full text-center text-muted-foreground py-8">
             {t('dashboard.goals.empty')}
           </div>
         ) : (
@@ -88,11 +88,11 @@ export function GoalsProgress() {
             const progress = getGoalProgress(goal);
             const percentage = Math.min((progress.current / progress.target) * 100, 100);
             const color = colors[index % colors.length];
-            
+
             return (
               <div
                 key={goal.id}
-                className="bg-[#0A0F1C] border border-white/5 rounded-xl p-4 hover:border-white/10 transition-colors"
+                className="bg-background border border-border rounded-xl p-4 hover:border-primary/50 transition-colors"
               >
                 {/* Icon */}
                 <div
@@ -103,11 +103,11 @@ export function GoalsProgress() {
                 </div>
 
                 {/* Name */}
-                <h4 className="text-sm font-semibold mb-3 truncate">{goal.nome}</h4>
+                <h4 className="text-sm font-semibold mb-3 truncate text-foreground">{goal.nome}</h4>
 
                 {/* Progress Bar */}
                 <div className="mb-3">
-                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-500"
                       style={{
@@ -120,7 +120,7 @@ export function GoalsProgress() {
 
                 {/* Values */}
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-400">
+                  <span className="text-muted-foreground">
                     {formatCurrency(progress.current)} / {formatCurrency(progress.target)}
                   </span>
                   <span className="font-semibold" style={{ color }}>
@@ -133,14 +133,14 @@ export function GoalsProgress() {
         )}
 
         {/* Add Goal Card */}
-        <button 
+        <button
           onClick={() => router.push('/dashboard/metas')}
-          className="bg-[#0A0F1C] border border-dashed border-white/10 rounded-xl p-4 hover:border-[#22C55E]/50 hover:bg-[#22C55E]/5 transition-colors flex flex-col items-center justify-center min-h-[180px]"
+          className="bg-background border border-dashed border-border rounded-xl p-4 hover:border-primary hover:bg-primary/5 transition-colors flex flex-col items-center justify-center min-h-[180px]"
         >
-          <div className="w-12 h-12 rounded-lg bg-[#22C55E]/10 flex items-center justify-center mb-3">
-            <Plus className="w-6 h-6 text-[#22C55E]" />
+          <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
+            <Plus className="w-6 h-6 text-primary" />
           </div>
-          <span className="text-sm font-medium text-zinc-400">{t('dashboard.goals.add')}</span>
+          <span className="text-sm font-medium text-muted-foreground">{t('dashboard.goals.add')}</span>
         </button>
       </div>
     </div>

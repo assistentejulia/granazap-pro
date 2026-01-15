@@ -32,13 +32,13 @@ const solutions = [
 
 export function SolutionSection() {
     return (
-        <section className="py-24 bg-[#0F172A]">
+        <section className="py-24 bg-muted/30">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+                    <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
                         Como a Julia te ajuda
                     </h2>
-                    <p className="text-zinc-400">
+                    <p className="text-muted-foreground">
                         Ferramentas poderosas para simplificar sua vida.
                     </p>
                 </div>
@@ -52,16 +52,16 @@ export function SolutionSection() {
                             viewport={{ once: true }}
                             whileHover={{ scale: 1.02 }}
                             transition={{ duration: 0.3 }}
-                            className="flex items-start gap-6 bg-[#182235] p-6 lg:p-8 rounded-2xl border border-white/5 shadow-lg group hover:bg-[#1E293B] transition-colors"
+                            className="flex items-start gap-6 bg-card p-6 lg:p-8 rounded-2xl border border-border shadow-lg group hover:bg-accent transition-colors"
                         >
                             <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${item.gradient} p-0.5 shadow-lg`}>
-                                <div className="w-full h-full bg-[#182235] rounded-xl flex items-center justify-center group-hover:bg-opacity-90 transition-all">
-                                    <item.icon className="w-6 h-6 text-white" />
+                                <div className="w-full h-full bg-card rounded-xl flex items-center justify-center group-hover:bg-opacity-90 transition-all">
+                                    <item.icon className="w-6 h-6 text-foreground" />
                                 </div>
                             </div>
                             <div className="flex-1">
-                                <h3 className="text-xl font-bold text-white mb-2">{item.title}</h3>
-                                <p className="text-zinc-400">{item.description}</p>
+                                <h3 className="text-xl font-bold text-foreground mb-2">{item.title}</h3>
+                                <p className="text-muted-foreground">{item.description}</p>
                             </div>
                         </motion.div>
                     ))}

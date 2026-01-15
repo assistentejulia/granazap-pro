@@ -20,16 +20,16 @@ export function DeleteAccountModal({ isOpen, onClose, supportEmail }: DeleteAcco
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-2xl font-bold text-white">
+          <h3 className="text-2xl font-bold text-foreground">
             Excluir Conta
           </h3>
-          <p className="text-zinc-400 text-base">
+          <p className="text-muted-foreground text-base">
             Para excluir sua conta, entre em contato com nosso suporte.
           </p>
         </div>
 
         <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 text-left">
-          <div className="space-y-3 text-sm text-zinc-300">
+          <div className="space-y-3 text-sm text-muted-foreground">
             <p><strong>Por que preciso entrar em contato?</strong></p>
             <ul className="space-y-2 ml-4">
               <li>• Garantir que você realmente deseja excluir</li>
@@ -43,12 +43,12 @@ export function DeleteAccountModal({ isOpen, onClose, supportEmail }: DeleteAcco
           </div>
         </div>
 
-        <div className="bg-zinc-900 border border-white/10 rounded-xl p-4">
+        <div className="bg-muted border border-border rounded-xl p-4">
           <div className="flex items-center gap-3 justify-center">
             <Mail className="w-5 h-5 text-blue-400" />
             <div className="text-left">
-              <p className="text-xs text-zinc-500">Entre em contato:</p>
-              <a 
+              <p className="text-xs text-muted-foreground">Entre em contato:</p>
+              <a
                 href={`mailto:${supportEmail}?subject=Solicita%C3%A7%C3%A3o%20de%20Exclus%C3%A3o%20de%20Conta`}
                 className="text-blue-400 hover:text-blue-300 font-medium"
               >
@@ -60,7 +60,7 @@ export function DeleteAccountModal({ isOpen, onClose, supportEmail }: DeleteAcco
 
         <button
           onClick={onClose}
-          className="w-full bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground px-6 py-3 rounded-lg font-medium transition-colors"
         >
           Entendi
         </button>

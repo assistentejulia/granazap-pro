@@ -40,7 +40,7 @@ export function PayInvoiceModal({
   const { filter: accountFilter } = useAccountFilter();
   const { accounts } = useAccounts(accountFilter);
   const { invoice } = useCardInvoice(card?.id || '', invoiceMonth);
-  
+
   const [contaId, setContaId] = useState("");
   const [dataPagamento, setDataPagamento] = useState(
     new Date().toISOString().split('T')[0]
@@ -78,7 +78,7 @@ export function PayInvoiceModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile || !card) return;
-    
+
     // Mostrar tela de confirmação primeiro
     if (!showConfirmation) {
       setShowConfirmation(true);
@@ -89,7 +89,7 @@ export function PayInvoiceModal({
     if (loading || isProcessingRef.current) {
       return;
     }
-    
+
     isProcessingRef.current = true;
     setLoading(true);
 
@@ -97,26 +97,26 @@ export function PayInvoiceModal({
       const supabase = createClient();
 
       // 🔒 SEGURANÇA: Escolher RPC baseada no modo de pagamento
-      const rpcFunction = paymentMode === 'partial' 
+      const rpcFunction = paymentMode === 'partial'
         ? 'processar_pagamento_fatura_parcial'
         : 'processar_pagamento_fatura_segura';
-      
+
       const rpcParams = paymentMode === 'partial'
         ? {
-            p_cartao_id: card.id,
-            p_conta_id: contaId,
-            p_data_pagamento: dataPagamento,
-            p_tipo_conta: accountFilter,
-            p_lancamento_ids: selectedItemIds // Array de IDs selecionados
-          }
+          p_cartao_id: card.id,
+          p_conta_id: contaId,
+          p_data_pagamento: dataPagamento,
+          p_tipo_conta: accountFilter,
+          p_lancamento_ids: selectedItemIds // Array de IDs selecionados
+        }
         : {
-            p_cartao_id: card.id,
-            p_conta_id: contaId,
-            p_mes_fatura: invoiceMonth,
-            p_data_pagamento: dataPagamento,
-            p_tipo_conta: accountFilter
-          };
-      
+          p_cartao_id: card.id,
+          p_conta_id: contaId,
+          p_mes_fatura: invoiceMonth,
+          p_data_pagamento: dataPagamento,
+          p_tipo_conta: accountFilter
+        };
+
       const { data: resultado, error: pagamentoError } = await supabase
         .rpc(rpcFunction, rpcParams);
 
@@ -153,8 +153,8 @@ export function PayInvoiceModal({
     if (!invoiceMonth) return '';
     // Creating date object from "YYYY-MM" string, appending "-02" to avoid timezone issues with day 1
     const [year, month] = invoiceMonth.split('-');
-    const date = new Date(parseInt(year), parseInt(month) - 1, 2); 
-    
+    const date = new Date(parseInt(year), parseInt(month) - 1, 2);
+
     return date.toLocaleDateString(locales[language], {
       month: 'long',
       year: 'numeric',
@@ -169,7 +169,7 @@ export function PayInvoiceModal({
   if (showSuccess) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-[#0F1419] border border-white/10 rounded-xl w-full max-w-md shadow-2xl">
+        <div className="bg-background border border-border rounded-xl w-full max-w-md shadow-2xl">
           <div className="p-6">
             <div className="flex flex-col items-center justify-center space-y-3">
               <div className="w-12 h-12 rounded-full bg-green-500/10 flex items-center justify-center">
@@ -178,7 +178,7 @@ export function PayInvoiceModal({
                 </svg>
               </div>
               <div className="text-center">
-                <h3 className="text-lg font-bold text-white mb-1">{t('invoice.successTitle')}</h3>
+                <h3 className="text-lg font-bold text-foreground mb-1">{t('invoice.successTitle')}</h3>
                 <p className="text-xs text-zinc-400 mb-3">
                   {t('invoice.successDesc')}
                 </p>
@@ -213,7 +213,7 @@ export function PayInvoiceModal({
               </div>
             </div>
           </div>
-          <div className="p-4 border-t border-white/5">
+          <div className="p-4 border-t border-border">
             <button
               onClick={() => {
                 setShowSuccess(false);
@@ -234,18 +234,18 @@ export function PayInvoiceModal({
   if (showConfirmation) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-[#111827] border border-white/10 rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto">
+        <div className="bg-background border border-border rounded-2xl w-full max-w-lg max-h-[85vh] overflow-y-auto">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b border-white/5 sticky top-0 bg-[#111827] z-10">
+          <div className="flex items-center justify-between p-4 border-b border-border sticky top-0 bg-background z-10">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-lg bg-yellow-500/10 flex items-center justify-center">
                 <AlertCircle className="w-4 h-4 text-yellow-400" />
               </div>
-              <h2 className="text-lg font-bold text-white">{t('invoice.confirmTitle')}</h2>
+              <h2 className="text-lg font-bold text-foreground">{t('invoice.confirmTitle')}</h2>
             </div>
             <button
               onClick={() => setShowConfirmation(false)}
-              className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+              className="p-2 hover:bg-muted rounded-lg transition-colors text-foreground"
             >
               <X className="w-5 h-5" />
             </button>
@@ -254,32 +254,32 @@ export function PayInvoiceModal({
           <div className="p-4 space-y-3">
             {/* Resumo do Pagamento */}
             <div className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border border-yellow-500/20 rounded-lg p-3">
-              <h3 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
                 <Receipt className="w-4 h-4 text-yellow-400" />
                 {t('invoice.summary')}
               </h3>
-              
+
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400 text-xs">{t('invoice.card')}:</span>
-                  <span className="text-white font-medium">{card.nome}</span>
+                  <span className="text-muted-foreground text-xs">{t('invoice.card')}:</span>
+                  <span className="text-foreground font-medium">{card.nome}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400 text-xs">{t('invoice.invoice')}:</span>
-                  <span className="text-white font-medium capitalize text-xs">{getMonthName()}</span>
+                  <span className="text-muted-foreground text-xs">{t('invoice.invoice')}:</span>
+                  <span className="text-foreground font-medium capitalize text-xs">{getMonthName()}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400 text-xs">{t('invoice.account')}:</span>
-                  <span className="text-white font-medium text-xs">{selectedAccount?.nome}</span>
+                  <span className="text-muted-foreground text-xs">{t('invoice.account')}:</span>
+                  <span className="text-foreground font-medium text-xs">{selectedAccount?.nome}</span>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-zinc-400 text-xs">{t('invoice.date')}:</span>
-                  <span className="text-white font-medium text-xs">
+                  <span className="text-muted-foreground text-xs">{t('invoice.date')}:</span>
+                  <span className="text-foreground font-medium text-xs">
                     {new Date(dataPagamento).toLocaleDateString(locales[language])}
                   </span>
                 </div>
-                <div className="pt-2 border-t border-white/10 flex justify-between items-center">
-                  <span className="text-sm font-semibold text-white">
+                <div className="pt-2 border-t border-border flex justify-between items-center">
+                  <span className="text-sm font-semibold text-foreground">
                     {paymentMode === 'partial' ? 'Total Selecionado:' : t('invoice.total')}:
                   </span>
                   <span className="text-xl font-bold text-green-400">{formatCurrency(invoiceTotal)}</span>
@@ -289,7 +289,7 @@ export function PayInvoiceModal({
 
             {/* Lista de Despesas */}
             <div>
-              <h3 className="text-sm font-semibold text-white mb-2 flex items-center gap-2">
+              <h3 className="text-sm font-semibold text-foreground mb-2 flex items-center gap-2">
                 <CreditCardIcon className="w-4 h-4 text-purple-400" />
                 {paymentMode === 'partial' ? (
                   <span>Despesas Selecionadas ({selectedItemIds.length})</span>
@@ -297,17 +297,17 @@ export function PayInvoiceModal({
                   <span>{t('invoice.expenses')} ({invoice?.items.filter(item => item.status === 'pendente').length || 0})</span>
                 )}
               </h3>
-              
-              <div className="bg-[#0A0F1C] border border-white/5 rounded-lg divide-y divide-white/5 max-h-40 overflow-y-auto">
-                {(paymentMode === 'partial' 
+
+              <div className="bg-card border border-border rounded-lg divide-y divide-border max-h-40 overflow-y-auto">
+                {(paymentMode === 'partial'
                   ? invoice?.items.filter(item => selectedItemIds.includes(item.id))
                   : invoice?.items.filter(item => item.status === 'pendente')
                 )?.map((item, index) => (
-                  <div key={item.id} className="p-2.5 hover:bg-white/5 transition-colors">
+                  <div key={item.id} className="p-2.5 hover:bg-muted transition-colors">
                     <div className="flex justify-between items-start gap-2">
                       <div className="flex-1 min-w-0">
-                        <p className="text-white font-medium text-sm truncate">{item.descricao}</p>
-                        <p className="text-xs text-zinc-500 mt-0.5">
+                        <p className="text-foreground font-medium text-sm truncate">{item.descricao}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">
                           {new Date(item.data_prevista).toLocaleDateString(locales[language], { day: '2-digit', month: '2-digit' })}
                           {item.parcela_info && (
                             <span className="ml-1 text-purple-400">
@@ -316,7 +316,7 @@ export function PayInvoiceModal({
                           )}
                         </p>
                       </div>
-                      <span className="text-white font-semibold text-sm whitespace-nowrap">{formatCurrency(item.valor)}</span>
+                      <span className="text-foreground font-semibold text-sm whitespace-nowrap">{formatCurrency(item.valor)}</span>
                     </div>
                   </div>
                 ))}
@@ -344,16 +344,16 @@ export function PayInvoiceModal({
                 <AlertCircle className="w-3.5 h-3.5" />
                 {t('invoice.whatHappens')}
               </h3>
-              
+
               <div className="space-y-1.5 text-xs text-blue-200">
                 <p className="leading-relaxed">
-                  • <strong className="text-white">{formatCurrency(invoiceTotal)}</strong> {t('invoice.discountFrom')} <strong className="text-white">{selectedAccount?.nome}</strong>
+                  • <strong className="text-foreground">{formatCurrency(invoiceTotal)}</strong> {t('invoice.discountFrom')} <strong className="text-foreground">{selectedAccount?.nome}</strong>
                 </p>
                 <p className="leading-relaxed">
-                  • {t('invoice.newBalance')}: <strong className="text-white">{formatCurrency((selectedAccount?.saldo_atual || 0) - invoiceTotal)}</strong>
+                  • {t('invoice.newBalance')}: <strong className="text-foreground">{formatCurrency((selectedAccount?.saldo_atual || 0) - invoiceTotal)}</strong>
                 </p>
                 <p className="leading-relaxed">
-                  • <strong className="text-white">{paymentMode === 'partial' ? selectedItemIds.length : (invoice?.items.length || 0)}</strong> {t('invoice.expensesEffective')}
+                  • <strong className="text-foreground">{paymentMode === 'partial' ? selectedItemIds.length : (invoice?.items.length || 0)}</strong> {t('invoice.expensesEffective')}
                 </p>
                 <p className="leading-relaxed">
                   • {t('invoice.limitReleased')}
@@ -382,7 +382,7 @@ export function PayInvoiceModal({
               <button
                 type="button"
                 onClick={() => setShowConfirmation(false)}
-                className="flex-1 px-3 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors text-sm font-medium"
+                className="flex-1 px-3 py-2 bg-secondary hover:bg-secondary/80 text-foreground rounded-lg transition-colors text-sm font-medium"
               >
                 ← {t('invoice.back')}
               </button>
@@ -404,18 +404,18 @@ export function PayInvoiceModal({
   // Tela inicial de dados
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-[#111827] border border-white/10 rounded-2xl w-full max-w-md">
+      <div className="bg-background border border-border rounded-2xl w-full max-w-md">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-white/5">
+        <div className="flex items-center justify-between p-6 border-b border-border">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
               <DollarSign className="w-5 h-5 text-green-400" />
             </div>
-            <h2 className="text-xl font-bold text-white">{t('invoice.payTitle')}</h2>
+            <h2 className="text-xl font-bold text-foreground">{t('invoice.payTitle')}</h2>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+            className="p-2 hover:bg-muted text-foreground rounded-lg transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -424,18 +424,18 @@ export function PayInvoiceModal({
         {/* Form */}
         <form onSubmit={handleSubmit} className="p-4 space-y-3">
           {/* Info Resumida */}
-          <div className="bg-[#0A0F1C] border border-white/5 rounded-lg p-3">
+          <div className="bg-card border border-border rounded-lg p-3">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs text-zinc-400">{t('invoice.card')}</p>
-                <p className="text-white font-medium text-sm">{card.nome}</p>
+                <p className="text-xs text-muted-foreground">{t('invoice.card')}</p>
+                <p className="text-foreground font-medium text-sm">{card.nome}</p>
               </div>
               <div className="text-right">
-                <p className="text-xs text-zinc-400">{t('invoice.amount')}</p>
+                <p className="text-xs text-muted-foreground">{t('invoice.amount')}</p>
                 <p className="text-lg font-bold text-green-400">{formatCurrency(invoiceTotal)}</p>
               </div>
             </div>
-            <p className="text-xs text-zinc-500 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               {t('invoice.monthInvoice')} {getMonthName()}
             </p>
           </div>
@@ -443,14 +443,14 @@ export function PayInvoiceModal({
           {/* Conta e Data */}
           <div className="grid grid-cols-1 gap-3">
             <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 {t('invoice.payWithAccount')} *
               </label>
               <select
                 value={contaId}
                 onChange={(e) => setContaId(e.target.value)}
                 required
-                className="w-full px-3 py-2 bg-[#0A0F1C] border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-green-500/50"
+                className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/50"
               >
                 <option value="">{t('invoice.selectAccount')}</option>
                 {accounts.map((account) => (
@@ -460,14 +460,14 @@ export function PayInvoiceModal({
                 ))}
               </select>
               {selectedAccount && (
-                <p className="text-xs text-zinc-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   {t('invoice.balanceAfter')}: {formatCurrency(selectedAccount.saldo_atual - invoiceTotal)}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-zinc-300 mb-1.5">
+              <label className="block text-xs font-medium text-muted-foreground mb-1.5">
                 {t('invoice.paymentDate')} *
               </label>
               <input
@@ -475,7 +475,7 @@ export function PayInvoiceModal({
                 value={dataPagamento}
                 onChange={(e) => setDataPagamento(e.target.value)}
                 required
-                className="w-full px-3 py-2 bg-[#0A0F1C] border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-green-500/50"
+                className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-green-500/50"
               />
             </div>
           </div>
@@ -510,7 +510,7 @@ export function PayInvoiceModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-3 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors text-sm font-medium"
+              className="flex-1 px-3 py-2 bg-secondary hover:bg-secondary/80 text-foreground rounded-lg transition-colors text-sm font-medium"
             >
               {t('common.cancel')}
             </button>

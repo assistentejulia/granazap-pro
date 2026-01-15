@@ -29,7 +29,7 @@ export function DeleteTransactionModal({
 }: DeleteTransactionModalProps) {
   const { t, language } = useLanguage();
   const { formatCurrency } = useCurrency();
-  
+
   if (!transaction) return null;
 
   const isPessoal = transaction.tipo_conta === 'pessoal';
@@ -58,23 +58,23 @@ export function DeleteTransactionModal({
 
         {/* Message */}
         <div className="text-center space-y-2">
-          <h3 className="text-lg font-semibold text-white">
+          <h3 className="text-lg font-semibold text-foreground">
             {t('modal.deleteMessage')}
           </h3>
-          <p className="text-sm text-zinc-400">
+          <p className="text-sm text-muted-foreground">
             {t('modal.deleteWarning')}
           </p>
         </div>
 
         {/* Transaction Details */}
-        <div className="bg-[#0A0F1C] rounded-lg p-4 space-y-3 border border-white/10">
+        <div className="bg-card rounded-lg p-4 space-y-3 border border-border">
           <div className="flex items-center justify-between">
-            <span className="text-sm text-zinc-400">{t('form.description')}:</span>
-            <span className="text-sm font-medium text-white">{transaction.descricao}</span>
+            <span className="text-sm text-muted-foreground">{t('form.description')}:</span>
+            <span className="text-sm font-medium text-foreground">{transaction.descricao}</span>
           </div>
-          
+
           <div className="flex items-center justify-between">
-            <span className="text-sm text-zinc-400">{t('form.value')}:</span>
+            <span className="text-sm text-muted-foreground">{t('form.value')}:</span>
             <span className={cn(
               "text-sm font-semibold",
               isReceita ? "text-green-400" : "text-red-400"
@@ -84,15 +84,15 @@ export function DeleteTransactionModal({
           </div>
 
           <div className="flex items-center justify-between">
-            <span className="text-sm text-zinc-400">{t('form.type')}:</span>
-            <span className="text-sm font-medium text-white">
+            <span className="text-sm text-muted-foreground">{t('form.type')}:</span>
+            <span className="text-sm font-medium text-foreground">
               {isReceita ? t('transactions.income') : t('transactions.expenses')}
             </span>
           </div>
 
-          <div className="pt-2 border-t border-white/5">
+          <div className="pt-2 border-t border-border">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-zinc-400">{t('form.account')}:</span>
+              <span className="text-sm text-muted-foreground">{t('form.account')}:</span>
               <div className={cn(
                 "px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1.5",
                 isPessoal
@@ -122,7 +122,7 @@ export function DeleteTransactionModal({
             type="button"
             onClick={onClose}
             disabled={isDeleting}
-            className="flex-1 bg-transparent border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+            className="flex-1 bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             {t('common.cancel')}
           </Button>

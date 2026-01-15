@@ -9,7 +9,7 @@ import { CtaFooter } from "@/components/landing/cta-footer";
 
 export default function LandingPage() {
   return (
-    <main className="min-h-screen bg-[#0A0F1C] text-white selection:bg-blue-500/30">
+    <main className="min-h-screen bg-background text-foreground selection:bg-blue-500/30">
       <Navbar />
       <HeroSection />
       <ProblemSection />

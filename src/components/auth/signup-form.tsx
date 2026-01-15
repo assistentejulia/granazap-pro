@@ -34,7 +34,7 @@ export function SignupForm() {
   const [duplicateType, setDuplicateType] = useState<'email' | 'phone'>('email');
   const [duplicateValue, setDuplicateValue] = useState("");
   const [userEmail, setUserEmail] = useState("");
-  
+
   // Schema for validation with translations
   const signupSchema = z.object({
     fullName: z.string().min(3, { message: t('error.nameMin') }),
@@ -49,7 +49,7 @@ export function SignupForm() {
     message: t('error.passwordMismatch'),
     path: ["confirmPassword"],
   });
-  
+
   const {
     register,
     handleSubmit,
@@ -71,7 +71,7 @@ export function SignupForm() {
     try {
       // Importar dinamicamente para evitar problemas de SSR
       const { signupUser } = await import('@/lib/auth/signup');
-      
+
       const result = await signupUser({
         fullName: data.fullName,
         email: data.email,
@@ -86,7 +86,7 @@ export function SignupForm() {
           setShowBlockedModal(true);
           return;
         }
-        
+
         // Verificar se é email duplicado
         if (result.error === 'EMAIL_JA_CADASTRADO') {
           setDuplicateType('email');
@@ -94,7 +94,7 @@ export function SignupForm() {
           setShowDuplicateModal(true);
           return;
         }
-        
+
         // Verificar se é celular duplicado
         if (result.error === 'CELULAR_JA_CADASTRADO') {
           setDuplicateType('phone');
@@ -102,7 +102,7 @@ export function SignupForm() {
           setShowDuplicateModal(true);
           return;
         }
-        
+
         alert(result.error || 'Erro ao criar conta');
         return;
       }
@@ -110,7 +110,7 @@ export function SignupForm() {
       // Sucesso! Mostrar modal de confirmação de email
       setUserEmail(data.email);
       setShowEmailModal(true);
-      
+
     } catch (error: any) {
       alert('Erro ao criar conta. Tente novamente.');
     }
@@ -126,7 +126,7 @@ export function SignupForm() {
     <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-4">
       {/* Full Name Input */}
       <div className="flex flex-col w-full space-y-2">
-        <label className="text-sm font-medium leading-none text-white" htmlFor="fullName">
+        <label className="text-sm font-medium leading-none text-foreground" htmlFor="fullName">
           {t('signup.fullName')}
         </label>
         <Input
@@ -144,7 +144,7 @@ export function SignupForm() {
 
       {/* Email Input */}
       <div className="flex flex-col w-full space-y-2">
-        <label className="text-sm font-medium leading-none text-white" htmlFor="email">
+        <label className="text-sm font-medium leading-none text-foreground" htmlFor="email">
           {t('signup.email')}
         </label>
         <Input
@@ -164,7 +164,7 @@ export function SignupForm() {
 
       {/* Phone Input (Optional) */}
       <div className="flex flex-col w-full space-y-2">
-        <label className="text-sm font-medium leading-none text-white" htmlFor="phone">
+        <label className="text-sm font-medium leading-none text-foreground" htmlFor="phone">
           {t('signup.phoneOptional')}
         </label>
         <Controller
@@ -186,7 +186,7 @@ export function SignupForm() {
 
       {/* Password Input */}
       <div className="flex flex-col w-full space-y-2">
-        <label className="text-sm font-medium leading-none text-white" htmlFor="password">
+        <label className="text-sm font-medium leading-none text-foreground" htmlFor="password">
           {t('signup.password')}
         </label>
         <Input
@@ -199,7 +199,7 @@ export function SignupForm() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="text-zinc-500 hover:text-white focus:outline-none transition-colors"
+              className="text-muted-foreground hover:text-foreground focus:outline-none transition-colors"
             >
               {showPassword ? (
                 <EyeOff className="h-5 w-5" />
@@ -216,7 +216,7 @@ export function SignupForm() {
 
       {/* Confirm Password Input */}
       <div className="flex flex-col w-full space-y-2">
-        <label className="text-sm font-medium leading-none text-white" htmlFor="confirmPassword">
+        <label className="text-sm font-medium leading-none text-foreground" htmlFor="confirmPassword">
           {t('signup.confirmPassword')}
         </label>
         <Input
@@ -229,7 +229,7 @@ export function SignupForm() {
             <button
               type="button"
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="text-zinc-500 hover:text-white focus:outline-none transition-colors"
+              className="text-muted-foreground hover:text-foreground focus:outline-none transition-colors"
             >
               {showConfirmPassword ? (
                 <EyeOff className="h-5 w-5" />
@@ -258,7 +258,7 @@ export function SignupForm() {
             />
           )}
         />
-        <label htmlFor="acceptTerms" className="text-sm text-zinc-400 leading-tight cursor-pointer select-none">
+        <label htmlFor="acceptTerms" className="text-sm text-muted-foreground leading-tight cursor-pointer select-none">
           {t('signup.acceptTerms')}{" "}
           <Link href="/termos-de-uso" target="_blank" className="text-primary hover:text-primary/80 font-medium transition-colors">
             {t('signup.termsOfUse')}

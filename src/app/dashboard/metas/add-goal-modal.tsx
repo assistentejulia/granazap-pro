@@ -73,13 +73,13 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!profile) return;
-    
+
     setLoading(true);
     setFeedback(null);
 
     try {
       const supabase = createClient();
-      
+
       const payload: any = {
         usuario_id: profile.id,
         nome: formData.nome,
@@ -105,9 +105,9 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
       if (error) {
         throw error;
       }
-      
+
       setFeedback({ type: 'success', message: t('goals.createSuccess') });
-      
+
       // Delay para fechar
       setTimeout(() => {
         onSuccess();
@@ -117,11 +117,11 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
 
     } catch (error: any) {
       let msg = t('goals.errorCreate');
-      
+
       // Tentar extrair mensagem do Supabase
       if (error?.message) msg = error.message;
       if (error?.details) msg += ` (${error.details})`;
-      
+
       setFeedback({ type: 'error', message: msg });
     } finally {
       setLoading(false);
@@ -135,7 +135,7 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
         isOpen={isOpen}
         onClose={onClose}
         title={feedback.type === 'success' ? t('common.save') : 'Erro'}
-        className="max-w-sm w-full p-6 bg-[#111827] border border-white/10"
+        className="max-w-sm w-full p-6 bg-card border border-border"
       >
         <div className="flex flex-col items-center text-center space-y-4">
           {feedback.type === 'success' ? (
@@ -147,20 +147,20 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
               <XCircle className="w-6 h-6 text-red-500" />
             </div>
           )}
-          
+
           <div className="space-y-2">
-            <h3 className="text-lg font-medium text-white">
+            <h3 className="text-lg font-medium text-foreground">
               {feedback.type === 'success' ? t('goals.createSuccess') : 'Ops, algo deu errado'}
             </h3>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-muted-foreground">
               {feedback.message}
             </p>
           </div>
 
           {feedback.type === 'error' && (
-            <Button 
-              onClick={() => setFeedback(null)} 
-              className="w-full bg-white/10 hover:bg-white/20 text-white"
+            <Button
+              onClick={() => setFeedback(null)}
+              className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground"
             >
               {t('common.cancel')}
             </Button>
@@ -175,10 +175,10 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
       isOpen={isOpen}
       onClose={onClose}
       title={t('goals.newGoal')}
-      className="max-w-md w-full p-0 overflow-hidden bg-[#111827] border border-white/10"
+      className="max-w-md w-full p-0 overflow-hidden bg-card border border-border"
     >
       <div className="p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
-        
+
         {/* Indicador de Conta */}
         <div className="mb-6 bg-blue-500/5 border border-blue-500/10 rounded-lg p-3 flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
@@ -193,7 +193,7 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          
+
           {/* Nome */}
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('goals.goalName')}</label>
@@ -206,8 +206,8 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
                 type="text"
                 placeholder={t('goals.namePlaceholder')}
                 value={formData.nome}
-                onChange={e => setFormData({...formData, nome: e.target.value})}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                onChange={e => setFormData({ ...formData, nome: e.target.value })}
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
               />
             </div>
           </div>
@@ -220,10 +220,10 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-500 transition-colors">
                   <Target className="w-4 h-4" />
                 </div>
-                <select 
-                  value={formData.tipo_meta} 
-                  onChange={e => setFormData({...formData, tipo_meta: e.target.value})}
-                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-8 h-10 text-sm text-white appearance-none focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                <select
+                  value={formData.tipo_meta}
+                  onChange={e => setFormData({ ...formData, tipo_meta: e.target.value })}
+                  className="w-full bg-background border border-border rounded-lg pl-9 pr-8 h-10 text-sm text-foreground appearance-none focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                 >
                   <option value="categoria">{t('goals.byCategory')}</option>
                   <option value="geral_saida">{t('goals.generalExpense')}</option>
@@ -248,8 +248,8 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
                   step="0.01"
                   placeholder="0,00"
                   value={formData.valor_limite}
-                  onChange={e => setFormData({...formData, valor_limite: e.target.value})}
-                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
+                  onChange={e => setFormData({ ...formData, valor_limite: e.target.value })}
+                  className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
                 />
               </div>
             </div>
@@ -262,10 +262,10 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-500 transition-colors">
                 <LayoutGrid className="w-4 h-4" />
               </div>
-              <select 
-                value={formData.categoria_id} 
-                onChange={e => setFormData({...formData, categoria_id: e.target.value})}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-8 h-10 text-sm text-white appearance-none focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-ellipsis"
+              <select
+                value={formData.categoria_id}
+                onChange={e => setFormData({ ...formData, categoria_id: e.target.value })}
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-8 h-10 text-sm text-foreground appearance-none focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all text-ellipsis"
               >
                 <option value="">{t('goals.selectCategory')}</option>
                 <optgroup label={t('transactions.expenses')}>
@@ -302,8 +302,8 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
                   required
                   type="date"
                   value={formData.data_inicio}
-                  onChange={e => setFormData({...formData, data_inicio: e.target.value})}
-                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all [color-scheme:dark]"
+                  onChange={e => setFormData({ ...formData, data_inicio: e.target.value })}
+                  className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                 />
               </div>
             </div>
@@ -317,24 +317,24 @@ export function AddGoalModal({ isOpen, onClose, onSuccess, initialData }: AddGoa
                   required
                   type="date"
                   value={formData.data_fim}
-                  onChange={e => setFormData({...formData, data_fim: e.target.value})}
-                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all [color-scheme:dark]"
+                  onChange={e => setFormData({ ...formData, data_fim: e.target.value })}
+                  className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-white/5 mt-4">
-            <Button 
-              type="button" 
+          <div className="flex gap-3 pt-4 border-t border-border mt-4">
+            <Button
+              type="button"
               variant="ghost"
               onClick={onClose}
-              className="flex-1 text-zinc-400 hover:text-white hover:bg-white/5 h-10 rounded-lg transition-colors text-sm"
+              className="flex-1 text-muted-foreground hover:text-foreground hover:bg-muted h-10 rounded-lg transition-colors text-sm"
             >
               {t('common.cancel')}
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-medium h-10 rounded-lg shadow-lg shadow-blue-900/20 transition-all active:scale-[0.98] text-sm"
               disabled={loading}
             >

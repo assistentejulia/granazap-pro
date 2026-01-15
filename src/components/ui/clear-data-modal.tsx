@@ -39,13 +39,13 @@ export function ClearDataModal({ isOpen, onClose, onConfirm, isDeleting }: Clear
           <h3 className="text-2xl font-bold text-red-500">
             ⚠️ ATENÇÃO: AÇÃO IRREVERSÍVEL!
           </h3>
-          <p className="text-zinc-300 text-base font-medium">
+          <p className="text-muted-foreground text-base font-medium">
             Você está prestes a DELETAR TODOS os seus dados financeiros!
           </p>
         </div>
 
         <div className="bg-red-500/10 border-2 border-red-500/50 rounded-xl p-4 text-left">
-          <div className="space-y-3 text-sm text-zinc-200">
+          <div className="space-y-3 text-sm text-muted-foreground">
             <p className="font-bold text-red-400 text-base">O QUE SERÁ DELETADO:</p>
             <ul className="space-y-2 ml-4">
               <li className="flex items-start gap-2">
@@ -69,7 +69,7 @@ export function ClearDataModal({ isOpen, onClose, onConfirm, isDeleting }: Clear
               <p className="font-bold text-yellow-400 text-center">
                 ⚠️ ESTA AÇÃO NÃO PODE SER DESFEITA! ⚠️
               </p>
-              <p className="text-center text-xs text-zinc-400 mt-1">
+              <p className="text-center text-xs text-muted-foreground mt-1">
                 Recomendamos exportar seus dados antes de continuar
               </p>
             </div>
@@ -78,7 +78,7 @@ export function ClearDataModal({ isOpen, onClose, onConfirm, isDeleting }: Clear
 
         <div className="space-y-3">
           <div className="text-left">
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Digite <strong className="text-red-500">DELETAR</strong> para confirmar:
             </label>
             <input
@@ -87,7 +87,7 @@ export function ClearDataModal({ isOpen, onClose, onConfirm, isDeleting }: Clear
               onChange={(e) => setConfirmText(e.target.value.toUpperCase())}
               placeholder="Digite DELETAR"
               disabled={isDeleting}
-              className="w-full px-4 py-3 bg-zinc-900 border-2 border-red-500/30 rounded-lg text-white placeholder-zinc-600 focus:outline-none focus:border-red-500 disabled:opacity-50 text-center font-bold"
+              className="w-full px-4 py-3 bg-input border-2 border-red-500/30 rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-red-500 disabled:opacity-50 text-center font-bold"
             />
           </div>
 
@@ -112,7 +112,7 @@ export function ClearDataModal({ isOpen, onClose, onConfirm, isDeleting }: Clear
             <button
               onClick={handleClose}
               disabled={isDeleting}
-              className="w-full bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
+              className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
             >
               Cancelar (Recomendado)
             </button>

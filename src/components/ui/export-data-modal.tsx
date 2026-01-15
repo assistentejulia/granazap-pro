@@ -21,8 +21,8 @@ export function ExportDataModal({ isOpen, onClose, onConfirm, isExporting }: Exp
         </div>
 
         <div className="space-y-2">
-          <h3 className="text-2xl font-bold text-white">Exportar Dados?</h3>
-          <p className="text-zinc-400 text-base">
+          <h3 className="text-2xl font-bold text-foreground">Exportar Dados?</h3>
+          <p className="text-muted-foreground text-base">
             Você está prestes a baixar todos os seus dados financeiros.
           </p>
         </div>
@@ -30,7 +30,7 @@ export function ExportDataModal({ isOpen, onClose, onConfirm, isExporting }: Exp
         <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 text-left">
           <div className="flex items-start gap-3">
             <Info className="w-5 h-5 text-blue-400 mt-0.5 flex-shrink-0" />
-            <div className="space-y-2 text-sm text-zinc-300">
+            <div className="space-y-2 text-sm text-muted-foreground">
               <p><strong>O arquivo Excel (.xlsx) incluirá 5 abas:</strong></p>
               <ul className="space-y-1 ml-4">
                 <li>📊 <strong>Receitas:</strong> Todas as receitas efetivadas</li>
@@ -67,7 +67,7 @@ export function ExportDataModal({ isOpen, onClose, onConfirm, isExporting }: Exp
           <button
             onClick={onClose}
             disabled={isExporting}
-            className="w-full bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
+            className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
           >
             Cancelar
           </button>

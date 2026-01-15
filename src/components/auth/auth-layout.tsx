@@ -36,7 +36,7 @@ export function AuthLayout({
   return (
     <div className="min-h-screen flex bg-background text-foreground overflow-hidden font-sans">
       {/* --- LEFT PANEL (60% Desktop, Hidden Mobile) --- */}
-      <div className="relative hidden w-full lg:flex lg:w-[60%] flex-col justify-between p-8 xl:p-12 bg-gradient-to-br from-[#1E3A2F] via-[#0F172A] to-[#0F172A]">
+      <div className="relative hidden w-full lg:flex lg:w-[60%] flex-col justify-between p-8 xl:p-12 bg-muted border-r border-border">
         {/* Decorative Background Orbs */}
         <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-[-10%] left-[-5%] w-[600px] h-[600px] rounded-full bg-primary/20 blur-[150px] opacity-50" />
@@ -53,12 +53,12 @@ export function AuthLayout({
               <img src={settings.appLogoUrl} alt={settings.appName} className="w-12 h-12 rounded-xl object-cover" />
             ) : !settings.show_login_logo && (
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/20">
-                <span className="text-2xl font-bold text-white">{settings.appName.charAt(0).toUpperCase()}</span>
+                <span className="text-2xl font-bold text-primary-foreground">{settings.appName.charAt(0).toUpperCase()}</span>
               </div>
             )}
             {/* Mostrar nome se habilitado */}
             {settings.show_login_name !== false && (
-              <h1 className="text-2xl font-bold tracking-tight text-white">
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">
                 {settings.appName}
               </h1>
             )}
@@ -75,8 +75,8 @@ export function AuthLayout({
               transition={{ duration: 0.8, delay: 0.2 }}
               className="space-y-4"
             >
-              <h2 className="text-3xl font-bold text-white">{title}</h2>
-              <p className="text-zinc-400 text-lg">{subtitle}</p>
+              <h2 className="text-3xl font-bold text-foreground">{title}</h2>
+              <p className="text-muted-foreground text-lg">{subtitle}</p>
             </motion.div>
 
             {/* Feature Cards */}
@@ -87,14 +87,14 @@ export function AuthLayout({
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                  className="flex items-start gap-4 p-4 rounded-xl bg-[#1E293B]/60 backdrop-blur-xl border border-white/10"
+                  className="flex items-start gap-4 p-4 rounded-xl bg-card border border-border shadow-sm"
                 >
                   <div className="p-2 bg-primary/20 rounded-lg flex-shrink-0">
                     <feature.icon className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-white mb-1">{feature.title}</h3>
-                    <p className="text-sm text-zinc-400">{feature.subtitle}</p>
+                    <h3 className="font-semibold text-foreground mb-1">{feature.title}</h3>
+                    <p className="text-sm text-muted-foreground">{feature.subtitle}</p>
                   </div>
                 </motion.div>
               ))}
@@ -105,7 +105,7 @@ export function AuthLayout({
 
         {/* Tagline */}
         <div className="relative z-10">
-          <p className="text-base text-zinc-400 max-w-lg leading-relaxed">
+          <p className="text-base text-muted-foreground max-w-lg leading-relaxed">
             "{tagline}"
           </p>
         </div>
@@ -131,12 +131,12 @@ export function AuthLayout({
                 <img src={settings.appLogoUrl} alt={settings.appName} className="w-12 h-12 rounded-xl object-cover" />
               ) : !settings.show_login_logo && (
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-lg shadow-primary/20">
-                  <span className="text-2xl font-bold text-white">{settings.appName.charAt(0).toUpperCase()}</span>
+                  <span className="text-2xl font-bold text-primary-foreground">{settings.appName.charAt(0).toUpperCase()}</span>
                 </div>
               )}
               {/* Mostrar nome se habilitado */}
               {settings.show_login_name !== false && (
-                <span className="text-2xl font-bold tracking-wide text-white">
+                <span className="text-2xl font-bold tracking-wide text-foreground">
                   {settings.appName}
                 </span>
               )}

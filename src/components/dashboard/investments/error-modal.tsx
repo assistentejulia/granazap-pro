@@ -34,10 +34,10 @@ export function InvestmentErrorModal({
 
         {/* Título */}
         <div className="space-y-2">
-          <h3 className="text-2xl font-bold text-white">
+          <h3 className="text-2xl font-bold text-foreground">
             {title || t('investments.modal.error')}
           </h3>
-          <p className="text-zinc-400">
+          <p className="text-muted-foreground">
             {message}
           </p>
         </div>

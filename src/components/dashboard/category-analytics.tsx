@@ -54,45 +54,45 @@ export function CategoryAnalytics() {
 
   if (loading) {
     return (
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6 animate-pulse">
+      <div className="bg-card border border-border rounded-xl p-4 md:p-6 animate-pulse">
         <div className="h-80" />
       </div>
     );
   }
 
   return (
-    <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
+    <div className="bg-card border border-border rounded-xl p-4 md:p-6">
       <h3 className="text-base md:text-lg font-semibold mb-4 md:mb-6">{t('dashboard.categoryAnalysis.title')}</h3>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Despesas por Categoria */}
         <div>
           <div className="flex items-center gap-2 mb-3 md:mb-4">
-            <TrendingDown className="w-4 h-4 md:w-5 md:h-5 text-red-400" />
-            <h4 className="text-xs md:text-sm font-semibold text-red-400">{t('dashboard.categoryAnalysis.expenses')}</h4>
-            <span className="ml-auto text-xs md:text-sm font-mono text-zinc-400">
+            <TrendingDown className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
+            <h4 className="text-xs md:text-sm font-semibold text-red-500">{t('dashboard.categoryAnalysis.expenses')}</h4>
+            <span className="ml-auto text-xs md:text-sm font-mono text-muted-foreground">
               {formatCurrency(categoryData.expenseTotal)}
             </span>
           </div>
 
           <div className="space-y-2 md:space-y-3">
             {categoryData.expenses.length === 0 ? (
-              <p className="text-center text-zinc-500 py-4 text-xs md:text-sm">
+              <p className="text-center text-muted-foreground py-4 text-xs md:text-sm">
                 {t('dashboard.categoryAnalysis.noExpenses')}
               </p>
             ) : (
               categoryData.expenses.map((cat, index) => (
                 <div key={index} className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-zinc-300">{cat.name}</span>
+                    <span className="text-sm text-foreground">{cat.name}</span>
                     <div className="text-right">
-                      <p className="text-sm font-semibold font-mono text-white">
+                      <p className="text-sm font-semibold font-mono text-foreground">
                         {formatCurrency(cat.value)}
                       </p>
-                      <p className="text-xs text-zinc-500">{cat.percentage}%</p>
+                      <p className="text-xs text-muted-foreground">{cat.percentage}%</p>
                     </div>
                   </div>
-                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-red-500 to-red-600 rounded-full"
                       style={{ width: `${cat.percentage}%` }}
@@ -107,31 +107,31 @@ export function CategoryAnalytics() {
         {/* Receitas por Categoria */}
         <div>
           <div className="flex items-center gap-2 mb-3 md:mb-4">
-            <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-400" />
-            <h4 className="text-xs md:text-sm font-semibold text-green-400">{t('dashboard.categoryAnalysis.income')}</h4>
-            <span className="ml-auto text-xs md:text-sm font-mono text-zinc-400">
+            <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
+            <h4 className="text-xs md:text-sm font-semibold text-green-500">{t('dashboard.categoryAnalysis.income')}</h4>
+            <span className="ml-auto text-xs md:text-sm font-mono text-muted-foreground">
               {formatCurrency(categoryData.incomeTotal)}
             </span>
           </div>
 
           <div className="space-y-2 md:space-y-3">
             {categoryData.incomes.length === 0 ? (
-              <p className="text-center text-zinc-500 py-4 text-xs md:text-sm">
+              <p className="text-center text-muted-foreground py-4 text-xs md:text-sm">
                 {t('dashboard.categoryAnalysis.noIncome')}
               </p>
             ) : (
               categoryData.incomes.map((cat, index) => (
                 <div key={index} className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs md:text-sm text-zinc-300 truncate max-w-[150px]">{cat.name}</span>
+                    <span className="text-xs md:text-sm text-foreground truncate max-w-[150px]">{cat.name}</span>
                     <div className="text-right flex-shrink-0">
-                      <p className="text-xs md:text-sm font-semibold font-mono text-white">
+                      <p className="text-xs md:text-sm font-semibold font-mono text-foreground">
                         {formatCurrency(cat.value)}
                       </p>
-                      <p className="text-[10px] md:text-xs text-zinc-500">{cat.percentage}%</p>
+                      <p className="text-[10px] md:text-xs text-muted-foreground">{cat.percentage}%</p>
                     </div>
                   </div>
-                  <div className="h-1.5 md:h-2 bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-1.5 md:h-2 bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full"
                       style={{ width: `${cat.percentage}%` }}
@@ -146,3 +146,4 @@ export function CategoryAnalytics() {
     </div>
   );
 }
+

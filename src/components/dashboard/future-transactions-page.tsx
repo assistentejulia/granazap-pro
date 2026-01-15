@@ -17,6 +17,8 @@ import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { InfoCard } from "@/components/ui/info-card";
 import { EmptyStateEducational } from "@/components/ui/empty-state-educational";
+import { useTransactionsExport } from "@/hooks/use-transactions-export";
+import { ExportDropdown } from "@/components/dashboard/export-dropdown";
 
 // Dynamic imports para reduzir bundle inicial
 const FutureTransactionModal = dynamic(() => import("./future-transaction-modal").then(mod => mod.FutureTransactionModal));
@@ -37,7 +39,9 @@ export function FutureTransactionsPage() {
   const { period } = usePeriodFilter();
   const { transactions, loading, isRefetching } = useFutureTransactionsQuery(period);
   const { invalidateAll } = useFutureTransactionMutations();
+  const { exportTransactionsToPDF, exportTransactionsToExcel } = useTransactionsExport();
 
+  const [isExporting, setIsExporting] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearchTerm = useDeferredValue(searchTerm); // Busca deferida
   const [filterType, setFilterType] = useState<FilterType>('todos');
@@ -268,6 +272,20 @@ export function FutureTransactionsPage() {
     invalidateAll();
   };
 
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    exportTransactionsToPDF(filteredTransactions, formatCurrency);
+    setIsExporting(false);
+  };
+
+  const handleExportExcel = async () => {
+    setIsExporting(true);
+    await new Promise(resolve => setTimeout(resolve, 100));
+    exportTransactionsToExcel(filteredTransactions, formatCurrency);
+    setIsExporting(false);
+  };
+
   // Don't show skeleton on server to prevent hydration mismatch
   if (loading && !mounted) {
     return null;
@@ -297,8 +315,8 @@ export function FutureTransactionsPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
-          <h1 className="text-xl md:text-2xl font-bold text-white">{t('future.title')}</h1>
-          <p className="text-zinc-400 text-xs md:text-sm mt-1">
+          <h1 className="text-xl md:text-2xl font-bold text-foreground">{t('future.title')}</h1>
+          <p className="text-muted-foreground text-xs md:text-sm mt-1">
             {t('future.subtitle')}
           </p>
         </div>
@@ -310,6 +328,12 @@ export function FutureTransactionsPage() {
             </div>
           )}
           <div className="flex items-center gap-2">
+            <ExportDropdown
+              onExportPDF={handleExportPDF}
+              onExportExcel={handleExportExcel}
+              isExporting={isExporting}
+              className="hidden sm:flex"
+            />
             <button
               onClick={() => {
                 setSelectedTransaction(null);
@@ -338,67 +362,67 @@ export function FutureTransactionsPage() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-2.5 md:p-4">
+        <div className="bg-card border border-border rounded-xl p-2.5 md:p-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center flex-shrink-0">
               <Clock className="w-4 h-4 md:w-5 md:h-5 text-yellow-500" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] md:text-xs text-zinc-500 truncate">Pendentes</p>
-              <p className="text-base md:text-xl font-bold text-white">{stats.totalPending}</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground truncate">Pendentes</p>
+              <p className="text-base md:text-xl font-bold text-foreground">{stats.totalPending}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-2.5 md:p-4">
+        <div className="bg-card border border-border rounded-xl p-2.5 md:p-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-[#22C55E]/10 flex items-center justify-center flex-shrink-0">
               <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-[#22C55E]" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] md:text-xs text-zinc-500 truncate">A Receber</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground truncate">A Receber</p>
               <p className="text-xs md:text-lg font-bold text-[#22C55E] truncate">{formatCurrency(stats.totalIncome)}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-2.5 md:p-4">
+        <div className="bg-card border border-border rounded-xl p-2.5 md:p-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
               <TrendingDown className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
             </div>
             <div className="min-w-0">
-              <p className="text-[10px] md:text-xs text-zinc-500 truncate">A Pagar</p>
+              <p className="text-[10px] md:text-xs text-muted-foreground truncate">A Pagar</p>
               <p className="text-xs md:text-lg font-bold text-red-500 truncate">{formatCurrency(stats.totalExpense)}</p>
             </div>
           </div>
         </div>
 
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-2.5 md:p-4">
+        <div className="bg-card border border-border rounded-xl p-2.5 md:p-4">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
               <XCircle className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs text-zinc-500">{t('future.overdue')}</p>
-              <p className="text-xl font-bold text-white">{stats.totalOverdue}</p>
+              <p className="text-xs text-muted-foreground">{t('future.overdue')}</p>
+              <p className="text-xl font-bold text-foreground">{stats.totalOverdue}</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Filters */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-4">
+      <div className="bg-card border border-border rounded-xl p-4">
         <div className="flex flex-col md:flex-row gap-4">
           {/* Search */}
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-500" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder={t('future.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full h-10 pl-10 pr-4 bg-[#0A0F1C] border border-white/10 rounded-lg text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#22C55E]"
+              className="w-full h-10 pl-10 pr-4 bg-background border border-input rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             />
           </div>
 
@@ -408,8 +432,8 @@ export function FutureTransactionsPage() {
             className={cn(
               "flex items-center gap-2 px-4 h-10 rounded-lg border transition-colors",
               showFilters
-                ? "bg-[#22C55E]/10 border-[#22C55E] text-[#22C55E]"
-                : "bg-[#0A0F1C] border-white/10 text-zinc-400 hover:text-white hover:border-white/20"
+                ? "bg-primary/10 border-primary text-primary"
+                : "bg-background border-input text-muted-foreground hover:text-foreground hover:border-sidebar-primary"
             )}
           >
             <Filter className="w-4 h-4" />
@@ -419,14 +443,14 @@ export function FutureTransactionsPage() {
 
         {/* Advanced Filters */}
         {showFilters && (
-          <div className="space-y-4 mt-4 pt-4 border-t border-white/5">
+          <div className="space-y-4 mt-4 pt-4 border-t border-border">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
-                <label className="text-xs text-zinc-500 mb-2 block">{t('common.type')}</label>
+                <label className="text-xs text-muted-foreground mb-2 block">{t('common.type')}</label>
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value as FilterType)}
-                  className="w-full h-9 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-[#22C55E]"
+                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-foreground text-sm focus:outline-none focus:border-primary"
                 >
                   <option value="todos">{t('future.all')}</option>
                   <option value="entrada">{t('common.income')}</option>
@@ -435,11 +459,11 @@ export function FutureTransactionsPage() {
               </div>
 
               <div>
-                <label className="text-xs text-zinc-500 mb-2 block">{t('common.status')}</label>
+                <label className="text-xs text-muted-foreground mb-2 block">{t('common.status')}</label>
                 <select
                   value={filterStatus}
                   onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
-                  className="w-full h-9 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-[#22C55E]"
+                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-foreground text-sm focus:outline-none focus:border-primary"
                 >
                   <option value="todos">{t('future.all')}</option>
                   <option value="pendente">{t('future.pending')}</option>
@@ -449,11 +473,11 @@ export function FutureTransactionsPage() {
               </div>
 
               <div>
-                <label className="text-xs text-zinc-500 mb-2 block">{t('future.recurrence')}</label>
+                <label className="text-xs text-muted-foreground mb-2 block">{t('future.recurrence')}</label>
                 <select
                   value={filterRecurrence}
                   onChange={(e) => setFilterRecurrence(e.target.value as FilterRecurrence)}
-                  className="w-full h-9 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-[#22C55E]"
+                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-foreground text-sm focus:outline-none focus:border-primary"
                 >
                   <option value="todos">{t('future.all')}</option>
                   <option value="unico">{t('future.unique')}</option>
@@ -466,21 +490,21 @@ export function FutureTransactionsPage() {
             {/* Date Range Filter */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-xs text-zinc-500 mb-2 block">{t('future.startDate')}</label>
+                <label className="text-xs text-muted-foreground mb-2 block">{t('future.startDate')}</label>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full h-9 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-white text-sm focus:outline-none focus:border-[#22C55E] [color-scheme:dark]"
+                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-foreground text-sm focus:outline-none focus:border-primary"
                 />
               </div>
               <div>
-                <label className="text-xs text-zinc-500 mb-2 block">{t('future.endDate')}</label>
+                <label className="text-xs text-muted-foreground mb-2 block">{t('future.endDate')}</label>
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full h-9 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-[#22C55E] [color-scheme:dark]"
+                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
                 />
               </div>
             </div>
@@ -496,7 +520,7 @@ export function FutureTransactionsPage() {
                     setFilterStatus('todos');
                     setFilterRecurrence('todos');
                   }}
-                  className="text-xs text-zinc-400 hover:text-white transition-colors"
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {t('future.clearFilters')}
                 </button>
@@ -520,12 +544,12 @@ export function FutureTransactionsPage() {
       />
 
       {/* Transactions List */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl overflow-hidden">
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
         {paginatedTransactions.length === 0 ? (
           searchTerm || filterType !== 'todos' || filterStatus !== 'todos' || filterRecurrence !== 'todos' ? (
             <div className="flex flex-col items-center justify-center py-12 px-4">
-              <Calendar className="w-12 h-12 text-zinc-600 mb-3" />
-              <p className="text-zinc-400 text-center">{t('future.noResults')}</p>
+              <Calendar className="w-12 h-12 text-muted-foreground mb-3" />
+              <p className="text-muted-foreground text-center">{t('future.noResults')}</p>
             </div>
           ) : (
             <EmptyStateEducational
@@ -553,39 +577,39 @@ export function FutureTransactionsPage() {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#0A0F1C] border-b border-white/5">
+              <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {t('future.tableDescription')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {t('future.tableCategory')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {t('future.tableDueDate')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {t('future.tableValue')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {t('future.tableStatus')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {t('future.tableType')}
                   </th>
-                  <th className="px-6 py-3 text-right text-xs font-medium text-zinc-400 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase tracking-wider">
                     {t('future.tableActions')}
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-border">
                 {paginatedTransactions.map((transaction) => {
                   const IconComponent = getIconComponent(transaction.categoria?.icon_key);
                   const dateStatus = getDateStatus(transaction.data_prevista, transaction.status);
                   const isIncome = transaction.tipo === 'entrada';
 
                   return (
-                    <tr key={transaction.id} className="hover:bg-white/5 transition-colors">
+                    <tr key={transaction.id} className="hover:bg-muted/50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className={cn(
@@ -598,7 +622,7 @@ export function FutureTransactionsPage() {
                             )} />
                           </div>
                           <div>
-                            <p className="text-white font-medium">{transaction.descricao}</p>
+                            <p className="text-foreground font-medium">{transaction.descricao}</p>
                             <div className="flex items-center gap-2 mt-1 flex-wrap">
                               {transaction.tipo_conta === 'pj' ? (
                                 <span className="px-2 py-0.5 bg-blue-500/10 text-blue-400 text-xs rounded border border-blue-500/30 font-medium">
@@ -633,13 +657,13 @@ export function FutureTransactionsPage() {
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <span className="text-zinc-400 text-sm">
+                        <span className="text-muted-foreground text-sm">
                           {transaction.categoria?.descricao || 'Sem categoria'}
                         </span>
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <span className="text-white text-sm">
+                          <span className="text-foreground text-sm">
                             {format(parseISO(transaction.data_prevista), "dd/MM/yyyy", { locale: ptBR })}
                           </span>
                           {dateStatus && (
@@ -668,7 +692,7 @@ export function FutureTransactionsPage() {
                           ) : (
                             <TrendingDown className="w-4 h-4 text-red-500" />
                           )}
-                          <span className="text-zinc-400 text-sm">
+                          <span className="text-muted-foreground text-sm">
                             {isIncome ? t('common.income') : t('common.expense')}
                           </span>
                         </div>
@@ -707,7 +731,7 @@ export function FutureTransactionsPage() {
                           {transaction.status === 'pendente' && (
                             <button
                               onClick={() => handleEdit(transaction)}
-                              className="p-2 hover:bg-white/10 text-zinc-400 hover:text-white rounded-lg transition-colors"
+                              className="p-2 hover:bg-muted text-muted-foreground hover:text-foreground rounded-lg transition-colors"
                               title={t('action.edit')}
                             >
                               <Edit className="w-4 h-4" />
@@ -734,15 +758,15 @@ export function FutureTransactionsPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-6 py-4 border-t border-white/5">
-            <p className="text-sm text-zinc-400">
+          <div className="flex items-center justify-between px-6 py-4 border-t border-border">
+            <p className="text-sm text-muted-foreground">
               {t('future.showing')} {((currentPage - 1) * itemsPerPage) + 1} {t('future.to')} {Math.min(currentPage * itemsPerPage, filteredTransactions.length)} {t('future.of')} {filteredTransactions.length} {t('future.transactions')}
             </p>
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
-                className="px-3 py-1 rounded-lg border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-3 py-1 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {t('future.previous')}
               </button>
@@ -753,8 +777,8 @@ export function FutureTransactionsPage() {
                   className={cn(
                     "w-8 h-8 rounded-lg transition-colors",
                     currentPage === page
-                      ? "bg-[#22C55E] text-white"
-                      : "border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+                      ? "bg-primary text-primary-foreground"
+                      : "border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
                   )}
                 >
                   {page}
@@ -763,7 +787,7 @@ export function FutureTransactionsPage() {
               <button
                 onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
                 disabled={currentPage === totalPages}
-                className="px-3 py-1 rounded-lg border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-3 py-1 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 {t('future.next')}
               </button>

@@ -236,7 +236,7 @@ export function AddPositionModal({ isOpen, onClose, onSuccess, onError }: AddPos
                 setSearchTicker("");
                 setFilteredSuggestions(POPULAR_TICKERS[newType]);
               }}
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               {ASSET_TYPES.map((type) => (
                 <option key={type.value} value={type.value}>
@@ -262,7 +262,7 @@ export function AddPositionModal({ isOpen, onClose, onSuccess, onError }: AddPos
                 onFocus={() => setShowSuggestions(true)}
                 onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                 placeholder={t('investments.modal.tickerPlaceholder')}
-                className="flex-1 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <Button
                 onClick={() => handleSearch()}
@@ -296,10 +296,10 @@ export function AddPositionModal({ isOpen, onClose, onSuccess, onError }: AddPos
                     key={ticker}
                     type="button"
                     onClick={() => handleSelectSuggestion(ticker)}
-                    className="w-full px-4 py-3 text-left text-white bg-zinc-800 hover:bg-zinc-700 active:bg-zinc-600 transition-colors rounded-lg flex items-center justify-between gap-3"
+                    className="w-full px-4 py-3 text-left text-foreground bg-card hover:bg-muted active:bg-muted/80 transition-colors rounded-lg flex items-center justify-between gap-3"
                   >
                     <span className="font-semibold text-sm">{ticker}</span>
-                    <span className="text-xs text-zinc-500">{t('investments.modal.select')}</span>
+                    <span className="text-xs text-muted-foreground">{t('investments.modal.select')}</span>
                   </button>
                 ))}
               </div>
@@ -368,7 +368,7 @@ export function AddPositionModal({ isOpen, onClose, onSuccess, onError }: AddPos
                   value={yieldPercentage}
                   onChange={(e) => setYieldPercentage(e.target.value)}
                   placeholder="Ex: 100"
-                  className="flex-1 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="flex-1 px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <span className="text-zinc-400 text-sm">{t('investments.modal.cdiSuffix')}</span>
               </div>
@@ -390,7 +390,7 @@ export function AddPositionModal({ isOpen, onClose, onSuccess, onError }: AddPos
                 onChange={(e) => setQuantidade(e.target.value)}
                 required
                 placeholder={assetType === "renda_fixa" ? t('investments.modal.quantityPlaceholderFixed') : t('investments.modal.quantityPlaceholderStock')}
-                className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <p className="text-xs text-zinc-500 mt-1">
                 {assetType === "renda_fixa"
@@ -410,7 +410,7 @@ export function AddPositionModal({ isOpen, onClose, onSuccess, onError }: AddPos
                 onChange={(e) => setPrecoMedio(e.target.value)}
                 required
                 placeholder={assetType === "renda_fixa" ? t('investments.modal.avgPricePlaceholderFixed') : t('investments.modal.avgPricePlaceholderStock')}
-                className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
               <p className="text-xs text-zinc-500 mt-1">
                 {assetType === "renda_fixa"
@@ -430,7 +430,7 @@ export function AddPositionModal({ isOpen, onClose, onSuccess, onError }: AddPos
               onChange={(e) => setDataCompra(e.target.value)}
               max={new Date().toISOString().split("T")[0]}
               required
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -442,7 +442,7 @@ export function AddPositionModal({ isOpen, onClose, onSuccess, onError }: AddPos
               <select
                 value={contaId}
                 onChange={(e) => setContaId(e.target.value)}
-                className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">{t('investments.modal.noAccountLinked')}</option>
                 {accounts.map((account) => (
@@ -462,7 +462,7 @@ export function AddPositionModal({ isOpen, onClose, onSuccess, onError }: AddPos
               value={observacao}
               onChange={(e) => setObservacao(e.target.value)}
               rows={3}
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               placeholder={t('investments.modal.observationPlaceholder')}
             />
           </div>

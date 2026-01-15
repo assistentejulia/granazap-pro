@@ -115,7 +115,7 @@ export function DashboardHeader() {
                     className="w-full px-4 py-3 flex items-center gap-3 hover:bg-accent hover:text-accent-foreground transition-colors text-left"
                   >
                     <div className="p-2 bg-red-500/10 rounded-lg">
-                      <TrendingDown className="w-5 h-5 text-red-400" />
+                      <TrendingDown className="w-5 h-5 text-red-600 dark:text-red-400" />
                     </div>
                     <div>
                       <div className="font-medium text-foreground">{t('modal.newExpense')}</div>

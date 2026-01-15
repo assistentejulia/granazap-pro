@@ -11,7 +11,7 @@ export function ProfileSettings() {
   const { t, setLanguage } = useLanguage();
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
-  
+
   // Local state para formulário
   const [formData, setFormData] = useState({
     nome: profile?.nome || "",
@@ -43,21 +43,21 @@ export function ProfileSettings() {
       });
 
       if (!success) throw new Error(error);
-      
+
       // Atualizar contexto de linguagem
       if (formData.idioma) {
         setLanguage(formData.idioma as any);
       }
-      
+
       // Recarregar profile do banco
       await refresh();
-      
+
       // Mostrar feedback de sucesso usando state ao invés de manipulação direta do DOM
       setSaved(true);
       setTimeout(() => {
         setSaved(false);
       }, 2000);
-      
+
     } catch (error: any) {
       alert(t('settings.saveError'));
     } finally {
@@ -70,45 +70,45 @@ export function ProfileSettings() {
       {/* Dados Pessoais */}
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-medium text-white">{t('settings.myProfile')}</h3>
-          <p className="text-sm text-zinc-400">{t('settings.updateInfo')}</p>
+          <h3 className="text-lg font-medium text-foreground">{t('settings.myProfile')}</h3>
+          <p className="text-sm text-muted-foreground">{t('settings.updateInfo')}</p>
         </div>
-        
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6 space-y-6">
-          
+
+        <div className="bg-card border border-border rounded-xl p-6 space-y-6">
+
           <div className="space-y-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300">{t('settings.name')}</label>
+              <label className="text-sm font-medium text-muted-foreground">{t('settings.name')}</label>
               <input
                 type="text"
                 value={formData.nome}
-                onChange={e => setFormData({...formData, nome: e.target.value})}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500"
+                onChange={e => setFormData({ ...formData, nome: e.target.value })}
+                className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300">{t('settings.email')}</label>
+              <label className="text-sm font-medium text-muted-foreground">{t('settings.email')}</label>
               <input
                 type="email"
                 value={user?.email || ""}
                 disabled
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-zinc-500 cursor-not-allowed opacity-60"
+                className="w-full bg-muted border border-border rounded-lg px-4 py-3 text-muted-foreground cursor-not-allowed opacity-60"
               />
-              <p className="text-xs text-zinc-600 italic">
+              <p className="text-xs text-muted-foreground italic">
                 {t('settings.managedBySystem')}
               </p>
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-300">{t('settings.phone')}</label>
+              <label className="text-sm font-medium text-muted-foreground">{t('settings.phone')}</label>
               <input
                 type="tel"
                 value={formData.celular}
                 disabled
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-zinc-500 cursor-not-allowed opacity-60"
+                className="w-full bg-muted border border-border rounded-lg px-4 py-3 text-muted-foreground cursor-not-allowed opacity-60"
               />
-              <p className="text-xs text-zinc-600 italic">
+              <p className="text-xs text-muted-foreground italic">
                 {t('settings.managedBySystem')}
               </p>
             </div>
@@ -119,19 +119,19 @@ export function ProfileSettings() {
       {/* Preferências */}
       <div className="space-y-4">
         <div>
-          <h3 className="text-lg font-medium text-white">{t('settings.preferences')}</h3>
+          <h3 className="text-lg font-medium text-foreground">{t('settings.preferences')}</h3>
         </div>
-        
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6 space-y-6">
+
+        <div className="bg-card border border-border rounded-xl p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-400">{t('settings.language')}</label>
+              <label className="text-sm font-medium text-muted-foreground">{t('settings.language')}</label>
               <div className="relative">
-                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <select
                   value={formData.idioma}
-                  onChange={e => setFormData({...formData, idioma: e.target.value as "pt" | "en" | "es"})}
-                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white appearance-none focus:outline-none focus:border-blue-500"
+                  onChange={e => setFormData({ ...formData, idioma: e.target.value as "pt" | "en" | "es" })}
+                  className="w-full bg-background border border-input rounded-lg pl-10 pr-4 py-2 text-foreground appearance-none focus:outline-none focus:border-primary"
                 >
                   <option value="pt">Português (Brasil)</option>
                   <option value="en">English</option>
@@ -141,13 +141,13 @@ export function ProfileSettings() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-zinc-400">{t('settings.currency')}</label>
+              <label className="text-sm font-medium text-muted-foreground">{t('settings.currency')}</label>
               <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <select
                   value={formData.moeda}
-                  onChange={e => setFormData({...formData, moeda: e.target.value as "BRL" | "USD" | "EUR" | "PYG" | "ARS"})}
-                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white appearance-none focus:outline-none focus:border-blue-500"
+                  onChange={e => setFormData({ ...formData, moeda: e.target.value as "BRL" | "USD" | "EUR" | "PYG" | "ARS" })}
+                  className="w-full bg-background border border-input rounded-lg pl-10 pr-4 py-2 text-foreground appearance-none focus:outline-none focus:border-primary"
                 >
                   <option value="BRL">Real Brasileiro (BRL)</option>
                   <option value="USD">US Dollar (USD)</option>

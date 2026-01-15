@@ -88,16 +88,16 @@ export function EditPositionModal({
       className="max-w-lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
-          <p className="text-lg font-bold text-white">{position.ticker}</p>
+        <div className="bg-muted border border-border rounded-lg p-4">
+          <p className="text-lg font-bold text-foreground">{position.ticker}</p>
           {position.asset_name && (
-            <p className="text-sm text-zinc-400">{position.asset_name}</p>
+            <p className="text-sm text-muted-foreground">{position.asset_name}</p>
           )}
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               {t('investments.modal.quantity')}
             </label>
             <input
@@ -106,12 +106,12 @@ export function EditPositionModal({
               value={quantidade}
               onChange={(e) => setQuantidade(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               {t('investments.modal.avgPrice')}
             </label>
             <input
@@ -120,20 +120,20 @@ export function EditPositionModal({
               value={precoMedio}
               onChange={(e) => setPrecoMedio(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
-        <div className="border-t border-zinc-700 pt-4">
+        <div className="border-t border-border pt-4">
           <label className="flex items-center gap-2 cursor-pointer">
             <input
               type="checkbox"
               checked={isManualPrice}
               onChange={(e) => setIsManualPrice(e.target.checked)}
-              className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-blue-600 focus:ring-blue-500"
+              className="w-4 h-4 rounded border-border bg-background text-blue-600 focus:ring-blue-500"
             />
-            <span className="text-sm text-zinc-300">
+            <span className="text-sm text-muted-foreground">
               {t('investments.modal.useManualPrice')}
             </span>
           </label>
@@ -141,7 +141,7 @@ export function EditPositionModal({
 
         {isManualPrice && (
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               {t('investments.modal.manualPrice')}
             </label>
             <input
@@ -150,9 +150,9 @@ export function EditPositionModal({
               value={manualPrice}
               onChange={(e) => setManualPrice(e.target.value)}
               required={isManualPrice}
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {t('investments.modal.manualPriceNote')}
             </p>
           </div>
@@ -161,7 +161,7 @@ export function EditPositionModal({
         {/* Yield Percentage for Renda Fixa */}
         {position.asset_type === "renda_fixa" && (
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               {t('investments.modal.yieldPercentage')}
             </label>
             <div className="flex items-center gap-2">
@@ -171,33 +171,33 @@ export function EditPositionModal({
                 value={yieldPercentage}
                 onChange={(e) => setYieldPercentage(e.target.value)}
                 placeholder={t('investments.modal.yieldPlaceholder')}
-                className="flex-1 px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
-              <span className="text-zinc-400 text-sm">{t('investments.modal.cdiSuffix')}</span>
+              <span className="text-muted-foreground text-sm">{t('investments.modal.cdiSuffix')}</span>
             </div>
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {t('investments.modal.yieldNote')}
             </p>
           </div>
         )}
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             {t('investments.modal.observation')}
           </label>
           <textarea
             value={observacao}
             onChange={(e) => setObservacao(e.target.value)}
             rows={3}
-            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             placeholder={t('investments.modal.observationPlaceholder')}
           />
         </div>
 
         {quantidade && precoMedio && (
           <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4">
-            <p className="text-sm text-zinc-400 mb-1">{t('investments.modal.totalInvested')}</p>
-            <p className="text-2xl font-bold text-white">
+            <p className="text-sm text-muted-foreground mb-1">{t('investments.modal.totalInvested')}</p>
+            <p className="text-2xl font-bold text-foreground">
               {formatCurrency(Number(quantidade) * Number(precoMedio))}
             </p>
           </div>

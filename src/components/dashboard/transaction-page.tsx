@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useDeferredValue } from "react";
+import { useState, useMemo, useDeferredValue, useEffect } from "react";
 import { Plus, Search, Filter, Download, Pencil, Trash2, Loader2, Calendar } from "lucide-react";
 import { useTransactionsQuery } from "@/hooks/use-transactions-query";
 import { useTransactionsExport } from "@/hooks/use-transactions-export";
@@ -13,6 +13,7 @@ import dynamic from 'next/dynamic';
 import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { InfoCard } from "@/components/ui/info-card";
+import { ExportDropdown } from "@/components/dashboard/export-dropdown";
 
 // Dynamic imports
 const TransactionModal = dynamic(() => import("./transaction-modal").then(mod => mod.TransactionModal));
@@ -28,8 +29,10 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
   const { formatCurrency } = useCurrency();
   const { period, customRange, setCustomDateRange } = usePeriodFilter();
   const { transactions, loading, refetch } = useTransactionsQuery(period as any, customRange);
-  const { exportTransactionsToPDF } = useTransactionsExport();
+  const { exportTransactionsToPDF, exportTransactionsToExcel } = useTransactionsExport();
   const { filter: accountFilter } = useAccountFilter();
+
+  const [isExporting, setIsExporting] = useState(false);
 
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearchTerm = useDeferredValue(searchTerm); // Otimização de busca
@@ -44,6 +47,13 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
   const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    if (customRange) {
+      setStartDate(customRange.start);
+      setEndDate(customRange.end);
+    }
+  }, [customRange]);
 
   const locales = {
     pt: 'pt-BR',
@@ -136,7 +146,25 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
     setEndDate("");
     setShowFilters(false);
     // Voltar para o período padrão (mês)
+
+
     window.dispatchEvent(new CustomEvent('periodFilterChange', { detail: 'month' }));
+  };
+
+  const handleExportPDF = async () => {
+    setIsExporting(true);
+    // Pequeno delay para permitir renderização do estado de loading
+    await new Promise(resolve => setTimeout(resolve, 100));
+    exportTransactionsToPDF(filteredTransactions, formatCurrency);
+    setIsExporting(false);
+  };
+
+  const handleExportExcel = async () => {
+    setIsExporting(true);
+    // Pequeno delay para permitir renderização do estado de loading
+    await new Promise(resolve => setTimeout(resolve, 100));
+    exportTransactionsToExcel(filteredTransactions, formatCurrency);
+    setIsExporting(false);
   };
 
   if (loading) {
@@ -183,13 +211,12 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <button
-            onClick={() => exportTransactionsToPDF(filteredTransactions, formatCurrency)}
-            className="flex items-center gap-2 px-3 md:px-4 py-2 min-h-[44px] bg-card text-muted-foreground rounded-lg hover:bg-muted transition-colors border border-border text-xs md:text-sm font-medium"
-          >
-            <Download className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('common.export')}</span>
-          </button>
+
+          <ExportDropdown
+            onExportPDF={handleExportPDF}
+            onExportExcel={handleExportExcel}
+            isExporting={isExporting}
+          />
           <button
             onClick={() => setIsModalOpen(true)}
             className={cn(
@@ -262,7 +289,7 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
             onClick={() => setShowFilters(!showFilters)}
             className={cn(
               "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors border text-sm font-medium",
-              showFilters
+              showFilters || period === 'custom'
                 ? "bg-primary text-primary-foreground border-primary"
                 : "bg-background text-muted-foreground border-border hover:bg-muted"
             )}

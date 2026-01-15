@@ -14,7 +14,7 @@ export function SecuritySettings() {
     new: "",
     confirm: ""
   });
-  
+
   const supabase = createClient();
 
   const handleUpdatePassword = async () => {
@@ -22,7 +22,7 @@ export function SecuritySettings() {
       alert(t('settings.passwordMismatch'));
       return;
     }
-    
+
     if (passwords.new.length < 6) {
       alert(t('settings.passwordTooShort'));
       return;
@@ -35,10 +35,10 @@ export function SecuritySettings() {
       });
 
       if (error) throw error;
-      
+
       alert(t('settings.passwordUpdated'));
       setPasswords({ current: "", new: "", confirm: "" });
-      
+
     } catch (error: any) {
       alert(error.message || t('settings.passwordError'));
     } finally {
@@ -49,18 +49,18 @@ export function SecuritySettings() {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-white">{t('settings.security')}</h3>
-        <p className="text-sm text-zinc-400">{t('settings.changePasswordDesc')}</p>
+        <h3 className="text-lg font-medium text-foreground">{t('settings.security')}</h3>
+        <p className="text-sm text-muted-foreground">{t('settings.changePasswordDesc')}</p>
       </div>
 
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
+      <div className="bg-card border border-border rounded-xl p-6">
         <div className="flex items-start gap-4 mb-6">
           <div className="p-3 bg-blue-500/10 rounded-xl">
             <ShieldCheck className="w-6 h-6 text-blue-400" />
           </div>
           <div>
-            <h4 className="font-medium text-white">{t('settings.changePassword')}</h4>
-            <p className="text-sm text-zinc-400 mt-1">
+            <h4 className="font-medium text-foreground">{t('settings.changePassword')}</h4>
+            <p className="text-sm text-muted-foreground mt-1">
               {t('settings.passwordStrengthDesc')}
             </p>
           </div>
@@ -68,28 +68,28 @@ export function SecuritySettings() {
 
         <div className="space-y-4 max-w-md">
           <div className="space-y-2">
-            <label className="text-sm font-medium text-zinc-400">{t('settings.newPassword')}</label>
+            <label className="text-sm font-medium text-muted-foreground">{t('settings.newPassword')}</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="password"
                 value={passwords.new}
-                onChange={e => setPasswords({...passwords, new: e.target.value})}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white focus:outline-none focus:border-[#22C55E]"
+                onChange={e => setPasswords({ ...passwords, new: e.target.value })}
+                className="w-full bg-background border border-input rounded-lg pl-10 pr-4 py-2 text-foreground focus:outline-none focus:border-[#22C55E]"
                 placeholder="••••••••"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium text-zinc-400">{t('settings.confirmPassword')}</label>
+            <label className="text-sm font-medium text-muted-foreground">{t('settings.confirmPassword')}</label>
             <div className="relative">
-              <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+              <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="password"
                 value={passwords.confirm}
-                onChange={e => setPasswords({...passwords, confirm: e.target.value})}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-10 pr-4 py-2 text-white focus:outline-none focus:border-[#22C55E]"
+                onChange={e => setPasswords({ ...passwords, confirm: e.target.value })}
+                className="w-full bg-background border border-input rounded-lg pl-10 pr-4 py-2 text-foreground focus:outline-none focus:border-[#22C55E]"
                 placeholder="••••••••"
               />
             </div>

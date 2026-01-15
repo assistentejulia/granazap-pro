@@ -32,8 +32,8 @@ export function SettingsSidebar({ activeTab, setActiveTab }: SettingsSidebarProp
             className={cn(
               "flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors whitespace-nowrap md:whitespace-normal flex-shrink-0 md:flex-shrink",
               activeTab === item.id
-                ? "bg-blue-600/10 text-blue-500" // Azul como no print
-                : "text-zinc-400 hover:text-white hover:bg-white/5"
+                ? "bg-primary/10 text-primary" // Azul como no print
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
             )}
           >
             <item.icon className="w-4 h-4" />

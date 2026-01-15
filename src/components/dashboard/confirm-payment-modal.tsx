@@ -93,20 +93,20 @@ export function ConfirmPaymentModal({
         {/* Info */}
         <div className={cn(
           "border rounded-lg p-4",
-          isIncome 
-            ? "bg-[#22C55E]/10 border-[#22C55E]/30" 
+          isIncome
+            ? "bg-green-500/10 border-green-500/30"
             : "bg-red-500/10 border-red-500/30"
         )}>
           <div className="flex items-start gap-3">
             <CheckCircle2 className={cn(
               "w-5 h-5 flex-shrink-0 mt-0.5",
-              isIncome ? "text-[#22C55E]" : "text-red-500"
+              isIncome ? "text-green-500" : "text-red-500"
             )} />
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <p className={cn(
                   "text-sm font-medium",
-                  isIncome ? "text-[#22C55E]" : "text-red-500"
+                  isIncome ? "text-green-500" : "text-red-500"
                 )}>
                   {transaction.descricao}
                 </p>
@@ -122,7 +122,7 @@ export function ConfirmPaymentModal({
               </div>
               <p className={cn(
                 "text-xs",
-                isIncome ? "text-[#22C55E]/80" : "text-red-500/80"
+                isIncome ? "text-green-500/80" : "text-red-500/80"
               )}>
                 {t('future.value')}: {formatCurrency(Number(transaction.valor))}
                 <br />
@@ -132,23 +132,22 @@ export function ConfirmPaymentModal({
           </div>
         </div>
 
-        <p className="text-zinc-400 text-sm">
+        <p className="text-muted-foreground text-sm">
           {t('future.confirmMessage')}
         </p>
 
         {/* Data de Efetivação */}
         <div>
-          <label className="text-sm font-medium text-white flex items-center gap-2">
+          <label className="text-sm font-medium text-foreground flex items-center gap-2">
             📅 {t('future.effectiveDate')} <span className="text-red-400">*</span>
           </label>
           <input
             type="date"
             value={dataEfetivacao}
             onChange={(e) => setDataEfetivacao(e.target.value)}
-            className="mt-1 w-full h-10 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#22C55E] [color-scheme:dark]"
-            style={{ colorScheme: 'dark' }}
+            className="mt-1 w-full h-10 px-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:border-green-500 [color-scheme:light] dark:[color-scheme:dark]"
           />
-          <p className="text-xs text-zinc-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {t('future.effectiveDateDesc')}
           </p>
         </div>
@@ -170,11 +169,11 @@ export function ConfirmPaymentModal({
         )}
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 pt-3 border-t border-white/5">
+        <div className="flex justify-end gap-3 pt-3 border-t border-border">
           <Button
             onClick={onClose}
             disabled={confirming}
-            className="px-6 bg-transparent border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+            className="px-6 bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             {t('common.cancel')}
           </Button>
@@ -183,7 +182,7 @@ export function ConfirmPaymentModal({
             disabled={confirming || !dataEfetivacao}
             className={cn(
               "px-6 text-white font-medium",
-              isIncome ? "bg-[#22C55E] hover:bg-[#16A34A]" : "bg-red-500 hover:bg-red-600"
+              isIncome ? "bg-green-500 hover:bg-green-600" : "bg-red-500 hover:bg-red-600"
             )}
           >
             {confirming && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}

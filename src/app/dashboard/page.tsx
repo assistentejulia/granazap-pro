@@ -10,7 +10,7 @@ const StatsCardsDynamic = dynamic(
     loading: () => (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="bg-[#111827] border border-white/5 rounded-xl p-6 animate-pulse">
+          <div key={i} className="bg-card border border-border rounded-xl p-6 animate-pulse">
             <div className="h-20" />
           </div>
         ))}

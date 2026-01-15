@@ -44,10 +44,10 @@ export default function SignupPage() {
     >
       {/* Header */}
       <div className="text-center lg:text-left space-y-2 mb-8">
-        <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-white">
+        <h2 className="text-3xl lg:text-4xl font-bold tracking-tight text-foreground">
           {t('signup.title')}
         </h2>
-        <p className="text-zinc-400 text-base">{t('signup.subtitle')}</p>
+        <p className="text-muted-foreground text-base">{t('signup.subtitle')}</p>
       </div>
 
       {/* Signup Form */}
@@ -55,7 +55,7 @@ export default function SignupPage() {
         <SignupForm />
 
         {/* Sign In Link */}
-        <div className="mt-6 text-center text-sm text-zinc-400">
+        <div className="mt-6 text-center text-sm text-muted-foreground">
           {t('signup.hasAccount')}{" "}
           <Link href="/login" className="font-semibold text-primary hover:text-primary/80 transition-colors">
             {t('signup.signIn')}

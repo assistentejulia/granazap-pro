@@ -44,7 +44,7 @@ export function ManageRecurrenceModal({
 
     while (currentDate <= finalDate) {
       dates.push(format(currentDate, 'yyyy-MM-dd'));
-      
+
       switch (period) {
         case 'diario':
           currentDate = addDays(currentDate, 1);
@@ -83,7 +83,7 @@ export function ManageRecurrenceModal({
 
     try {
       const supabase = createClient();
-      
+
       // Buscar lançamentos existentes desta recorrência
       const { data: existingTransactions } = await supabase
         .from('lancamentos_futuros')
@@ -99,25 +99,25 @@ export function ManageRecurrenceModal({
       if (!existingTransactions) return;
 
       const existingDates = existingTransactions.map(t => t.data_prevista);
-      
+
       // Encontrar a última data existente
-      const ultimaDataExistente = existingDates.length > 0 
-        ? existingDates[existingDates.length - 1] 
+      const ultimaDataExistente = existingDates.length > 0
+        ? existingDates[existingDates.length - 1]
         : transaction.data_prevista;
 
       // Calcular quantos lançamentos serão criados a partir da última data
       const proximaData = addMonths(parseISO(ultimaDataExistente + 'T12:00:00'), 1);
       const dataFinalDate = parseISO(dataFinal + 'T12:00:00');
-      
+
       const datesToAdd = [];
       let currentDate = proximaData;
-      
+
       while (currentDate <= dataFinalDate) {
         const dateStr = format(currentDate, 'yyyy-MM-dd');
         if (!existingDates.includes(dateStr)) {
           datesToAdd.push(dateStr);
         }
-        
+
         switch (periodicidade) {
           case 'diario':
             currentDate = addDays(currentDate, 1);
@@ -147,7 +147,7 @@ export function ManageRecurrenceModal({
             currentDate = addMonths(currentDate, 1);
         }
       }
-      
+
       // Calcular quantos serão removidos (após a data final)
       const datesToRemove = existingDates.filter(d => d > dataFinal);
 
@@ -176,7 +176,7 @@ export function ManageRecurrenceModal({
 
     setUpdating(true);
     setShowConfirmation(false);
-    
+
     try {
       const supabase = createClient();
 
@@ -195,26 +195,26 @@ export function ManageRecurrenceModal({
       if (!existingTransactions) throw new Error('Erro ao buscar lançamentos');
 
       const existingDates = existingTransactions.map(t => t.data_prevista);
-      
+
       // Encontrar a última data existente
-      const ultimaDataExistente = existingDates.length > 0 
-        ? existingDates[existingDates.length - 1] 
+      const ultimaDataExistente = existingDates.length > 0
+        ? existingDates[existingDates.length - 1]
         : transaction.data_prevista;
 
       // Gerar datas esperadas a partir da próxima data após a última existente
       const proximaData = addMonths(parseISO(ultimaDataExistente + 'T12:00:00'), 1);
       const dataFinalDate = parseISO(dataFinal + 'T12:00:00');
-      
+
       // Gerar apenas datas futuras que ainda não existem
       const datesToAdd = [];
       let currentDate = proximaData;
-      
+
       while (currentDate <= dataFinalDate) {
         const dateStr = format(currentDate, 'yyyy-MM-dd');
         if (!existingDates.includes(dateStr)) {
           datesToAdd.push(dateStr);
         }
-        
+
         switch (periodicidade) {
           case 'diario':
             currentDate = addDays(currentDate, 1);
@@ -244,7 +244,7 @@ export function ManageRecurrenceModal({
             currentDate = addMonths(currentDate, 1);
         }
       }
-      
+
       // Datas para remover (lançamentos após a nova data final)
       const datesToRemove = existingDates.filter(d => d > dataFinal);
 
@@ -334,25 +334,24 @@ export function ManageRecurrenceModal({
                 <Trash2 className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
               )}
               <div className="flex-1">
-                <p className="text-sm font-semibold text-white mb-2">
+                <p className="text-sm font-semibold text-foreground mb-2">
                   {impactType === 'add' ? '➕ ' + t('common.add') : '🗑️ ' + t('common.delete')}
                 </p>
-                <p className="text-sm text-zinc-300 mb-3">{impactMessage}</p>
+                <p className="text-sm text-muted-foreground mb-3">{impactMessage}</p>
                 <div className="flex gap-2">
                   <Button
                     onClick={() => setShowConfirmation(false)}
-                    className="px-4 py-2 bg-transparent border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5 text-sm"
+                    className="px-4 py-2 bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-muted text-sm"
                   >
                     {t('common.cancel')}
                   </Button>
                   <Button
                     onClick={performUpdate}
                     disabled={updating}
-                    className={`px-4 py-2 text-white font-medium text-sm ${
-                      impactType === 'add' 
-                        ? 'bg-blue-500 hover:bg-blue-600' 
+                    className={`px-4 py-2 text-white font-medium text-sm ${impactType === 'add'
+                        ? 'bg-blue-500 hover:bg-blue-600'
                         : 'bg-red-500 hover:bg-red-600'
-                    }`}
+                      }`}
                   >
                     {updating && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                     {t('common.confirm')}
@@ -401,22 +400,22 @@ export function ManageRecurrenceModal({
         {/* Description */}
         <div className="space-y-3">
           <div>
-            <label className="text-sm font-medium text-white">{t('common.description')}</label>
+            <label className="text-sm font-medium text-foreground">{t('common.description')}</label>
             <Input
               value={transaction.descricao}
               disabled
-              className="mt-1 bg-[#0A0F1C] border-white/10 text-zinc-500"
+              className="mt-1 bg-muted border-border text-muted-foreground"
             />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               🔄 Periodicidade
             </label>
             <select
               value={periodicidade}
               onChange={(e) => setPeriodicidade(e.target.value)}
-              className="mt-1 w-full h-10 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#22C55E]"
+              className="mt-1 w-full h-10 px-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:border-green-500"
             >
               <option value="diario">{t('common.daily')}</option>
               <option value="semanal">{t('common.weekly')}</option>
@@ -430,28 +429,28 @@ export function ManageRecurrenceModal({
           </div>
 
           <div>
-            <label className="text-sm font-medium text-white">
+            <label className="text-sm font-medium text-foreground">
               📅 Data Final <span className="text-red-400">*</span>
             </label>
             <input
               type="date"
               value={dataFinal}
               onChange={(e) => setDataFinal(e.target.value)}
-              className="mt-1 w-full h-10 px-3 bg-[#0A0F1C] border border-white/10 rounded-lg text-white focus:outline-none focus:border-[#22C55E] [color-scheme:dark]"
+              className="mt-1 w-full h-10 px-3 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:border-green-500 [color-scheme:light] dark:[color-scheme:dark]"
               style={{ colorScheme: 'dark' }}
             />
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               Defina até quando o lançamento deve se repetir.
             </p>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 pt-3 border-t border-white/5">
+        <div className="flex justify-end gap-3 pt-3 border-t border-border">
           <Button
             onClick={onClose}
             disabled={updating}
-            className="px-6 bg-transparent border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+            className="px-6 bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             {t('common.cancel')}
           </Button>

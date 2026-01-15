@@ -86,8 +86,17 @@ async function fetchTransactions(
     return `${year}-${month}-${day}`;
   };
 
-  const startDateStr = formatLocalDate(startDate);
-  const endDateStr = formatLocalDate(endDate);
+  let startDateStr: string;
+  let endDateStr: string;
+
+  if (period === 'custom' && customRange) {
+    // Usar strings diretamente para evitar problemas de timezone
+    startDateStr = customRange.start;
+    endDateStr = customRange.end;
+  } else {
+    startDateStr = formatLocalDate(startDate);
+    endDateStr = formatLocalDate(endDate);
+  }
 
 
   let query = supabase
@@ -149,8 +158,8 @@ export function useTransactionsQuery(
   const { filter: userFilter } = useUserFilter();
   const queryClient = useQueryClient();
 
-  // Query key incluindo userFilter
-  const queryKey = ['transactions', profile?.id, accountFilter, period, userFilter];
+  // Query key incluindo userFilter e customRange para garantir refetch correto
+  const queryKey = ['transactions', profile?.id, accountFilter, period, userFilter, period === 'custom' ? customRange : null];
 
   const query = useQuery({
     queryKey,

@@ -138,7 +138,7 @@ export default function InvestimentosPage() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6 animate-pulse">
+            <div key={i} className="bg-card border border-border rounded-xl p-4 md:p-6 animate-pulse">
               <div className="h-20" />
             </div>
           ))}
@@ -184,33 +184,33 @@ export default function InvestimentosPage() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {/* Valor Investido */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6">
           <div className="flex items-center justify-between mb-3 md:mb-4">
             <div className="p-2 bg-blue-500/10 rounded-lg">
               <Wallet className="w-4 h-4 md:w-5 md:h-5 text-blue-500" />
             </div>
           </div>
-          <p className="text-xs md:text-sm text-zinc-400 mb-1">{t('investments.summary.investedValue')}</p>
-          <p className="text-xl md:text-2xl font-bold text-white">
+          <p className="text-xs md:text-sm text-muted-foreground mb-1">{t('investments.summary.investedValue')}</p>
+          <p className="text-xl md:text-2xl font-bold text-foreground">
             {formatCurrency(summary?.valor_investido || 0)}
           </p>
         </div>
 
         {/* Valor Atual */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6">
           <div className="flex items-center justify-between mb-3 md:mb-4">
             <div className="p-2 bg-green-500/10 rounded-lg">
               <DollarSign className="w-4 h-4 md:w-5 md:h-5 text-green-500" />
             </div>
           </div>
-          <p className="text-xs md:text-sm text-zinc-400 mb-1">{t('investments.summary.currentValue')}</p>
-          <p className="text-xl md:text-2xl font-bold text-white">
+          <p className="text-xs md:text-sm text-muted-foreground mb-1">{t('investments.summary.currentValue')}</p>
+          <p className="text-xl md:text-2xl font-bold text-foreground">
             {formatCurrency(summary?.valor_atual || 0)}
           </p>
         </div>
 
         {/* Lucro/Prejuízo */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6">
           <div className="flex items-center justify-between mb-3 md:mb-4">
             <div className={`p-2 rounded-lg ${(summary?.lucro_prejuizo || 0) >= 0
               ? 'bg-green-500/10'
@@ -222,7 +222,7 @@ export default function InvestimentosPage() {
                 }`} />
             </div>
           </div>
-          <p className="text-xs md:text-sm text-zinc-400 mb-1">{t('investments.summary.profitLoss')}</p>
+          <p className="text-xs md:text-sm text-muted-foreground mb-1">{t('investments.summary.profitLoss')}</p>
           <p className={`text-xl md:text-2xl font-bold ${(summary?.lucro_prejuizo || 0) >= 0
             ? 'text-green-500'
             : 'text-red-500'
@@ -239,17 +239,17 @@ export default function InvestimentosPage() {
         </div>
 
         {/* Total Ativos */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
+        <div className="bg-card border border-border rounded-xl p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="p-2 bg-purple-500/10 rounded-lg">
               <PieChart className="w-5 h-5 text-purple-500" />
             </div>
           </div>
-          <p className="text-sm text-zinc-400 mb-1">{t('investments.summary.totalAssets')}</p>
-          <p className="text-2xl font-bold text-white">
+          <p className="text-sm text-muted-foreground mb-1">{t('investments.summary.totalAssets')}</p>
+          <p className="text-2xl font-bold text-foreground">
             {summary?.total_ativos || 0}
           </p>
-          <p className="text-sm text-zinc-400 mt-1">
+          <p className="text-sm text-muted-foreground mt-1">
             {t('investments.summary.dividends')}: {formatCurrency(totalDividends)}
           </p>
         </div>
@@ -257,8 +257,8 @@ export default function InvestimentosPage() {
 
       {/* Distribuição por Tipo */}
       {byType.length > 0 && (
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
-          <h2 className="text-lg font-semibold text-white mb-4">
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h2 className="text-lg font-semibold text-foreground mb-4">
             {t('investments.distribution.title')}
           </h2>
           <div className="space-y-3">
@@ -266,14 +266,14 @@ export default function InvestimentosPage() {
               <div key={item.type} className="flex items-center gap-4">
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-sm text-white font-medium">
+                    <span className="text-sm text-foreground font-medium">
                       {getAssetTypeLabel(item.type)}
                     </span>
-                    <span className="text-sm text-zinc-400">
+                    <span className="text-sm text-muted-foreground">
                       {item.count} {item.count === 1 ? t('investments.distribution.asset') : t('investments.distribution.assets')}
                     </span>
                   </div>
-                  <div className="w-full bg-zinc-800 rounded-full h-2">
+                  <div className="w-full bg-muted rounded-full h-2">
                     <div
                       className={`h-2 rounded-full transition-all ${ASSET_TYPE_COLORS[item.type] || 'bg-blue-500'}`}
                       style={{ width: `${item.percentage}%` }}
@@ -281,10 +281,10 @@ export default function InvestimentosPage() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm font-medium text-white">
+                  <p className="text-sm font-medium text-foreground">
                     {formatCurrency(item.currentValue)}
                   </p>
-                  <p className="text-xs text-zinc-400">
+                  <p className="text-xs text-muted-foreground">
                     {item.percentage.toFixed(1)}%
                   </p>
                 </div>
@@ -297,18 +297,18 @@ export default function InvestimentosPage() {
       {/* Posições */}
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-white">
+          <h2 className="text-lg font-semibold text-foreground">
             {t('investments.positions.title')}
           </h2>
 
           {/* Ordenação */}
           {hasPositions && (
             <div className="flex items-center gap-2">
-              <span className="text-xs text-zinc-500">{t('investments.positions.sortBy')}</span>
+              <span className="text-xs text-muted-foreground">{t('investments.positions.sortBy')}</span>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as "name" | "value" | "profit")}
-                className="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-sm text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 py-1.5 bg-background border border-border rounded-lg text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               >
                 <option value="name">{t('investments.positions.sortName')}</option>
                 <option value="value">{t('investments.positions.sortValue')}</option>
@@ -324,8 +324,8 @@ export default function InvestimentosPage() {
             <button
               onClick={() => setAssetTypeFilter("all")}
               className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${assetTypeFilter === "all"
-                ? "bg-blue-600 text-white"
-                : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
                 }`}
             >
               {t('investments.positions.all')} ({positions.length})
@@ -338,8 +338,8 @@ export default function InvestimentosPage() {
                   key={type}
                   onClick={() => setAssetTypeFilter(type)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${assetTypeFilter === type
-                    ? "bg-blue-600 text-white"
-                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-muted text-muted-foreground hover:bg-muted/80"
                     }`}
                 >
                   {getAssetTypeLabel(type)} ({count})
@@ -362,36 +362,36 @@ export default function InvestimentosPage() {
             ))}
           </div>
         ) : hasPositions && !hasFilteredPositions ? (
-          <div className="bg-[#111827] border border-white/5 rounded-xl p-12 text-center">
-            <p className="text-zinc-400">
+          <div className="bg-card border border-border rounded-xl p-12 text-center">
+            <p className="text-muted-foreground">
               {t('investments.emptyStates.noFilteredPositions')} <strong>{getAssetTypeLabel(assetTypeFilter)}</strong>.
             </p>
             <button
               onClick={() => setAssetTypeFilter("all")}
-              className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              className="mt-4 px-4 py-2 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors"
             >
               {t('investments.emptyStates.viewAll')}
             </button>
           </div>
         ) : (
-          <div className="bg-[#111827] border border-white/5 rounded-xl p-12 text-center">
+          <div className="bg-card border border-border rounded-xl p-12 text-center">
             <div className="max-w-lg mx-auto">
-              <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                <TrendingUp className="w-8 h-8 text-zinc-600" />
+              <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mx-auto mb-4">
+                <TrendingUp className="w-8 h-8 text-muted-foreground" />
               </div>
-              <h3 className="text-lg font-semibold text-white mb-2">
+              <h3 className="text-lg font-semibold text-foreground mb-2">
                 {t('investments.emptyStates.noPositions')}
               </h3>
-              <p className="text-sm text-zinc-400 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 {t('investments.emptyStates.subtitle')}
               </p>
 
               {/* Onboarding Tips */}
-              <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4 mb-6 text-left">
-                <h4 className="text-sm font-semibold text-white mb-3">
+              <div className="bg-muted/50 border border-border rounded-lg p-4 mb-6 text-left">
+                <h4 className="text-sm font-semibold text-foreground mb-3">
                   {t('investments.emptyStates.whatToAdd')}
                 </h4>
-                <ul className="text-xs text-zinc-400 space-y-2">
+                <ul className="text-xs text-muted-foreground space-y-2">
                   <li>📈 <strong>{t('investments.assetDescriptions.stock')}</strong> {t('investments.assetDescriptions.stockExamples')}</li>
                   <li>🏢 <strong>{t('investments.assetDescriptions.fii')}</strong> {t('investments.assetDescriptions.fiiExamples')}</li>
                   <li>💰 <strong>{t('investments.assetDescriptions.fixedIncome')}</strong> {t('investments.assetDescriptions.fixedIncomeExamples')}</li>
@@ -403,7 +403,7 @@ export default function InvestimentosPage() {
 
               <button
                 onClick={() => setAddModalOpen(true)}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground rounded-lg transition-colors"
               >
                 <Plus className="w-4 h-4" />
                 {t('investments.emptyStates.addFirst')}

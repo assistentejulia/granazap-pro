@@ -17,13 +17,13 @@ export function CategoriesPage() {
   const { t } = useLanguage();
   const { filter: accountFilter } = useAccountFilter();
   const { categories: allCategories, loading } = useCategoriesQuery();
-  
+
   // Filtrar categorias por tipo (incluindo 'ambos')
   const incomeCategories = allCategories.filter(c => c.tipo === 'entrada' || c.tipo === 'ambos');
   const expenseCategories = allCategories.filter(c => c.tipo === 'saida' || c.tipo === 'ambos');
   const loadingIncome = loading;
   const loadingExpense = loading;
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryToEdit, setCategoryToEdit] = useState<any>(null);
   const [selectedType, setSelectedType] = useState<'entrada' | 'saida'>('entrada');
@@ -60,7 +60,7 @@ export function CategoriesPage() {
     try {
       setDeletingId(categoryToDelete.id);
       const supabase = createClient();
-      
+
       const { data, error } = await supabase
         .rpc('delete_category_safe', { p_category_id: categoryToDelete.id });
 
@@ -74,7 +74,7 @@ export function CategoriesPage() {
       if (data && data.success) {
         const { transacoes_afetadas, lancamentos_afetados } = data;
         const total = transacoes_afetadas + lancamentos_afetados;
-        
+
         if (total > 0) {
           alert(`Categoria deletada com sucesso! ${total} registro(s) foram atualizados para "Sem Categoria".`);
         }
@@ -107,17 +107,17 @@ export function CategoriesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 md:gap-3">
-            <h1 className="text-xl md:text-2xl font-bold text-white">{t('categories.title')}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-foreground">{t('categories.title')}</h1>
             <span className={cn(
               "px-2 md:px-3 py-1 rounded-full text-xs font-semibold",
-              accountFilter === 'pessoal' 
-                ? "bg-blue-500/10 text-blue-400 border border-blue-500/20" 
+              accountFilter === 'pessoal'
+                ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
                 : "bg-purple-500/10 text-purple-400 border border-purple-500/20"
             )}>
               {accountFilter === 'pessoal' ? `👤 ${t('sidebar.personal')}` : `🏢 ${t('sidebar.pj')}`}
             </span>
           </div>
-          <p className="text-zinc-400 text-xs md:text-sm mt-1">
+          <p className="text-muted-foreground text-xs md:text-sm mt-1">
             {t('categories.description')}
           </p>
         </div>
@@ -140,10 +140,10 @@ export function CategoriesPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs md:text-sm text-zinc-400 mb-2">{t('categories.incomeTitle')}</p>
+              <p className="text-xs md:text-sm text-muted-foreground mb-2">{t('categories.incomeTitle')}</p>
               <p className="text-2xl md:text-3xl font-bold text-[#22C55E]">
                 {incomeCategories.length}
               </p>
@@ -153,10 +153,10 @@ export function CategoriesPage() {
             </div>
           </div>
         </div>
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6">
+        <div className="bg-card border border-border rounded-xl p-4 md:p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs md:text-sm text-zinc-400 mb-2">{t('categories.expenseTitle')}</p>
+              <p className="text-xs md:text-sm text-muted-foreground mb-2">{t('categories.expenseTitle')}</p>
               <p className="text-2xl md:text-3xl font-bold text-red-500">
                 {expenseCategories.length}
               </p>
@@ -169,15 +169,15 @@ export function CategoriesPage() {
       </div>
 
       {/* Categorias de Receitas */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl overflow-hidden">
-        <div className="px-4 md:px-6 py-3 md:py-4 border-b border-white/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="px-4 md:px-6 py-3 md:py-4 border-b border-border flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-[#22C55E]/10 flex items-center justify-center">
               <TrendingUp className="w-5 h-5 text-[#22C55E]" />
             </div>
             <div>
-              <h2 className="text-base md:text-lg font-semibold text-white">{t('transactions.income')}</h2>
-              <p className="text-xs text-zinc-400">{t('categories.incomeTitle')}</p>
+              <h2 className="text-base md:text-lg font-semibold text-foreground">{t('transactions.income')}</h2>
+              <p className="text-xs text-muted-foreground">{t('categories.incomeTitle')}</p>
             </div>
           </div>
           <button
@@ -223,7 +223,7 @@ export function CategoriesPage() {
                 return (
                   <div
                     key={category.id}
-                    className="group bg-[#0A0F1C] border border-white/10 rounded-lg p-4 hover:border-[#22C55E]/50 transition-all"
+                    className="group bg-background border border-border rounded-lg p-4 hover:border-[#22C55E]/50 transition-all"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
@@ -231,35 +231,35 @@ export function CategoriesPage() {
                           <IconComponent className="w-5 h-5 text-[#22C55E]" />
                         </div>
                         <div>
-                          <h3 className="text-white font-medium">{category.descricao}</h3>
-                          <p className="text-xs text-zinc-500">{t('categories.incomeType')}</p>
+                          <h3 className="text-foreground font-medium">{category.descricao}</h3>
+                          <p className="text-xs text-muted-foreground">{t('categories.incomeType')}</p>
                         </div>
                       </div>
                     </div>
-                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => handleEdit(category, 'entrada')}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white rounded-lg transition-colors text-sm"
-                    >
-                      <Pencil className="w-3 h-3" />
-                      {t('common.edit')}
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(category, 'entrada')}
-                      disabled={deletingId === category.id}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-lg transition-colors text-sm"
-                    >
-                      {deletingId === category.id ? (
-                        <Loader2 className="w-3 h-3 animate-spin" />
-                      ) : (
-                        <>
-                          <Trash2 className="w-3 h-3" />
-                          {t('common.delete')}
-                        </>
-                      )}
-                    </button>
+                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={() => handleEdit(category, 'entrada')}
+                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground rounded-lg transition-colors text-sm"
+                      >
+                        <Pencil className="w-3 h-3" />
+                        {t('common.edit')}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(category, 'entrada')}
+                        disabled={deletingId === category.id}
+                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 rounded-lg transition-colors text-sm"
+                      >
+                        {deletingId === category.id ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <>
+                            <Trash2 className="w-3 h-3" />
+                            {t('common.delete')}
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
-                </div>
                 );
               })}
             </div>
@@ -268,15 +268,15 @@ export function CategoriesPage() {
       </div>
 
       {/* Categorias de Despesas */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
+      <div className="bg-card border border-border rounded-xl overflow-hidden">
+        <div className="px-6 py-4 border-b border-border flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-red-500/10 flex items-center justify-center">
               <TrendingDown className="w-5 h-5 text-red-500" />
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-white">{t('transactions.expenses')}</h2>
-              <p className="text-xs text-zinc-400">{t('categories.expenseTitle')}</p>
+              <h2 className="text-lg font-semibold text-foreground">{t('transactions.expenses')}</h2>
+              <p className="text-xs text-muted-foreground">{t('categories.expenseTitle')}</p>
             </div>
           </div>
           <button
@@ -321,7 +321,7 @@ export function CategoriesPage() {
                 return (
                   <div
                     key={category.id}
-                    className="group bg-[#0A0F1C] border border-white/10 rounded-lg p-4 hover:border-red-500/50 transition-all"
+                    className="group bg-background border border-border rounded-lg p-4 hover:border-red-500/50 transition-all"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
@@ -329,35 +329,35 @@ export function CategoriesPage() {
                           <IconComponent className="w-5 h-5 text-red-500" />
                         </div>
                         <div>
-                          <h3 className="text-white font-medium">{category.descricao}</h3>
-                          <p className="text-xs text-zinc-500">{t('categories.expenseType')}</p>
+                          <h3 className="text-foreground font-medium">{category.descricao}</h3>
+                          <p className="text-xs text-muted-foreground">{t('categories.expenseType')}</p>
                         </div>
                       </div>
                     </div>
-                  <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button
-                      onClick={() => handleEdit(category, 'saida')}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white rounded-lg transition-colors text-sm"
-                    >
-                      <Pencil className="w-3 h-3" />
-                      {t('common.edit')}
-                    </button>
-                    <button
-                      onClick={() => handleDeleteClick(category, 'saida')}
-                      disabled={deletingId === category.id}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 rounded-lg transition-colors text-sm"
-                    >
-                      {deletingId === category.id ? (
-                        <Loader2 className="w-3 h-3 animate-spin" />
-                      ) : (
-                        <>
-                          <Trash2 className="w-3 h-3" />
-                          {t('common.delete')}
-                        </>
-                      )}
-                    </button>
+                    <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        onClick={() => handleEdit(category, 'saida')}
+                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground rounded-lg transition-colors text-sm"
+                      >
+                        <Pencil className="w-3 h-3" />
+                        {t('common.edit')}
+                      </button>
+                      <button
+                        onClick={() => handleDeleteClick(category, 'saida')}
+                        disabled={deletingId === category.id}
+                        className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-red-500/10 hover:bg-red-500/20 text-destructive dark:text-destructive-foreground hover:text-destructive-hover dark:hover:text-destructive-foreground-hover rounded-lg transition-colors text-sm"
+                      >
+                        {deletingId === category.id ? (
+                          <Loader2 className="w-3 h-3 animate-spin" />
+                        ) : (
+                          <>
+                            <Trash2 className="w-3 h-3" />
+                            {t('common.delete')}
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
-                </div>
                 );
               })}
             </div>

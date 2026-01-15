@@ -33,10 +33,10 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
   const formatCurrencyInput = (value: string) => {
     // Remove tudo exceto números
     const numbers = value.replace(/\D/g, '');
-    
+
     // Converte para número e divide por 100 para ter os centavos
     const amount = parseFloat(numbers) / 100;
-    
+
     // Formata no padrão brasileiro
     return amount.toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
@@ -46,7 +46,7 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
 
   const handleCurrencyChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const formatted = formatCurrencyInput(e.target.value);
-    setFormData({...formData, saldo_atual: formatted});
+    setFormData({ ...formData, saldo_atual: formatted });
   };
 
   // Reset feedback ao abrir
@@ -71,7 +71,7 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
       // Parse o valor formatado: remove pontos (separador de milhar) e substitui vírgula por ponto
       const valorLimpo = formData.saldo_atual.replace(/\./g, '').replace(',', '.');
       const saldoNumerico = parseFloat(valorLimpo) || 0;
-      
+
       await createAccount({
         nome: formData.nome,
         banco: formData.banco || undefined,
@@ -80,7 +80,7 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
       });
 
       setFeedback({ type: 'success', message: t('accounts.createSuccess') });
-      
+
       setTimeout(() => {
         onSuccess();
         onClose();
@@ -103,7 +103,7 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
         isOpen={isOpen}
         onClose={onClose}
         title={feedback.type === 'success' ? t('common.save') : 'Erro'}
-        className="max-w-sm w-full p-6 bg-[#111827] border border-white/10"
+        className="max-w-sm w-full p-6 bg-card border border-border"
       >
         <div className="flex flex-col items-center text-center space-y-4">
           {feedback.type === 'success' ? (
@@ -115,20 +115,20 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
               <XCircle className="w-6 h-6 text-red-500" />
             </div>
           )}
-          
+
           <div className="space-y-2">
-            <h3 className="text-lg font-medium text-white">
+            <h3 className="text-lg font-medium text-foreground">
               {feedback.type === 'success' ? t('accounts.createSuccess') : 'Ops, algo deu errado'}
             </h3>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-muted-foreground">
               {feedback.message}
             </p>
           </div>
 
           {feedback.type === 'error' && (
-            <Button 
-              onClick={() => setFeedback(null)} 
-              className="w-full bg-white/10 hover:bg-white/20 text-white"
+            <Button
+              onClick={() => setFeedback(null)}
+              className="w-full bg-secondary hover:bg-secondary/80 text-secondary-foreground"
             >
               {t('common.cancel')}
             </Button>
@@ -143,10 +143,10 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
       isOpen={isOpen}
       onClose={onClose}
       title={t('accounts.newAccount')}
-      className="max-w-md w-full p-0 overflow-hidden bg-[#111827] border border-white/10"
+      className="max-w-md w-full p-0 overflow-hidden bg-card border border-border"
     >
       <div className="p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
-        
+
         {/* Indicador de Conta */}
         <div className="mb-6 bg-blue-500/5 border border-blue-500/10 rounded-lg p-3 flex items-start gap-3">
           <AlertCircle className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" />
@@ -158,7 +158,7 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          
+
           {/* Nome */}
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('accounts.accountName')}</label>
@@ -171,8 +171,8 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
                 type="text"
                 placeholder="Ex: Nubank, Itaú Principal..."
                 value={formData.nome}
-                onChange={e => setFormData({...formData, nome: e.target.value})}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                onChange={e => setFormData({ ...formData, nome: e.target.value })}
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
               />
             </div>
           </div>
@@ -188,8 +188,8 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
                 type="text"
                 placeholder="Ex: Nu Pagamentos S.A."
                 value={formData.banco}
-                onChange={e => setFormData({...formData, banco: e.target.value})}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                onChange={e => setFormData({ ...formData, banco: e.target.value })}
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
               />
             </div>
           </div>
@@ -207,7 +207,7 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
                 placeholder="0,00"
                 value={formData.saldo_atual}
                 onChange={handleCurrencyChange}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-green-500 focus:ring-1 focus:ring-green-500 transition-all"
               />
             </div>
           </div>
@@ -215,32 +215,32 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
           {/* Is Default Toggle */}
           <div className="flex items-center gap-3 pt-2">
             <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
-                <input 
-                    type="checkbox" 
-                    name="toggle" 
-                    id="toggle" 
-                    checked={formData.is_default}
-                    onChange={(e) => setFormData({...formData, is_default: e.target.checked})}
-                    className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300 checked:right-0 right-5"
-                />
-                <label htmlFor="toggle" className={`toggle-label block overflow-hidden h-5 rounded-full cursor-pointer transition-colors duration-300 ${formData.is_default ? 'bg-blue-600' : 'bg-zinc-700'}`}></label>
+              <input
+                type="checkbox"
+                name="toggle"
+                id="toggle"
+                checked={formData.is_default}
+                onChange={(e) => setFormData({ ...formData, is_default: e.target.checked })}
+                className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300 checked:right-0 right-5"
+              />
+              <label htmlFor="toggle" className={`toggle-label block overflow-hidden h-5 rounded-full cursor-pointer transition-colors duration-300 ${formData.is_default ? 'bg-blue-600' : 'bg-muted'}`}></label>
             </div>
-            <label htmlFor="toggle" className="text-sm text-zinc-300 cursor-pointer select-none">
-                {t('accounts.setAsDefault')}
+            <label htmlFor="toggle" className="text-sm text-muted-foreground cursor-pointer select-none">
+              {t('accounts.setAsDefault')}
             </label>
           </div>
 
           <div className="flex gap-3 pt-4 border-t border-white/5 mt-4">
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               variant="ghost"
               onClick={onClose}
-              className="flex-1 text-zinc-400 hover:text-white hover:bg-white/5 h-10 rounded-lg transition-colors text-sm"
+              className="flex-1 text-muted-foreground hover:text-foreground hover:bg-muted h-10 rounded-lg transition-colors text-sm"
             >
               {t('common.cancel')}
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white font-medium h-10 rounded-lg shadow-lg shadow-blue-900/20 transition-all active:scale-[0.98] text-sm"
               disabled={loading}
             >
@@ -258,7 +258,10 @@ export function AddAccountModal({ isOpen, onClose, onSuccess }: AddAccountModalP
         }
         .toggle-checkbox {
           right: 20px;
-          border-color: #3f3f46;
+          border-color: #71717a; /* zinc-500 */
+        }
+        .dark .toggle-checkbox {
+           border-color: #3f3f46; /* zinc-700 */
         }
       `}</style>
     </Modal>

@@ -136,11 +136,11 @@ export default function GoalsPage() {
   };
 
   const renderIcon = (iconKey?: string) => {
-    if (!iconKey) return <Target className="w-5 h-5 text-white" />;
+    if (!iconKey) return <Target className="w-5 h-5 text-foreground" />;
     // Remove prefixo 'lucide-' se existir e converte para lowercase
     const key = iconKey.replace('lucide-', '').toLowerCase();
     const IconComponent = IconMap[key] || IconMap['default'];
-    return <IconComponent className="w-5 h-5 text-white" />;
+    return <IconComponent className="w-5 h-5 text-foreground" />;
   };
 
   if (loading) {
@@ -157,7 +157,7 @@ export default function GoalsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 md:gap-3">
-            <h1 className="text-xl md:text-2xl font-bold text-white flex items-center gap-2">
+            <h1 className="text-xl md:text-2xl font-bold text-foreground flex items-center gap-2">
               <Target className="w-6 h-6 md:w-8 md:h-8 text-blue-500" />
               {t('goals.title')}
             </h1>
@@ -170,7 +170,7 @@ export default function GoalsPage() {
               {accountFilter === 'pessoal' ? `👤 ${t('sidebar.personal')}` : `🏢 ${t('sidebar.pj')}`}
             </span>
           </div>
-          <p className="text-xs md:text-sm text-zinc-400 mt-1">{t('goals.description')}</p>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">{t('goals.description')}</p>
         </div>
 
         <button
@@ -185,84 +185,84 @@ export default function GoalsPage() {
       {/* Resumo Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 md:gap-4">
         {/* Card 1 - Receita */}
-        <div className="bg-[#111827] border border-white/5 p-4 md:p-5 rounded-xl">
+        <div className="bg-card border border-border p-4 md:p-5 rounded-xl">
           <div className="flex items-center gap-3 md:gap-4 mb-3">
             <div className="p-2 md:p-3 bg-emerald-500/10 rounded-xl flex-shrink-0">
               <TrendingUp className="w-5 h-5 md:w-6 md:h-6 text-emerald-500" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs md:text-sm text-zinc-400 truncate">{t('goals.totalIncome')}</p>
-              <h3 className="text-lg md:text-xl font-bold text-white truncate">
+              <p className="text-xs md:text-sm text-muted-foreground truncate">{t('goals.totalIncome')}</p>
+              <h3 className="text-lg md:text-xl font-bold text-foreground truncate">
                 {formatCurrency(totalIncomeRealized)}
               </h3>
             </div>
           </div>
           <div className="space-y-2">
-            <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full rounded-full bg-emerald-500 transition-all duration-1000"
                 style={{ width: `${Math.min(totalIncomeProgress, 100)}%` }}
               />
             </div>
             <div className="flex justify-between text-[10px] md:text-xs">
-              <span className="text-zinc-500 truncate">{t('goals.valueLimit')}: {formatCurrency(totalIncomeLimit)}</span>
+              <span className="text-muted-foreground truncate">{t('goals.valueLimit')}: {formatCurrency(totalIncomeLimit)}</span>
               <span className="text-emerald-400 flex-shrink-0">{totalIncomeProgress.toFixed(0)}%</span>
             </div>
           </div>
         </div>
 
         {/* Card 2 - Gasto */}
-        <div className="bg-[#111827] border border-white/5 p-4 md:p-5 rounded-xl">
+        <div className="bg-card border border-border p-4 md:p-5 rounded-xl">
           <div className="flex items-center gap-3 md:gap-4 mb-3">
             <div className="p-2 md:p-3 bg-red-500/10 rounded-xl flex-shrink-0">
               <ArrowDownCircle className="w-5 h-5 md:w-6 md:h-6 text-red-500" />
             </div>
             <div className="min-w-0">
-              <p className="text-xs md:text-sm text-zinc-400 truncate">{t('goals.totalSpent')}</p>
-              <h3 className="text-lg md:text-xl font-bold text-white truncate">
+              <p className="text-xs md:text-sm text-muted-foreground truncate">{t('goals.totalSpent')}</p>
+              <h3 className="text-lg md:text-xl font-bold text-foreground truncate">
                 {formatCurrency(totalSpent)}
               </h3>
             </div>
           </div>
           <div className="space-y-2">
-            <div className="h-1.5 w-full bg-zinc-800 rounded-full overflow-hidden">
+            <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-1000 ${totalProgress > 100 ? 'bg-red-500' : 'bg-red-500'}`}
                 style={{ width: `${Math.min(totalProgress, 100)}%` }}
               />
             </div>
             <div className="flex justify-between text-[10px] md:text-xs">
-              <span className="text-zinc-500 truncate">{t('goals.totalBudget')}</span>
+              <span className="text-muted-foreground truncate">{t('goals.totalBudget')}</span>
               <span className="text-red-400 flex-shrink-0">{totalProgress.toFixed(0)}%</span>
             </div>
           </div>
         </div>
 
         {/* Card 3 - Orçamento */}
-        <div className="bg-[#111827] border border-white/5 p-4 md:p-5 rounded-xl flex items-center gap-3 md:gap-4">
+        <div className="bg-card border border-border p-4 md:p-5 rounded-xl flex items-center gap-3 md:gap-4">
           <div className="p-2 md:p-3 bg-blue-500/10 rounded-xl flex-shrink-0">
             <Target className="w-5 h-5 md:w-6 md:h-6 text-blue-500" />
           </div>
           <div className="min-w-0">
-            <p className="text-xs md:text-sm text-zinc-400 truncate">{t('goals.valueLimit')}</p>
-            <h3 className="text-lg md:text-xl font-bold text-white truncate">
+            <p className="text-xs md:text-sm text-muted-foreground truncate">{t('goals.valueLimit')}</p>
+            <h3 className="text-lg md:text-xl font-bold text-foreground truncate">
               {formatCurrency(totalLimit)}
             </h3>
-            <p className="text-xs text-zinc-500 mt-1">{t('goals.totalBudget')}</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('goals.totalBudget')}</p>
           </div>
         </div>
 
         {/* Card 4 - Metas Ativas */}
-        <div className="bg-[#111827] border border-white/5 p-5 rounded-xl flex items-center gap-4">
+        <div className="bg-card border border-border p-5 rounded-xl flex items-center gap-4">
           <div className="p-3 bg-yellow-500/10 rounded-xl">
             <Trophy className="w-6 h-6 text-yellow-500" />
           </div>
           <div>
-            <p className="text-sm text-zinc-400">{t('goals.activeGoals')}</p>
-            <h3 className="text-xl font-bold text-white">
+            <p className="text-sm text-muted-foreground">{t('goals.activeGoals')}</p>
+            <h3 className="text-xl font-bold text-foreground">
               {activeGoals.length}
             </h3>
-            <p className="text-xs text-zinc-500 mt-1">{incomeGoals.length} {t('transactions.income')} • {expenseGoals.length} {t('transactions.expenses')}</p>
+            <p className="text-xs text-muted-foreground mt-1">{incomeGoals.length} {t('transactions.income')} • {expenseGoals.length} {t('transactions.expenses')}</p>
           </div>
         </div>
       </div>
@@ -329,7 +329,7 @@ export default function GoalsPage() {
             const barBgClass = isIncome ? 'bg-emerald-500' : (isOverBudget ? 'bg-red-500' : 'bg-blue-500');
 
             return (
-              <div key={goal.id} className="group bg-[#111827] border border-white/5 hover:border-white/10 p-5 rounded-xl transition-all hover:translate-y-[-2px] relative overflow-hidden">
+              <div key={goal.id} className="group bg-card border border-border hover:border-border/80 p-5 rounded-xl transition-all hover:translate-y-[-2px] relative overflow-hidden">
 
                 {/* Background Glow Efeito */}
                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-${themeColor}-500/5 to-transparent rounded-bl-full -mr-8 -mt-8 pointer-events-none`} />
@@ -350,21 +350,21 @@ export default function GoalsPage() {
                 <div className="absolute top-4 right-4 flex gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity z-10">
                   <button
                     onClick={() => handleDuplicate(goal)}
-                    className="p-2 bg-[#0A0F1C] border border-white/5 hover:bg-blue-900/20 text-zinc-400 hover:text-blue-400 rounded-lg transition-colors shadow-lg"
+                    className="p-2 bg-background border border-border hover:bg-muted text-muted-foreground hover:text-blue-500 rounded-lg transition-colors shadow-lg"
                     title={t('goals.duplicate')}
                   >
                     <Copy className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => setEditingGoal(goal)}
-                    className="p-2 bg-[#0A0F1C] border border-white/5 hover:bg-zinc-800 text-zinc-400 hover:text-white rounded-lg transition-colors shadow-lg"
+                    className="p-2 bg-background border border-border hover:bg-muted text-muted-foreground hover:text-foreground rounded-lg transition-colors shadow-lg"
                     title={t('common.edit')}
                   >
                     <Pencil className="w-3.5 h-3.5" />
                   </button>
                   <button
                     onClick={() => handleDeleteClick(goal)}
-                    className="p-2 bg-[#0A0F1C] border border-white/5 hover:bg-red-900/20 text-zinc-400 hover:text-red-400 rounded-lg transition-colors shadow-lg"
+                    className="p-2 bg-background border border-border hover:bg-red-500/10 text-muted-foreground hover:text-red-500 rounded-lg transition-colors shadow-lg"
                     title={t('common.delete')}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -376,8 +376,8 @@ export default function GoalsPage() {
                     {renderIcon(goal.categoria?.icon_key)}
                   </div>
                   <div className="overflow-hidden">
-                    <p className="text-xs text-zinc-500 mb-0.5 uppercase tracking-wider">{goal.categoria?.descricao || t('goals.generalExpense')}</p>
-                    <h3 className="text-white font-semibold truncate text-lg leading-tight" title={goal.nome}>
+                    <p className="text-xs text-muted-foreground mb-0.5 uppercase tracking-wider">{goal.categoria?.descricao || t('goals.generalExpense')}</p>
+                    <h3 className="text-foreground font-semibold truncate text-lg leading-tight" title={goal.nome}>
                       {goal.nome}
                     </h3>
                   </div>
@@ -386,20 +386,20 @@ export default function GoalsPage() {
                 <div className="space-y-3">
                   <div className="flex items-end justify-between">
                     <div>
-                      <p className="text-xs text-zinc-500 mb-1">{isIncome ? t('goals.realized') : t('goals.spent')}</p>
-                      <span className={`text-lg font-bold ${isIncome ? 'text-emerald-400' : 'text-white'}`}>
+                      <p className="text-xs text-muted-foreground mb-1">{isIncome ? t('goals.realized') : t('goals.spent')}</p>
+                      <span className={`text-lg font-bold ${isIncome ? 'text-emerald-400' : 'text-foreground'}`}>
                         {formatCurrency(goal.currentAmount)}
                       </span>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs text-zinc-500 mb-1">{t('goals.valueLimit')}</p>
-                      <span className="text-sm font-medium text-zinc-400">
+                      <p className="text-xs text-muted-foreground mb-1">{t('goals.valueLimit')}</p>
+                      <span className="text-sm font-medium text-muted-foreground">
                         {formatCurrency(goal.valor_limite)}
                       </span>
                     </div>
                   </div>
 
-                  <div className="h-2 w-full bg-[#0A0F1C] border border-white/5 rounded-full overflow-hidden relative">
+                  <div className="h-2 w-full bg-background border border-border rounded-full overflow-hidden relative">
                     <div
                       className={`h-full rounded-full transition-all duration-1000 ${barBgClass}`}
                       style={{ width: `${Math.min(progress, 100)}%` }}
@@ -407,7 +407,7 @@ export default function GoalsPage() {
                   </div>
 
                   <div className="flex items-center justify-between text-xs pt-1">
-                    <div className="flex items-center gap-1.5 text-zinc-500">
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
                       <Calendar className="w-3 h-3" />
                       <span>{t('goals.endDate')}: {new Date(goal.data_fim).toLocaleDateString('pt-BR')}</span>
                     </div>
@@ -416,14 +416,14 @@ export default function GoalsPage() {
                     </span>
                   </div>
 
-                  <div className={`pt-3 mt-3 border-t border-white/5 flex items-center justify-between text-xs`}>
-                    <span className="text-zinc-500">
+                  <div className={`pt-3 mt-3 border-t border-border flex items-center justify-between text-xs`}>
+                    <span className="text-muted-foreground">
                       {isIncome
                         ? (remaining > 0 ? t('goals.remaining') : t('goals.exceeded'))
                         : (remaining >= 0 ? t('goals.remaining') : t('goals.exceeded'))}
                     </span>
                     <span className={`font-mono font-medium ${isIncome
-                      ? (remaining <= 0 ? 'text-emerald-400' : 'text-zinc-400')
+                      ? (remaining <= 0 ? 'text-emerald-400' : 'text-muted-foreground')
                       : (remaining < 0 ? 'text-red-400' : 'text-emerald-400')
                       }`}>
                       {formatCurrency(Math.abs(remaining))}

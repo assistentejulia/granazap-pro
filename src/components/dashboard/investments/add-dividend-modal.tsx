@@ -102,17 +102,17 @@ export function AddDividendModal({
       className="max-w-lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="bg-zinc-800/50 border border-zinc-700 rounded-lg p-4">
+        <div className="bg-muted border border-border rounded-lg p-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-lg font-bold text-white">{position.ticker}</p>
+              <p className="text-lg font-bold text-foreground">{position.ticker}</p>
               {position.asset_name && (
-                <p className="text-sm text-zinc-400">{position.asset_name}</p>
+                <p className="text-sm text-muted-foreground">{position.asset_name}</p>
               )}
             </div>
             <div className="text-right">
-              <p className="text-sm text-zinc-400">{t('investments.modal.quantityInfo')}</p>
-              <p className="text-lg font-bold text-white">
+              <p className="text-sm text-muted-foreground">{t('investments.modal.quantityInfo')}</p>
+              <p className="text-lg font-bold text-foreground">
                 {Number(position.quantidade).toLocaleString('pt-BR', {
                   minimumFractionDigits: 0,
                   maximumFractionDigits: 8
@@ -123,16 +123,16 @@ export function AddDividendModal({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             {t('investments.modal.dividendType')}
           </label>
           <select
             value={tipo}
             onChange={(e) => setTipo(e.target.value as DividendType)}
-            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             {DIVIDEND_TYPES.map((type) => (
-              <option key={type.value} value={type.value}>
+              <option key={type.value} value={type.value} className="bg-popover text-foreground">
                 {type.label}
               </option>
             ))}
@@ -140,7 +140,7 @@ export function AddDividendModal({
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             {t('investments.modal.valuePerAsset')}
           </label>
           <input
@@ -150,16 +150,16 @@ export function AddDividendModal({
             onChange={(e) => setValorPorAtivo(e.target.value)}
             required
             placeholder="0.00"
-            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <p className="text-xs text-zinc-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             {t('investments.modal.valuePerAssetNote')}
           </p>
         </div>
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               {t('investments.modal.comDate')}
             </label>
             <input
@@ -167,15 +167,15 @@ export function AddDividendModal({
               value={dataCom}
               onChange={(e) => setDataCom(e.target.value)}
               max={new Date().toISOString().split("T")[0]}
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {t('investments.modal.comDateNote')}
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               {t('investments.modal.paymentDate')}
             </label>
             <input
@@ -183,31 +183,31 @@ export function AddDividendModal({
               value={dataPagamento}
               onChange={(e) => setDataPagamento(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             {t('investments.modal.observation')}
           </label>
           <textarea
             value={observacao}
             onChange={(e) => setObservacao(e.target.value)}
             rows={2}
-            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+            className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
             placeholder={t('investments.modal.observationPlaceholder')}
           />
         </div>
 
         {totalValue > 0 && (
           <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-            <p className="text-sm text-zinc-400 mb-1">{t('investments.modal.totalReceived')}</p>
+            <p className="text-sm text-muted-foreground mb-1">{t('investments.modal.totalReceived')}</p>
             <p className="text-2xl font-bold text-green-500">
               {formatCurrency(totalValue)}
             </p>
-            <p className="text-xs text-zinc-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               {Number(valorPorAtivo).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} × {Number(position.quantidade).toLocaleString('pt-BR')} {t('investments.modal.assets')}
             </p>
           </div>

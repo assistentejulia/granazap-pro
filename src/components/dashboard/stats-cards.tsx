@@ -84,7 +84,7 @@ export function StatsCards() {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {[1, 2, 3, 4, 5, 6].map((i) => (
-          <div key={i} className="bg-[#111827] border border-white/5 rounded-xl p-6 animate-pulse">
+          <div key={i} className="bg-card border border-border rounded-xl p-6 animate-pulse">
             <div className="h-20" />
           </div>
         ))}
@@ -169,50 +169,50 @@ export function StatsCards() {
       {/* Main Stats Cards - 5 cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4">
         {mainStatsCards.map((stat, index) => (
-        <div
-          key={index}
-          className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6 hover:border-white/10 transition-colors"
-        >
-          {/* Icon & Change */}
-          <div className="flex items-start justify-between mb-3 md:mb-4">
-            <div className={cn("p-2 rounded-lg bg-white/5", stat.iconColor)}>
-              <stat.icon className="w-4 h-4 md:w-5 md:h-5" />
+          <div
+            key={index}
+            className="bg-card border border-border rounded-xl p-4 md:p-6 hover:border-foreground/10 transition-colors"
+          >
+            {/* Icon & Change */}
+            <div className="flex items-start justify-between mb-3 md:mb-4">
+              <div className={cn("p-2 rounded-lg bg-foreground/5", stat.iconColor)}>
+                <stat.icon className="w-4 h-4 md:w-5 md:h-5" />
+              </div>
+              <span
+                className={cn(
+                  "text-xs md:text-sm font-medium",
+                  stat.changeType === "positive" ? "text-[#22C55E]" : "text-[#EF4444]"
+                )}
+              >
+                {stat.change}
+              </span>
             </div>
-            <span
-              className={cn(
-                "text-xs md:text-sm font-medium",
-                stat.changeType === "positive" ? "text-[#22C55E]" : "text-[#EF4444]"
-              )}
-            >
-              {stat.change}
-            </span>
+
+            {/* Title */}
+            <p className="text-xs md:text-sm text-muted-foreground mb-2 line-clamp-2">{stat.title}</p>
+
+            {/* Value */}
+            <p className="text-base md:text-lg xl:text-xl font-bold font-mono mb-1 whitespace-nowrap overflow-hidden text-ellipsis">{stat.value}</p>
+
+            {/* Count */}
+            {stat.count && (
+              <p className="text-[10px] md:text-xs text-muted-foreground">{stat.count}</p>
+            )}
+
           </div>
-
-          {/* Title */}
-          <p className="text-xs md:text-sm text-zinc-400 mb-2 line-clamp-2">{stat.title}</p>
-
-          {/* Value */}
-          <p className="text-base md:text-lg xl:text-xl font-bold font-mono mb-1 whitespace-nowrap overflow-hidden text-ellipsis">{stat.value}</p>
-
-          {/* Count */}
-          {stat.count && (
-            <p className="text-[10px] md:text-xs text-zinc-500">{stat.count}</p>
-          )}
-
-        </div>
-      ))}
+        ))}
       </div>
 
       {/* Savings Card - Full width horizontal banner */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-4 md:p-6 hover:border-white/10 transition-colors">
+      <div className="bg-card border border-border rounded-xl p-4 md:p-6 hover:border-foreground/10 transition-colors">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           {/* Left side - Icon, Title, Value */}
           <div className="flex items-center gap-4">
-            <div className={cn("p-3 rounded-lg bg-white/5", savingsCard.iconColor)}>
+            <div className={cn("p-3 rounded-lg bg-foreground/5", savingsCard.iconColor)}>
               <savingsCard.icon className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div>
-              <p className="text-xs md:text-sm text-zinc-400 mb-1">{savingsCard.title}</p>
+              <p className="text-xs md:text-sm text-muted-foreground mb-1">{savingsCard.title}</p>
               <p className="text-xl md:text-2xl font-bold font-mono">{savingsCard.value}</p>
             </div>
           </div>
@@ -229,7 +229,7 @@ export function StatsCards() {
                 {savingsCard.change}
               </span>
             </div>
-            <div className="h-3 md:h-4 bg-white/5 rounded-full overflow-hidden">
+            <div className="h-3 md:h-4 bg-foreground/5 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-[#F59E0B] to-[#FBBF24] rounded-full transition-all duration-500"
                 style={{ width: savingsCard.value }}
