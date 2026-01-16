@@ -6,14 +6,13 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useUser } from "@/hooks/use-user";
-import { usePeriodFilter, type PeriodFilter } from "@/hooks/use-period-filter";
+
 import { useLanguage } from "@/contexts/language-context";
 import { TransactionModal } from "@/components/dashboard/transaction-modal";
 import { UserFilter } from "@/components/dashboard/user-filter";
 import { useSidebar } from "@/contexts/sidebar-context";
 
 export function DashboardHeader() {
-  const { period, changePeriod } = usePeriodFilter();
   const { profile } = useUser();
   const { t, language } = useLanguage();
   const { toggle } = useSidebar();
@@ -55,27 +54,6 @@ export function DashboardHeader() {
         <div className="hidden lg:flex items-center gap-3">
           {/* User Filter */}
           <UserFilter />
-
-          {/* Period Selector */}
-          <div className="flex gap-2 p-1 bg-muted rounded-lg">
-            {(["day", "week", "month", "year"] as PeriodFilter[]).map((p) => (
-              <button
-                key={p}
-                onClick={() => changePeriod(p)}
-                className={cn(
-                  "px-4 py-2 rounded-md text-sm font-medium transition-colors capitalize",
-                  period === p
-                    ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                {p === "day" && t('header.period.day')}
-                {p === "week" && t('header.period.week')}
-                {p === "month" && t('header.period.month')}
-                {p === "year" && t('header.period.year')}
-              </button>
-            ))}
-          </div>
         </div>
 
         {/* Right: Actions */}

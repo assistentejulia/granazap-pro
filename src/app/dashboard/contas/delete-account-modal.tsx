@@ -30,7 +30,7 @@ export function DeleteAccountModal({ isOpen, onClose, onSuccess, account }: Dele
     try {
       await deleteAccount(account.id);
       setFeedback({ type: 'success', message: t('accounts.deleteSuccess') });
-      
+
       setTimeout(() => {
         onSuccess();
         onClose();
@@ -51,7 +51,7 @@ export function DeleteAccountModal({ isOpen, onClose, onSuccess, account }: Dele
     try {
       await archiveAccount(account.id);
       setFeedback({ type: 'success', message: t('accounts.deleteSuccess') });
-      
+
       setTimeout(() => {
         onSuccess();
         onClose();
@@ -82,7 +82,7 @@ export function DeleteAccountModal({ isOpen, onClose, onSuccess, account }: Dele
               <XCircle className="w-6 h-6 text-red-500" />
             </div>
           )}
-          
+
           <div className="space-y-2">
             <h3 className="text-lg font-medium text-white">
               {feedback.type === 'success' ? t('accounts.deleteSuccess') : 'Ops, algo deu errado'}
@@ -93,8 +93,8 @@ export function DeleteAccountModal({ isOpen, onClose, onSuccess, account }: Dele
           </div>
 
           {feedback.type === 'error' && (
-            <Button 
-              onClick={() => setFeedback(null)} 
+            <Button
+              onClick={() => setFeedback(null)}
               className="w-full bg-white/10 hover:bg-white/20 text-white"
             >
               {t('common.cancel')}
@@ -110,13 +110,13 @@ export function DeleteAccountModal({ isOpen, onClose, onSuccess, account }: Dele
       isOpen={isOpen}
       onClose={onClose}
       title={t('accounts.deleteAccount')}
-      className="max-w-sm w-full p-6 bg-[#111827] border border-white/10"
+      className="max-w-sm w-full p-6 !bg-[#111827] border border-white/10 shadow-2xl text-white"
     >
       <div className="flex flex-col items-center text-center space-y-4">
         <div className="w-12 h-12 bg-red-500/10 rounded-full flex items-center justify-center">
           <AlertTriangle className="w-6 h-6 text-red-500" />
         </div>
-        
+
         <div className="space-y-2">
           <h3 className="text-lg font-medium text-white">
             {t('accounts.confirmDelete')}
@@ -130,28 +130,29 @@ export function DeleteAccountModal({ isOpen, onClose, onSuccess, account }: Dele
         </div>
 
         <div className="flex flex-col gap-2 w-full pt-2">
-          <Button 
+          <Button
             onClick={handleDelete}
             disabled={loading}
             className="w-full bg-red-600 hover:bg-red-700 text-white"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : t('accounts.deleteAccount')}
           </Button>
-          
-          <Button 
+
+          <Button
             onClick={handleArchive}
             disabled={loading}
             variant="outline"
-            className="w-full border-zinc-700 hover:bg-zinc-800 text-zinc-300"
+            className="w-full border-zinc-700 bg-transparent text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors"
           >
-            {t('accounts.deleteAccount')}
+            {/* TODO: Add 'accounts.archiveAccount' translation key */}
+            Arquivar Conta
           </Button>
 
-          <Button 
+          <Button
             onClick={onClose}
             variant="ghost"
             disabled={loading}
-            className="w-full text-zinc-500 hover:text-zinc-300"
+            className="w-full text-zinc-300 hover:text-white"
           >
             {t('common.cancel')}
           </Button>

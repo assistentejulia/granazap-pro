@@ -33,12 +33,12 @@ async function fetchAllTransactions(
   userFilter?: 'todos' | 'principal' | number | null
 ): Promise<Transaction[]> {
   const supabase = createClient();
-  
+
   // Calcular período
   const now = new Date();
   let startDate = new Date();
   let endDate = new Date();
-  
+
   if (period === 'custom' && customRange) {
     startDate = new Date(customRange.start);
     endDate = new Date(customRange.end);
@@ -87,9 +87,9 @@ async function fetchAllTransactions(
     `)
     .eq('usuario_id', userId)
     .eq('tipo_conta', accountFilter)
-    .gte('data', `${startDateStr}T00:00:00`)
-    .lte('data', `${endDateStr}T23:59:59`);
-    // NÃO filtra is_transferencia aqui - busca TUDO
+    .gte('data', startDateStr)
+    .lte('data', endDateStr);
+  // NÃO filtra is_transferencia aqui - busca TUDO
 
   // Aplicar filtro de usuário se necessário
   if (userFilter === 'principal') {

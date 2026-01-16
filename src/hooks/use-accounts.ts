@@ -22,7 +22,7 @@ export function useAccounts(tipoConta: 'pessoal' | 'pj') {
     try {
       setLoading(true);
       const supabase = createClient();
-      
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
@@ -63,19 +63,21 @@ export function useAccounts(tipoConta: 'pessoal' | 'pj') {
         .eq('tipo_conta', tipoConta);
     }
 
-    const { error } = await supabase
+    const { data: createdAccount, error } = await supabase
       .from('contas_bancarias')
       .insert({
         ...data,
         usuario_id: user.id,
         tipo_conta: tipoConta,
         is_archived: false
-      });
+      })
+      .select()
+      .single();
 
     if (error) throw error;
 
     fetchAccounts();
-    return true;
+    return createdAccount;
   };
 
   const updateAccount = async (id: string, data: Partial<Omit<BankAccount, 'id' | 'usuario_id' | 'created_at' | 'updated_at'>>) => {
@@ -107,7 +109,7 @@ export function useAccounts(tipoConta: 'pessoal' | 'pj') {
 
   const archiveAccount = async (id: string) => {
     const supabase = createClient();
-    
+
     const { error } = await supabase
       .from('contas_bancarias')
       .update({ is_archived: true })
@@ -121,7 +123,7 @@ export function useAccounts(tipoConta: 'pessoal' | 'pj') {
 
   const deleteAccount = async (id: string) => {
     const supabase = createClient();
-    
+
     const { error } = await supabase
       .from('contas_bancarias')
       .delete()

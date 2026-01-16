@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useMemo, useDeferredValue, useEffect } from "react";
-import { Plus, Search, Filter, Download, Pencil, Trash2, Loader2, Calendar } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Loader2 } from "lucide-react";
 import { useTransactionsQuery } from "@/hooks/use-transactions-query";
 import { useTransactionsExport } from "@/hooks/use-transactions-export";
 import { useAccountFilter } from "@/hooks/use-account-filter";
-import { usePeriodFilter } from "@/hooks/use-period-filter";
 import { cn } from "@/lib/utils";
 import { TableSkeleton, CardSkeleton } from "@/components/ui/skeleton";
 import { createClient } from "@/lib/supabase/client";
@@ -14,6 +13,7 @@ import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { InfoCard } from "@/components/ui/info-card";
 import { ExportDropdown } from "@/components/dashboard/export-dropdown";
+import { TransactionFilters } from "@/components/dashboard/transaction-filters";
 
 // Dynamic imports
 const TransactionModal = dynamic(() => import("./transaction-modal").then(mod => mod.TransactionModal));
@@ -27,10 +27,26 @@ interface TransactionPageProps {
 export function TransactionPage({ type, title }: TransactionPageProps) {
   const { t, language } = useLanguage();
   const { formatCurrency } = useCurrency();
-  const { period, customRange, setCustomDateRange } = usePeriodFilter();
-  const { transactions, loading, refetch } = useTransactionsQuery(period as any, customRange);
   const { exportTransactionsToPDF, exportTransactionsToExcel } = useTransactionsExport();
   const { filter: accountFilter } = useAccountFilter();
+
+  // Initialize filters with defaults
+  const currentYear = new Date().getFullYear();
+  const [accountId, setAccountId] = useState("all");
+  const [categoryId, setCategoryId] = useState("all");
+  const [startDate, setStartDate] = useState<string | null>(`${currentYear}-01-01`);
+  const [endDate, setEndDate] = useState<string | null>(`${currentYear}-12-31`);
+
+  // Force 'custom' period when using start/end date
+  const effectivePeriod = (startDate && endDate) ? 'custom' : 'year'; // Default as fallback
+  const customRange = (startDate && endDate) ? { start: startDate, end: endDate } : null;
+
+  const { transactions, loading, refetch } = useTransactionsQuery(
+    effectivePeriod as any,
+    customRange,
+    accountId,
+    categoryId
+  );
 
   const [isExporting, setIsExporting] = useState(false);
 
@@ -42,18 +58,8 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [transactionToDelete, setTransactionToDelete] = useState<any>(null);
-  const [showFilters, setShowFilters] = useState(false);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-
-  useEffect(() => {
-    if (customRange) {
-      setStartDate(customRange.start);
-      setEndDate(customRange.end);
-    }
-  }, [customRange]);
 
   const locales = {
     pt: 'pt-BR',
@@ -132,23 +138,6 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setTransactionToEdit(null);
-  };
-
-  const handleApplyFilters = () => {
-    if (startDate && endDate) {
-      setCustomDateRange({ start: startDate, end: endDate });
-      setShowFilters(false);
-    }
-  };
-
-  const handleClearFilters = () => {
-    setStartDate("");
-    setEndDate("");
-    setShowFilters(false);
-    // Voltar para o período padrão (mês)
-
-
-    window.dispatchEvent(new CustomEvent('periodFilterChange', { detail: 'month' }));
   };
 
   const handleExportPDF = async () => {
@@ -274,6 +263,18 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
 
       {/* Filters & Search */}
       <div className="space-y-4">
+        <TransactionFilters
+          accountId={accountId}
+          setAccountId={setAccountId}
+          categoryId={categoryId}
+          setCategoryId={setCategoryId}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          type={type}
+        />
+
         <div className="flex flex-col md:flex-row gap-4 bg-card border border-border rounded-xl p-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -285,81 +286,7 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
               className="w-full bg-background border border-border rounded-lg pl-10 pr-4 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             />
           </div>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-lg transition-colors border text-sm font-medium",
-              showFilters || period === 'custom'
-                ? "bg-primary text-primary-foreground border-primary"
-                : "bg-background text-muted-foreground border-border hover:bg-muted"
-            )}
-          >
-            <Filter className="w-4 h-4" />
-            <span>{t('common.filters')}</span>
-          </button>
         </div>
-
-        {/* Advanced Filters Panel */}
-        {showFilters && (
-          <div className="bg-card border border-border rounded-xl p-6 space-y-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
-                <Calendar className="w-5 h-5" />
-                {t('filters.advanced')}
-              </h3>
-              <button
-                onClick={() => {
-                  // Reset filters
-                  setShowFilters(false);
-                }}
-                className="text-sm text-muted-foreground hover:text-foreground"
-              >
-                {t('filters.clear')}
-              </button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground">{t('filters.startDate')}</label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full h-10 px-4 rounded-lg bg-background border border-border text-foreground focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium text-muted-foreground">{t('filters.endDate')}</label>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full h-10 px-4 rounded-lg bg-background border border-border text-foreground focus:outline-none focus:border-primary [color-scheme:light] dark:[color-scheme:dark]"
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-3 pt-4 border-t border-border">
-              <button
-                onClick={handleClearFilters}
-                className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {t('common.cancel')}
-              </button>
-              <button
-                onClick={handleApplyFilters}
-                disabled={!startDate || !endDate}
-                className={cn(
-                  "px-4 py-2 text-sm text-white rounded-lg transition-colors font-medium",
-                  accentColor,
-                  (!startDate || !endDate) && "opacity-50 cursor-not-allowed"
-                )}
-              >
-                {t('filters.apply')}
-              </button>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Table */}

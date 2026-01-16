@@ -479,6 +479,9 @@ const translations = {
     'filters.startDate': 'Data Inicial',
     'filters.endDate': 'Data Final',
     'filters.apply': 'Aplicar Filtros',
+    'filters.account': 'Conta',
+    'filters.category': 'Categoria',
+    'filters.transactionType': 'Tipo de Transação',
 
     // Modals
     'modal.newIncome': 'Nova Receita',
@@ -1700,6 +1703,8 @@ const translations = {
     'filters.advanced': 'Filtros Avanzados',
     'filters.clear': 'Limpiar Filtros',
     'filters.apply': 'Aplicar',
+    'filters.account': 'Cuenta',
+    'filters.transactionType': 'Tipo de Transação',
     'filters.period': 'Período',
     'filters.category': 'Categoría',
 
@@ -2168,6 +2173,9 @@ const translations = {
     'common.confirm': 'Confirm',
     'common.description': 'Description',
     'common.filter': 'Filter',
+    'filters.account': 'Account',
+    'filters.category': 'Category',
+    'filters.transactionType': 'Transaction Type',
     'common.daily': 'Daily',
     'common.weekly': 'Weekly',
 

@@ -52,7 +52,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
     setFeedback(null);
 
     const amount = parseFloat(formData.amount);
-    
+
     if (!amount || amount <= 0 || isNaN(amount)) {
       setFeedback({ type: 'error', message: t('validation.valueRequired') });
       setLoading(false);
@@ -73,7 +73,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
       // Buscar usuario_id
       const { data: usuarioIdData, error: usuarioError } = await supabase
         .rpc('get_usuario_id_from_auth');
-      
+
       if (usuarioError || !usuarioIdData) {
         throw new Error('Erro ao validar usuário');
       }
@@ -81,7 +81,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
 
       // Buscar ou criar categoria "Transferência"
       let categoriaId: number;
-      
+
       const { data: categoriaExistente } = await supabase
         .from('categoria_trasacoes')
         .select('id')
@@ -109,7 +109,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
         if (catError || !novaCategoria) {
           throw new Error(`Erro ao criar categoria: ${catError?.message}`);
         }
-        
+
         categoriaId = novaCategoria.id;
       }
 
@@ -157,7 +157,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
 
 
       setFeedback({ type: 'success', message: t('accounts.transferSuccess') });
-      
+
       setTimeout(() => {
         onSuccess();
         onClose();
@@ -173,12 +173,12 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
 
   if (feedback) {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title={feedback.type === 'success' ? t('common.save') : 'Erro'} className="max-w-sm">
-             <div className="flex flex-col items-center text-center space-y-4 p-4">
-                {feedback.type === 'success' ? <CheckCircle2 className="w-12 h-12 text-green-500" /> : <XCircle className="w-12 h-12 text-red-500" />}
-                <p className="text-white text-lg font-medium">{feedback.message}</p>
-             </div>
-        </Modal>
+      <Modal isOpen={isOpen} onClose={onClose} title={feedback.type === 'success' ? t('common.save') : 'Erro'} className="max-w-sm">
+        <div className="flex flex-col items-center text-center space-y-4 p-4">
+          {feedback.type === 'success' ? <CheckCircle2 className="w-12 h-12 text-green-500" /> : <XCircle className="w-12 h-12 text-red-500" />}
+          <p className="text-white text-lg font-medium">{feedback.message}</p>
+        </div>
+      </Modal>
     )
   }
 
@@ -189,30 +189,30 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
       isOpen={isOpen}
       onClose={onClose}
       title={t('accounts.makeTransfer')}
-      className="max-w-md w-full p-0 overflow-hidden bg-[#111827] border border-white/10"
+      className="max-w-md w-full p-0 overflow-hidden !bg-[#111827] border border-white/10 text-white"
     >
       <div className="p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
 
           {/* Conta Origem (Se não pré-selecionada ou permitir trocar) */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('accounts.transferFrom')}</label>
+            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.transferFrom')}</label>
             <div className="relative group">
-               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
                 <Wallet className="w-4 h-4" />
               </div>
               <select
                 required
                 value={formData.sourceAccountId}
-                onChange={e => setFormData({...formData, sourceAccountId: e.target.value})}
+                onChange={e => setFormData({ ...formData, sourceAccountId: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 appearance-none"
               >
                 <option value="">{t('accounts.selectSourceAccount')}</option>
                 {accounts.map(acc => (
-                    <option key={acc.id} value={acc.id} disabled={acc.id === formData.destinationAccountId}>
-                        {acc.nome} {acc.saldo_atual !== undefined ? `(${getCurrencySymbol()} ${acc.saldo_atual.toFixed(2)})` : ''}
-                    </option>
+                  <option key={acc.id} value={acc.id} disabled={acc.id === formData.destinationAccountId}>
+                    {acc.nome} {acc.saldo_atual !== undefined ? `(${getCurrencySymbol()} ${acc.saldo_atual.toFixed(2)})` : ''}
+                  </option>
                 ))}
               </select>
             </div>
@@ -220,22 +220,22 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
 
           {/* Conta Destino */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('accounts.transferTo')}</label>
+            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.transferTo')}</label>
             <div className="relative group">
-               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
                 <Wallet className="w-4 h-4" />
               </div>
               <select
                 required
                 value={formData.destinationAccountId}
-                onChange={e => setFormData({...formData, destinationAccountId: e.target.value})}
+                onChange={e => setFormData({ ...formData, destinationAccountId: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 appearance-none"
               >
                 <option value="">{t('accounts.selectDestinationAccount')}</option>
                 {accounts.map(acc => (
-                    <option key={acc.id} value={acc.id} disabled={acc.id === formData.sourceAccountId}>
-                        {acc.nome}
-                    </option>
+                  <option key={acc.id} value={acc.id} disabled={acc.id === formData.sourceAccountId}>
+                    {acc.nome}
+                  </option>
                 ))}
               </select>
             </div>
@@ -243,7 +243,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
 
           {/* Data */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('accounts.transferDate')}</label>
+            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.transferDate')}</label>
             <div className="relative group">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
                 <Calendar className="w-4 h-4" />
@@ -252,7 +252,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
                 required
                 type="date"
                 value={formData.date}
-                onChange={e => setFormData({...formData, date: e.target.value})}
+                onChange={e => setFormData({ ...formData, date: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 [color-scheme:dark]"
               />
             </div>
@@ -260,7 +260,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
 
           {/* Valor */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('accounts.transferAmount')}</label>
+            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.transferAmount')}</label>
             <div className="relative group">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
                 <DollarSign className="w-4 h-4" />
@@ -271,7 +271,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
                 step="0.01"
                 placeholder="0,00"
                 value={formData.amount}
-                onChange={e => setFormData({...formData, amount: e.target.value})}
+                onChange={e => setFormData({ ...formData, amount: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
               />
             </div>
@@ -279,7 +279,7 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
 
           {/* Descrição */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('accounts.transferDescription')}</label>
+            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.transferDescription')}</label>
             <div className="relative group">
               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
                 <FileText className="w-4 h-4" />
@@ -288,23 +288,23 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
                 type="text"
                 placeholder="Ex: Transferência para poupança"
                 value={formData.description}
-                onChange={e => setFormData({...formData, description: e.target.value})}
+                onChange={e => setFormData({ ...formData, description: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
               />
             </div>
           </div>
 
           <div className="flex gap-3 pt-4 border-t border-white/5 mt-4">
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               variant="ghost"
               onClick={onClose}
-              className="flex-1 text-zinc-400 hover:text-white hover:bg-white/5"
+              className="flex-1 text-zinc-300 hover:text-white hover:bg-white/5"
             >
               {t('common.cancel')}
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="flex-[2] bg-blue-600 hover:bg-blue-700 text-white"
               disabled={loading}
             >

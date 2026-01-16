@@ -117,7 +117,7 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
       isOpen={isOpen}
       onClose={onClose}
       title={t('accounts.editAccount')}
-      className="max-w-md w-full p-0 overflow-hidden bg-background border border-border"
+      className="max-w-md w-full p-0 overflow-hidden !bg-[#111827] border border-white/10 text-white"
     >
       <div className="p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
 
@@ -125,9 +125,9 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
 
           {/* Nome */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">{t('accounts.accountName')}</label>
+            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.accountName')}</label>
             <div className="relative group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-500 transition-colors">
                 <Wallet className="w-4 h-4" />
               </div>
               <input
@@ -136,16 +136,16 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
                 placeholder="Ex: Nubank, Itaú Principal..."
                 value={formData.nome}
                 onChange={e => setFormData({ ...formData, nome: e.target.value })}
-                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
               />
             </div>
           </div>
 
           {/* Banco */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">{t('accounts.bankOptional')}</label>
+            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.bankOptional')}</label>
             <div className="relative group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-500 transition-colors">
                 <Landmark className="w-4 h-4" />
               </div>
               <input
@@ -153,7 +153,7 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
                 placeholder="Ex: Nu Pagamentos S.A."
                 value={formData.banco}
                 onChange={e => setFormData({ ...formData, banco: e.target.value })}
-                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
               />
             </div>
           </div>
@@ -188,7 +188,7 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
               type="button"
               variant="ghost"
               onClick={onClose}
-              className="flex-1 text-muted-foreground hover:text-foreground hover:bg-muted h-10 rounded-lg transition-colors text-sm"
+              className="flex-1 text-zinc-300 hover:text-white hover:bg-white/5 h-10 rounded-lg transition-colors text-sm"
             >
               {t('common.cancel')}
             </Button>

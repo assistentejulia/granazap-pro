@@ -114,6 +114,13 @@ export function AuthLayout({
       {/* --- RIGHT PANEL (40% Desktop, Full Mobile) --- */}
       <div className="w-full lg:w-[40%] flex flex-col items-center justify-center p-6 lg:p-8 xl:p-12 bg-background lg:border-l border-border relative min-h-screen">
 
+        {/* Back to Home Button */}
+        <div className="absolute top-4 right-4 lg:top-8 lg:right-8 z-20">
+          <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
+            Voltar para o início
+          </Link>
+        </div>
+
         {/* Mobile Background Decoration */}
         <div className="absolute inset-0 lg:hidden pointer-events-none overflow-hidden">
           <div className="absolute top-[10%] right-[10%] w-[400px] h-[400px] bg-primary/10 rounded-full blur-[100px]" />

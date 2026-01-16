@@ -47,12 +47,12 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!account) return;
-    
+
     setLoading(true);
     setFeedback(null);
 
     const amount = parseFloat(formData.amount);
-    
+
     if (!amount || amount <= 0 || isNaN(amount)) {
       setFeedback({ type: 'error', message: t('validation.valueRequired') });
       setLoading(false);
@@ -67,14 +67,14 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
       // 🔒 SEGURANÇA: Buscar usuario_id correto (INTEGER) usando função segura
       const { data: usuarioIdData, error: usuarioError } = await supabase
         .rpc('get_usuario_id_from_auth');
-      
+
       if (usuarioError || !usuarioIdData) {
         throw new Error('Erro ao validar usuário');
       }
 
       // Buscar ou criar categoria "Ajuste de Saldo" do usuário
       let categoriaId: number;
-      
+
       const { data: categoriaExistente } = await supabase
         .from('categoria_trasacoes')
         .select('id')
@@ -102,7 +102,7 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
         if (catError || !novaCategoria) {
           throw new Error(`Erro ao criar categoria de ajuste: ${catError?.message}`);
         }
-        
+
         categoriaId = novaCategoria.id;
       }
 
@@ -125,7 +125,7 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
       if (error) throw error;
 
       setFeedback({ type: 'success', message: t('accounts.adjustSuccess') });
-      
+
       setTimeout(() => {
         onSuccess();
         onClose();
@@ -141,12 +141,12 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
 
   if (feedback) {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title={feedback.type === 'success' ? t('common.save') : 'Erro'} className="max-w-sm">
-             <div className="flex flex-col items-center text-center space-y-4 p-4">
-                {feedback.type === 'success' ? <CheckCircle2 className="w-12 h-12 text-green-500" /> : <XCircle className="w-12 h-12 text-red-500" />}
-                <p className="text-white text-lg font-medium">{feedback.message}</p>
-             </div>
-        </Modal>
+      <Modal isOpen={isOpen} onClose={onClose} title={feedback.type === 'success' ? t('common.save') : 'Erro'} className="max-w-sm">
+        <div className="flex flex-col items-center text-center space-y-4 p-4">
+          {feedback.type === 'success' ? <CheckCircle2 className="w-12 h-12 text-green-500" /> : <XCircle className="w-12 h-12 text-red-500" />}
+          <p className="text-white text-lg font-medium">{feedback.message}</p>
+        </div>
+      </Modal>
     )
   }
 
@@ -155,47 +155,47 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
       isOpen={isOpen}
       onClose={onClose}
       title={t('accounts.adjustBalanceTitle')}
-      className="max-w-md w-full p-0 overflow-hidden bg-[#111827] border border-white/10"
+      className="max-w-md w-full p-0 overflow-hidden !bg-[#111827] border border-white/10 text-white"
     >
       <div className="p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
         <div className="mb-6 text-center">
-            <p className="text-zinc-400 text-sm">{t('accounts.adjustBalanceDesc')}</p>
-            <p className="text-xl font-bold text-white mt-1">{account?.nome}</p>
+          <p className="text-zinc-400 text-sm">{t('accounts.adjustBalanceDesc')}</p>
+          <p className="text-xl font-bold text-white mt-1">{account?.nome}</p>
         </div>
 
         {/* Tipo Selector */}
         <div className="grid grid-cols-2 gap-3 mb-6">
-            <button
-                type="button"
-                onClick={() => setType('entrada')}
-                className={cn(
-                    "flex flex-col items-center gap-2 p-3 rounded-xl border transition-all",
-                    type === 'entrada' 
-                        ? "bg-green-500/10 border-green-500 text-green-400" 
-                        : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-700"
-                )}
-            >
-                <div className={cn("p-2 rounded-full", type === 'entrada' ? "bg-green-500/20" : "bg-zinc-800")}>
-                    <Plus className="w-5 h-5" />
-                </div>
-                <span className="text-sm font-medium">{t('accounts.willBeAdded')}</span>
-            </button>
+          <button
+            type="button"
+            onClick={() => setType('entrada')}
+            className={cn(
+              "flex flex-col items-center gap-2 p-3 rounded-xl border transition-all",
+              type === 'entrada'
+                ? "bg-green-500/10 border-green-500 text-green-400"
+                : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-700"
+            )}
+          >
+            <div className={cn("p-2 rounded-full", type === 'entrada' ? "bg-green-500/20" : "bg-zinc-800")}>
+              <Plus className="w-5 h-5" />
+            </div>
+            <span className="text-sm font-medium">{t('accounts.willBeAdded')}</span>
+          </button>
 
-            <button
-                type="button"
-                onClick={() => setType('saida')}
-                className={cn(
-                    "flex flex-col items-center gap-2 p-3 rounded-xl border transition-all",
-                    type === 'saida' 
-                        ? "bg-red-500/10 border-red-500 text-red-400" 
-                        : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-700"
-                )}
-            >
-                <div className={cn("p-2 rounded-full", type === 'saida' ? "bg-red-500/20" : "bg-zinc-800")}>
-                    <Minus className="w-5 h-5" />
-                </div>
-                <span className="text-sm font-medium">{t('accounts.willBeSubtracted')}</span>
-            </button>
+          <button
+            type="button"
+            onClick={() => setType('saida')}
+            className={cn(
+              "flex flex-col items-center gap-2 p-3 rounded-xl border transition-all",
+              type === 'saida'
+                ? "bg-red-500/10 border-red-500 text-red-400"
+                : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-700"
+            )}
+          >
+            <div className={cn("p-2 rounded-full", type === 'saida' ? "bg-red-500/20" : "bg-zinc-800")}>
+              <Minus className="w-5 h-5" />
+            </div>
+            <span className="text-sm font-medium">{t('accounts.willBeSubtracted')}</span>
+          </button>
         </div>
 
         {/* Info Box */}
@@ -231,71 +231,71 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          
+
           <div className="grid grid-cols-2 gap-4">
-             {/* Data */}
+            {/* Data */}
             <div className="space-y-1.5">
-                <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('form.date')}</label>
-                <div className="relative group">
+              <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('form.date')}</label>
+              <div className="relative group">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
-                    <Calendar className="w-4 h-4" />
+                  <Calendar className="w-4 h-4" />
                 </div>
                 <input
-                    required
-                    type="date"
-                    value={formData.date}
-                    onChange={e => setFormData({...formData, date: e.target.value})}
-                    className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 [color-scheme:dark]"
+                  required
+                  type="date"
+                  value={formData.date}
+                  onChange={e => setFormData({ ...formData, date: e.target.value })}
+                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 [color-scheme:dark]"
                 />
-                </div>
+              </div>
             </div>
 
             {/* Valor */}
             <div className="space-y-1.5">
-                <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('form.value')}</label>
-                <div className="relative group">
+              <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('form.value')}</label>
+              <div className="relative group">
                 <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
-                    <DollarSign className="w-4 h-4" />
+                  <DollarSign className="w-4 h-4" />
                 </div>
                 <input
-                    required
-                    type="number"
-                    step="0.01"
-                    placeholder="0,00"
-                    value={formData.amount}
-                    onChange={e => setFormData({...formData, amount: e.target.value})}
-                    className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
+                  required
+                  type="number"
+                  step="0.01"
+                  placeholder="0,00"
+                  value={formData.amount}
+                  onChange={e => setFormData({ ...formData, amount: e.target.value })}
+                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
                 />
-                </div>
+              </div>
             </div>
           </div>
 
           {/* Descrição */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">{t('accounts.adjustReason')}</label>
+            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.adjustReason')}</label>
             <input
-                type="text"
-                placeholder={type === 'entrada' ? "Ex: Estorno, Bônus..." : "Ex: Taxa bancária, Ajuste..."}
-                value={formData.description}
-                onChange={e => setFormData({...formData, description: e.target.value})}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
+              type="text"
+              placeholder={type === 'entrada' ? "Ex: Estorno, Bônus..." : "Ex: Taxa bancária, Ajuste..."}
+              value={formData.description}
+              onChange={e => setFormData({ ...formData, description: e.target.value })}
+              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
             />
           </div>
 
           <div className="flex gap-3 pt-4 border-t border-white/5 mt-4">
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               variant="ghost"
               onClick={onClose}
-              className="flex-1 text-zinc-400 hover:text-white hover:bg-white/5"
+              className="flex-1 text-zinc-300 hover:text-white hover:bg-white/5"
             >
               {t('common.cancel')}
             </Button>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className={cn(
-                  "flex-[2] text-white",
-                  type === 'entrada' ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
+                "flex-[2] text-white",
+                type === 'entrada' ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
               )}
               disabled={loading}
             >

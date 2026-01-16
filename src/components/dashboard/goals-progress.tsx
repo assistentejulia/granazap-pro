@@ -4,6 +4,7 @@ import { Target, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useGoals } from "@/hooks/use-goals";
 import { useTransactionsQuery } from "@/hooks/use-transactions-query";
+import { useDashboardFilter } from "@/contexts/dashboard-filter-context";
 import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { useRouter } from "next/navigation";
@@ -12,7 +13,8 @@ export function GoalsProgress() {
   const { t } = useLanguage();
   const { getCurrencySymbol } = useCurrency();
   const { goals, loading } = useGoals();
-  const { transactions } = useTransactionsQuery('month');
+  const { accountId } = useDashboardFilter();
+  const { transactions } = useTransactionsQuery('month', null, accountId);
   const router = useRouter();
 
   // Cores para as metas

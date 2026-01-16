@@ -103,43 +103,55 @@ export function FutureTransactionsPage() {
 
       // Filtro de data: PRIORIDADE para range personalizado
       if (startDate && endDate) {
-        // Se tem range personalizado, usa ele e ignora o período superior
-        const transactionDate = new Date(transaction.data_prevista);
-        const start = new Date(startDate);
-        const end = new Date(endDate);
-        if (transactionDate < start || transactionDate > end) return false;
+        // Comparação direta de strings YYYY-MM-DD (funciona perfeitamente para datas ISO)
+        if (transaction.data_prevista < startDate || transaction.data_prevista > endDate) return false;
       } else {
         // Se NÃO tem range personalizado, aplica o filtro de período do topo
-        const transactionDate = new Date(transaction.data_prevista);
         const now = new Date();
-        let periodStart = new Date();
-        let periodEnd = new Date();
+        let startStr = "";
+        let endStr = "";
+
+        const formatItems = (d: Date) => d.toISOString().split('T')[0];
 
         switch (period) {
           case 'day':
-            periodStart.setHours(0, 0, 0, 0);
-            periodEnd.setHours(23, 59, 59, 999);
+            startStr = formatItems(new Date());
+            endStr = startStr;
             break;
           case 'week':
             const dayOfWeek = now.getDay();
-            periodStart = new Date(now);
-            periodStart.setDate(now.getDate() - dayOfWeek);
-            periodStart.setHours(0, 0, 0, 0);
-            periodEnd = new Date(periodStart);
-            periodEnd.setDate(periodStart.getDate() + 6);
-            periodEnd.setHours(23, 59, 59, 999);
+            const start = new Date(now);
+            start.setDate(now.getDate() - dayOfWeek); // Domingo
+            const end = new Date(start);
+            end.setDate(start.getDate() + 6); // Sábado
+            startStr = formatItems(start);
+            endStr = formatItems(end);
             break;
           case 'month':
-            periodStart = new Date(now.getFullYear(), now.getMonth(), 1);
-            periodEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+            // Primeiro e último dia do mês atual
+            const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+            const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+            // Ajuste timezone para garantir string correta local
+            // Mas melhor: construir a string manualmente para evitar timezone issues
+            const y = now.getFullYear();
+            const m = String(now.getMonth() + 1).padStart(2, '0');
+            startStr = `${y}-${m}-01`;
+            // Para o fim do mês, cálculo de dias é mais seguro com date-fns ou manual
+            // Vamos usar o date object local mas cuidado com o split em UTC se for ISO
+            // Melhor: usar a string gerada localmente
+            const lastDayNum = new Date(y, now.getMonth() + 1, 0).getDate();
+            endStr = `${y}-${m}-${lastDayNum}`;
             break;
           case 'year':
-            periodStart = new Date(now.getFullYear(), 0, 1);
-            periodEnd = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+            const year = now.getFullYear();
+            startStr = `${year}-01-01`;
+            endStr = `${year}-12-31`;
             break;
         }
 
-        if (transactionDate < periodStart || transactionDate > periodEnd) return false;
+        if (startStr && endStr) {
+          if (transaction.data_prevista < startStr || transaction.data_prevista > endStr) return false;
+        }
       }
 
       return true;

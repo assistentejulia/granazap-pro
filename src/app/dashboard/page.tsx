@@ -44,26 +44,34 @@ const GoalsProgressDynamic = dynamic(
   { ssr: false }
 );
 
+
+import { DashboardFilterProvider } from "@/contexts/dashboard-filter-context";
+import { DashboardFilters } from "@/components/dashboard/dashboard-filters";
+
 export default function DashboardPage() {
   return (
-    <div className="space-y-4 md:space-y-6">
-      {/* Stats Cards */}
-      <StatsCardsDynamic />
+    <DashboardFilterProvider>
+      <div className="space-y-4 md:space-y-6">
+        <DashboardFilters />
 
-      {/* Charts Row */}
-      <ChartsSectionDynamic />
+        {/* Stats Cards */}
+        <StatsCardsDynamic />
 
-      {/* Category Analytics */}
-      <CategoryAnalyticsDynamic />
+        {/* Charts Row */}
+        <ChartsSectionDynamic />
 
-      {/* Two Columns */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-        <RecentTransactionsDynamic />
-        <UpcomingPaymentsDynamic />
+        {/* Category Analytics */}
+        <CategoryAnalyticsDynamic />
+
+        {/* Two Columns */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+          <RecentTransactionsDynamic />
+          <UpcomingPaymentsDynamic />
+        </div>
+
+        {/* Goals Progress */}
+        <GoalsProgressDynamic />
       </div>
-
-      {/* Goals Progress */}
-      <GoalsProgressDynamic />
-    </div>
+    </DashboardFilterProvider>
   );
 }

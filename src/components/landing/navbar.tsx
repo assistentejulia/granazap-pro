@@ -7,15 +7,14 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function Navbar() {
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
+        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-lg border-b border-white/10">
             <div className="container mx-auto px-4 h-16 flex items-center justify-between">
                 <Link href="/" className="text-xl font-bold bg-gradient-to-r from-green-500 to-blue-500 bg-clip-text text-transparent">
                     Assistente Julia
                 </Link>
 
                 <div className="flex items-center gap-4">
-                    <ThemeToggle />
-                    <Link href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                    <Link href="/login" className="text-sm font-medium text-zinc-300 hover:text-white transition-colors">
                         Entrar
                     </Link>
                     <Link href="/cadastro">
