@@ -1,6 +1,7 @@
 "use client";
 
 import { AccountFilterProvider } from "@/contexts/account-filter-context";
+import { DashboardFilterProvider } from "@/contexts/dashboard-filter-context";
 import { SidebarProvider } from "@/contexts/sidebar-context";
 import { SubscriptionBlockModal } from "@/components/dashboard/subscription-block-modal";
 import { SubscriptionWarningBanner } from "@/components/dashboard/subscription-warning-banner";
@@ -85,11 +86,13 @@ export default function DashboardLayout({
 }) {
   return (
     <AccountFilterProvider>
-      <SidebarProvider>
-        <DashboardLayoutContent>
-          {children}
-        </DashboardLayoutContent>
-      </SidebarProvider>
+      <DashboardFilterProvider>
+        <SidebarProvider>
+          <DashboardLayoutContent>
+            {children}
+          </DashboardLayoutContent>
+        </SidebarProvider>
+      </DashboardFilterProvider>
     </AccountFilterProvider>
   );
 }
