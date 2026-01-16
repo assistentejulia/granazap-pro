@@ -38,7 +38,10 @@ async function fetchTransactions(
   accountFilter: 'pessoal' | 'pj',
   period: 'day' | 'week' | 'month' | 'year' | 'custom',
   customRange?: { start: string; end: string } | null,
-  userFilter?: 'todos' | 'principal' | number | null
+  userFilter?: 'todos' | 'principal' | number | null,
+  accountId?: string | 'all',
+  categoryId?: string | 'all',
+  excludeInitialBalance: boolean = false
 ): Promise<{ transactions: Transaction[]; stats: TransactionStats }> {
   const supabase = createClient();
 
@@ -107,8 +110,8 @@ async function fetchTransactions(
     `)
     .eq('usuario_id', userId)
     .eq('tipo_conta', accountFilter)
-    .gte('data', `${startDateStr}T00:00:00`)
-    .lte('data', `${endDateStr}T23:59:59`)
+    .gte('data', startDateStr)
+    .lte('data', endDateStr)
     .or('is_transferencia.is.null,is_transferencia.eq.false'); // Excluir transferências
 
   // Aplicar filtro de usuário se necessário
@@ -117,7 +120,16 @@ async function fetchTransactions(
   } else if (typeof userFilter === 'number' && userFilter > 0) {
     query = query.eq('dependente_id', userFilter);
   }
-  // Se userFilter === 'todos' ou null, não filtra
+
+  // Aplicar filtro de conta bancária
+  if (accountId && accountId !== 'all') {
+    query = query.eq('conta_id', accountId);
+  }
+
+  // Aplicar filtro de categoria
+  if (categoryId && categoryId !== 'all') {
+    query = query.eq('categoria_id', categoryId);
+  }
 
   const { data, error } = await query
     .order('data', { ascending: false })
@@ -126,24 +138,49 @@ async function fetchTransactions(
 
   if (error) throw error;
 
-  const transactions = data || [];
+  const allTransactions = data || []; // Manter cópia completa
+  let transactions = [...allTransactions]; // Cópia para filtrar
+
+  // Filtrar Saldo Inicial se solicitado para os RETORNOS VISUAIS (Listas, Receitas, etc)
+  if (excludeInitialBalance) {
+    transactions = transactions.filter(t => t.categoria?.descricao !== 'Saldo Inicial');
+  }
 
   // Calcular estatísticas
-  const income = transactions
+
+  // Balance: Deve considerar TODO o dinheiro (incluindo saldo inicial), a menos que
+  // a lógica do sistema seja estritamente "Fluxo do Período".
+  // Dado o pedido do usuário ("apresenta somente o saldo dessa conta"),
+  // o Saldo Total deve incluir o Saldo Inicial.
+  // Portanto, usamos allTransactions para o cálculo do balanço se excludeInitialBalance for true?
+  // Mas cuidado: se 'stats' for usado para 'Resultado do Mês', isso pode confundir.
+  // Porém, 'Saldo Total' geralmente é acumulativo.
+  // Assumindo que o card "Saldo Total" deve mostrar o dinheiro real:
+
+  const balanceIncome = allTransactions
     .filter(t => t.tipo === 'entrada')
     .reduce((sum, t) => sum + Number(t.valor), 0);
 
-  const expenses = transactions
+  const balanceExpenses = allTransactions
+    .filter(t => t.tipo === 'saida')
+    .reduce((sum, t) => sum + Number(t.valor), 0);
+
+  // Income/Expenses para EXIBIÇÃO (Charts, Cards de Receita/Despesa) devem respeitar o filtro
+  const displayIncome = transactions
+    .filter(t => t.tipo === 'entrada')
+    .reduce((sum, t) => sum + Number(t.valor), 0);
+
+  const displayExpenses = transactions
     .filter(t => t.tipo === 'saida')
     .reduce((sum, t) => sum + Number(t.valor), 0);
 
   const stats: TransactionStats = {
-    balance: income - expenses,
-    income,
+    balance: balanceIncome - balanceExpenses, // Saldo Real (com Inicial)
+    income: displayIncome, // Receita Visual (sem Inicial)
     incomeCount: transactions.filter(t => t.tipo === 'entrada').length,
-    expenses,
+    expenses: displayExpenses,
     expensesCount: transactions.filter(t => t.tipo === 'saida').length,
-    savingsRate: income > 0 ? ((income - expenses) / income) * 100 : 0,
+    savingsRate: displayIncome > 0 ? ((displayIncome - displayExpenses) / displayIncome) * 100 : 0,
   };
 
   return { transactions, stats };
@@ -151,21 +188,24 @@ async function fetchTransactions(
 
 export function useTransactionsQuery(
   period: 'day' | 'week' | 'month' | 'year' | 'custom' = 'month',
-  customRange?: { start: string; end: string } | null
+  customRange?: { start: string; end: string } | null,
+  accountId?: string | 'all',
+  categoryId?: string | 'all',
+  excludeInitialBalance: boolean = false
 ) {
   const { profile } = useUser();
   const { filter: accountFilter } = useAccountFilter();
   const { filter: userFilter } = useUserFilter();
   const queryClient = useQueryClient();
 
-  // Query key incluindo userFilter e customRange para garantir refetch correto
-  const queryKey = ['transactions', profile?.id, accountFilter, period, userFilter, period === 'custom' ? customRange : null];
+  // Query key incluindo userFilter, customRange, accountId e categoryId para garantir refetch correto
+  const queryKey = ['transactions', profile?.id, accountFilter, period, userFilter, period === 'custom' ? customRange : null, accountId, categoryId, excludeInitialBalance];
 
   const query = useQuery({
     queryKey,
     queryFn: () => {
       if (!profile) throw new Error('User not authenticated');
-      return fetchTransactions(profile.id, accountFilter, period, customRange, userFilter);
+      return fetchTransactions(profile.id, accountFilter, period, customRange, userFilter, accountId, categoryId, excludeInitialBalance);
     },
     enabled: !!profile,
     placeholderData: (previousData) => previousData, // Mantém dados antigos enquanto busca novos

@@ -5,12 +5,28 @@ import { ShoppingCart, Briefcase, Home, Car, Coffee, DollarSign } from "lucide-r
 import { useTransactionsQuery } from "@/hooks/use-transactions-query";
 import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
+import { useDashboardFilter } from "@/contexts/dashboard-filter-context";
+import { usePeriodFilter } from "@/hooks/use-period-filter";
 import { cn } from "@/lib/utils";
 
 export function RecentTransactions() {
   const { t, language } = useLanguage();
   const { formatCurrency } = useCurrency();
-  const { transactions, loading } = useTransactionsQuery('month');
+  const { period } = usePeriodFilter();
+  const { accountId, startDate, endDate } = useDashboardFilter();
+
+  const effectivePeriod = (startDate && endDate) ? 'custom' : period;
+  const customRange = (startDate && endDate) ? { start: startDate, end: endDate } : null;
+
+  // Se datas não forem selecionadas, usar 'month' para recent transactions como fallback ou o periodo global?
+  // User wants "Recent Transactions" to obey the filter.
+  // Original only used 'month' hardcoded. Now we make it dynamic.
+  const queryPeriod = (startDate && endDate) ? 'custom' : 'month'; // Default to month if no custom range, or maybe use global period? Use global 'period' if not custom.
+
+  // Actually, Recent Transactions usually implies latest. Maybe stick to 'month' or global period.
+  // Let's use effectivePeriod but fallback to 'month' if period is something weird, but effectivePeriod handles it.
+
+  const { transactions, loading } = useTransactionsQuery(effectivePeriod, customRange, accountId, 'all', true);
 
   // Pegar apenas as 5 mais recentes
   const recentTransactions = transactions.slice(0, 5);

@@ -5,13 +5,19 @@ import { useTransactionsQuery } from "@/hooks/use-transactions-query";
 import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { usePeriodFilter } from "@/hooks/use-period-filter";
+import { useDashboardFilter } from "@/contexts/dashboard-filter-context";
 import { TrendingUp, TrendingDown } from "lucide-react";
 
 export function CategoryAnalytics() {
   const { t } = useLanguage();
   const { formatCurrency } = useCurrency();
   const { period } = usePeriodFilter();
-  const { transactions, loading } = useTransactionsQuery(period);
+  const { accountId, startDate, endDate } = useDashboardFilter();
+
+  const effectivePeriod = (startDate && endDate) ? 'custom' : period;
+  const customRange = (startDate && endDate) ? { start: startDate, end: endDate } : null;
+
+  const { transactions, loading } = useTransactionsQuery(effectivePeriod, customRange, accountId, 'all', true);
 
   const categoryData = useMemo(() => {
     const expenseMap = new Map<string, number>();

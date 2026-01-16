@@ -7,6 +7,7 @@ import { useFutureTransactionsQuery } from "@/hooks/use-future-transactions-quer
 import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { usePeriodFilter } from "@/hooks/use-period-filter";
+import { useDashboardFilter } from "@/contexts/dashboard-filter-context";
 import { useMemo } from "react";
 
 interface StatCard {
@@ -23,7 +24,12 @@ export function StatsCards() {
   const { t } = useLanguage();
   const { formatCurrency } = useCurrency();
   const { period } = usePeriodFilter();
-  const { stats, loading } = useTransactionsQuery(period);
+  const { accountId, startDate, endDate } = useDashboardFilter();
+
+  const effectivePeriod = (startDate && endDate) ? 'custom' : period;
+  const customRange = (startDate && endDate) ? { start: startDate, end: endDate } : null;
+
+  const { stats, loading } = useTransactionsQuery(effectivePeriod, customRange, accountId, 'all', true);
   const { transactions: futureTransactions, loading: loadingFuture } = useFutureTransactionsQuery();
 
   // Calcular contas a pagar e receber (baseado no período selecionado)

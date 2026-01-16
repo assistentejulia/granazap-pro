@@ -16,6 +16,7 @@ import {
 import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { usePeriodFilter } from "@/hooks/use-period-filter";
+import { useDashboardFilter } from "@/contexts/dashboard-filter-context";
 
 // Custom Tooltip para o gráfico de barras
 const CustomTooltip = ({ active, payload, label, formatCurrency }: any) => {
@@ -42,7 +43,12 @@ export function ChartsSection() {
   const { t, language } = useLanguage();
   const { formatCurrency, getCurrencySymbol } = useCurrency();
   const { period } = usePeriodFilter();
-  const { transactions, loading } = useTransactionsQuery(period);
+  const { accountId, startDate, endDate } = useDashboardFilter();
+
+  const effectivePeriod = (startDate && endDate) ? 'custom' : period;
+  const customRange = (startDate && endDate) ? { start: startDate, end: endDate } : null;
+
+  const { transactions, loading } = useTransactionsQuery(effectivePeriod, customRange, accountId, 'all', true);
 
   // Processar dados para o gráfico de fluxo de caixa (últimos 7 dias)
   const cashFlowData = useMemo(() => {
