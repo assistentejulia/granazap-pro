@@ -1,11 +1,14 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { X, Upload, CheckCircle2, AlertCircle, FileText, ArrowRight, ArrowLeft } from "lucide-react";
+import { X, Upload, CheckCircle2, AlertCircle, FileText, ArrowRight, ArrowLeft, Edit2, Tag, ArrowUpRight, ArrowDownRight, Plus, Check } from "lucide-react";
 import { useOFXImport } from "@/hooks/use-ofx-import";
 import { useAccounts } from "@/hooks/use-accounts";
+import { useCategories } from "@/hooks/use-categories";
 import { useCurrency } from "@/contexts/currency-context";
 import { useLanguage } from "@/contexts/language-context";
+import { useUser } from "@/hooks/use-user";
+import { createClient } from "@/lib/supabase/client";
 import { cn } from "@/lib/utils";
 import type { MatchResult } from "@/lib/transaction-matcher";
 import { getMatchStatistics } from "@/lib/transaction-matcher";
@@ -22,12 +25,25 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
     const { t } = useLanguage();
     const { formatCurrency } = useCurrency();
     const { accounts } = useAccounts('pessoal');
+    const { categories } = useCategories();
+    const { profile } = useUser();
     const { uploadOFX, importTransactions, reset, isProcessing, error, groupedResults, ofxData } = useOFXImport();
 
     const [step, setStep] = useState<Step>('upload');
     const [selectedAccountId, setSelectedAccountId] = useState<string>('');
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
     const [selectedMatches, setSelectedMatches] = useState<Set<string>>(new Set());
+    const [editedDescriptions, setEditedDescriptions] = useState<Map<string, string>>(new Map());
+    const [selectedCategories, setSelectedCategories] = useState<Map<string, string>>(new Map());
+    const [editingId, setEditingId] = useState<string | null>(null);
+
+    // Category creation state
+    const [creatingCategoryForTxId, setCreatingCategoryForTxId] = useState<string | null>(null);
+    const [newCategoryName, setNewCategoryName] = useState("");
+    const [isCreatingCategory, setIsCreatingCategory] = useState(false);
+    const [localError, setLocalError] = useState<string | null>(null);
+
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     if (!isOpen) return null;
@@ -38,6 +54,10 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
         setSelectedAccountId('');
         setSelectedFile(null);
         setSelectedMatches(new Set());
+        setEditedDescriptions(new Map());
+        setSelectedCategories(new Map());
+        setEditingId(null);
+        setLocalError(null);
         onClose();
     };
 
@@ -45,6 +65,7 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
         const file = e.target.files?.[0];
         if (file) {
             setSelectedFile(file);
+            setLocalError(null);
         }
     };
 
@@ -89,13 +110,83 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
     const isAllSelected = selectedMatches.size > 0 &&
         selectedMatches.size === (groupedResults.new.length + groupedResults.suggestions.length);
 
+    // Helper functions for inline editing
+    const updateDescription = (txId: string, newDescription: string) => {
+        const newMap = new Map(editedDescriptions);
+        newMap.set(txId, newDescription);
+        setEditedDescriptions(newMap);
+    };
+
+    const updateCategory = (txId: string, categoryId: string) => {
+        const newMap = new Map(selectedCategories);
+        newMap.set(txId, categoryId);
+        setSelectedCategories(newMap);
+    };
+
+    const getDisplayDescription = (txId: string, originalDescription: string) => {
+        return editedDescriptions.get(txId) || originalDescription;
+    };
+
+    const getDisplayCategory = (txId: string) => {
+        return selectedCategories.get(txId) || '';
+    };
+
+    const handleCreateCategory = async (txId: string, tipo: 'entrada' | 'saida') => {
+        if (!newCategoryName.trim() || !profile?.id) return;
+
+        try {
+            setIsCreatingCategory(true);
+            const supabase = createClient();
+
+            // Insert new category
+            const { data, error } = await supabase
+                .from('categoria_trasacoes')
+                .insert({
+                    descricao: newCategoryName.trim(),
+                    tipo: tipo === 'entrada' ? 'entrada' : 'saida', // 'entrada' | 'saida'
+                    usuario_id: profile.id,
+                    tipo_conta: 'pessoal', // Default for now, could be dynamic
+                    icon_key: 'FileText', // Default icon
+                    cor: '#94a3b8' // Default color (slate-400)
+                })
+                .select()
+                .single();
+
+            if (error) throw error;
+
+            if (data) {
+                // Dispatch event to refresh categories list
+                window.dispatchEvent(new Event('categoriesChanged'));
+
+                // Select the new category for this transaction
+                updateCategory(txId, data.id.toString());
+
+                // Reset creation state
+                setCreatingCategoryForTxId(null);
+                setNewCategoryName("");
+            }
+        } catch (error) {
+            console.error('Error creating category:', error);
+            // Optionally show error toast
+        } finally {
+            setIsCreatingCategory(false);
+        }
+    };
+
+
     const handleImport = async () => {
         const matchesToImport = [
             ...groupedResults.new,
             ...groupedResults.suggestions,
         ].filter(match => selectedMatches.has(match.ofxTransaction.id));
 
-        const result = await importTransactions(matchesToImport, selectedAccountId);
+        const result = await importTransactions(
+            matchesToImport,
+            selectedAccountId,
+            undefined, // defaultCategoryId
+            editedDescriptions, // Pass edited descriptions
+            selectedCategories // Pass selected categories
+        );
 
         if (result.success) {
             setStep('confirm');
@@ -106,8 +197,8 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
     const stats = getMatchStatistics([...groupedResults.exact, ...groupedResults.suggestions, ...groupedResults.new]);
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-            <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-card border border-border rounded-xl shadow-2xl w-full max-w-7xl max-h-[95vh] overflow-hidden flex flex-col">
                 {/* Header */}
                 <div className="flex items-center justify-between p-6 border-b border-border">
                     <div>
@@ -180,6 +271,23 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                                 <label className="block text-sm font-medium mb-2">Arquivo OFX</label>
                                 <div
                                     onClick={() => fileInputRef.current?.click()}
+                                    onDragOver={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                    }}
+                                    onDrop={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                                            const file = e.dataTransfer.files[0];
+                                            if (file.name.endsWith('.ofx')) {
+                                                setSelectedFile(file);
+                                                setLocalError(null);
+                                            } else {
+                                                setLocalError('Por favor, selecione um arquivo .ofx válido');
+                                            }
+                                        }
+                                    }}
                                     className="border-2 border-dashed border-border rounded-lg p-8 text-center cursor-pointer hover:border-primary transition-colors"
                                 >
                                     <Upload className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
@@ -196,10 +304,10 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                                 </div>
                             </div>
 
-                            {error && (
+                            {(error || localError) && (
                                 <div className="flex items-center gap-2 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
                                     <AlertCircle className="w-5 h-5 text-red-500" />
-                                    <p className="text-sm text-red-500">{error}</p>
+                                    <p className="text-sm text-red-500">{error || localError}</p>
                                 </div>
                             )}
                         </div>
@@ -256,7 +364,7 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                                         <AlertCircle className="w-5 h-5 text-yellow-500" />
                                         Sugestões ({groupedResults.suggestions.length})
                                     </h3>
-                                    <div className="space-y-2 max-h-96 overflow-y-auto">
+                                    <div className="space-y-2 max-h-[60vh] overflow-y-auto">
                                         {groupedResults.suggestions.map((match) => (
                                             <div key={match.ofxTransaction.id} className="flex items-center gap-3 p-3 bg-yellow-500/5 border border-yellow-500/20 rounded-lg">
                                                 <input
@@ -295,22 +403,153 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                                             </button>
                                         </div>
                                     </div>
-                                    <div className="space-y-2 max-h-96 overflow-y-auto">
-                                        {groupedResults.new.map((match) => (
-                                            <div key={match.ofxTransaction.id} className="flex items-center gap-3 p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedMatches.has(match.ofxTransaction.id)}
-                                                    onChange={() => toggleMatch(match.ofxTransaction.id)}
-                                                    className="w-4 h-4"
-                                                />
-                                                <div className="flex-1">
-                                                    <p className="font-medium">{match.ofxTransaction.description}</p>
-                                                    <p className="text-sm text-muted-foreground">{match.ofxTransaction.date}</p>
+                                    <div className="space-y-2 max-h-[60vh] overflow-y-auto">
+                                        {groupedResults.new.map((match) => {
+                                            const txId = match.ofxTransaction.id;
+                                            const isEditing = editingId === txId;
+                                            const isCreating = creatingCategoryForTxId === txId;
+                                            const displayDescription = getDisplayDescription(txId, match.ofxTransaction.description);
+                                            const selectedCategoryId = getDisplayCategory(txId);
+
+                                            // Visual distinction
+                                            const isCredit = match.ofxTransaction.type === 'CREDIT';
+                                            const amountColor = isCredit ? 'text-green-600' : 'text-red-600';
+                                            const AmountIcon = isCredit ? ArrowUpRight : ArrowDownRight;
+                                            const boxBorder = isCredit ? 'border-green-500/20' : 'border-red-500/20'; // Optional: distinct borders
+
+                                            // Filter categories based on transaction type
+                                            const allowedType = isCredit ? 'entrada' : 'saida';
+                                            const filteredCategories = categories.filter(c => c.tipo === 'ambos' || c.tipo === allowedType);
+
+                                            return (
+                                                <div key={txId} className={`p-3 bg-card border ${boxBorder} rounded-lg space-y-2`}>
+                                                    {/* First row: Checkbox, Description, Amount */}
+                                                    <div className="flex items-start gap-3">
+                                                        <input
+                                                            type="checkbox"
+                                                            checked={selectedMatches.has(txId)}
+                                                            onChange={() => toggleMatch(txId)}
+                                                            className="w-4 h-4 mt-1"
+                                                        />
+                                                        <div className="flex-1 space-y-1">
+                                                            {/* Description - Editable */}
+                                                            {isEditing ? (
+                                                                <div className="flex items-center gap-2">
+                                                                    <input
+                                                                        type="text"
+                                                                        value={displayDescription}
+                                                                        onChange={(e) => updateDescription(txId, e.target.value)}
+                                                                        className="flex-1 px-2 py-1 text-sm bg-background border border-primary/40 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                                                        autoFocus
+                                                                    />
+                                                                    <button
+                                                                        onClick={() => setEditingId(null)}
+                                                                        className="px-2 py-1 text-xs bg-primary/20 text-primary rounded hover:bg-primary/30"
+                                                                    >
+                                                                        Salvar
+                                                                    </button>
+                                                                </div>
+                                                            ) : (
+                                                                <div className="flex items-center gap-2">
+                                                                    <p className="font-medium flex-1 truncate">{displayDescription}</p>
+                                                                    <button
+                                                                        onClick={() => setEditingId(txId)}
+                                                                        className="p-1 text-muted-foreground hover:text-foreground rounded transition-colors"
+                                                                        title="Editar descrição"
+                                                                    >
+                                                                        <Edit2 className="w-4 h-4" />
+                                                                    </button>
+                                                                </div>
+                                                            )}
+                                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                                <span>{match.ofxTransaction.date}</span>
+                                                                {isCredit ? (
+                                                                    <span className="flex items-center text-green-500 text-xs bg-green-500/10 px-1.5 py-0.5 rounded">
+                                                                        <ArrowUpRight className="w-3 h-3 mr-1" /> Receita
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className="flex items-center text-red-500 text-xs bg-red-500/10 px-1.5 py-0.5 rounded">
+                                                                        <ArrowDownRight className="w-3 h-3 mr-1" /> Despesa
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className={`font-mono font-semibold flex items-center ${amountColor}`}>
+                                                            <AmountIcon className="w-4 h-4 mr-1" />
+                                                            {formatCurrency(match.ofxTransaction.amount)}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Second row: Category selector */}
+                                                    <div className="flex items-center gap-2 pl-7">
+                                                        <Tag className="w-4 h-4 text-muted-foreground" />
+
+                                                        {isCreating ? (
+                                                            <div className="flex items-center gap-2 flex-1 animate-in fade-in slide-in-from-left-2">
+                                                                <input
+                                                                    type="text"
+                                                                    value={newCategoryName}
+                                                                    onChange={(e) => setNewCategoryName(e.target.value)}
+                                                                    placeholder="Nome da nova categoria..."
+                                                                    className="flex-1 px-2 py-1 text-sm bg-background border border-primary/40 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 h-8"
+                                                                    autoFocus
+                                                                    onKeyDown={(e) => {
+                                                                        if (e.key === 'Enter') handleCreateCategory(txId, allowedType);
+                                                                        if (e.key === 'Escape') {
+                                                                            setCreatingCategoryForTxId(null);
+                                                                            setNewCategoryName("");
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <button
+                                                                    onClick={() => handleCreateCategory(txId, allowedType)}
+                                                                    disabled={!newCategoryName.trim() || isCreatingCategory}
+                                                                    className="p-1.5 bg-green-500/20 text-green-500 rounded hover:bg-green-500/30 disabled:opacity-50"
+                                                                    title="Salvar Categoria"
+                                                                >
+                                                                    {isCreatingCategory ? <span className="animate-spin">⌛</span> : <Check className="w-4 h-4" />}
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => {
+                                                                        setCreatingCategoryForTxId(null);
+                                                                        setNewCategoryName("");
+                                                                    }}
+                                                                    className="p-1.5 bg-red-500/20 text-red-500 rounded hover:bg-red-500/30"
+                                                                    title="Cancelar"
+                                                                >
+                                                                    <X className="w-4 h-4" />
+                                                                </button>
+                                                            </div>
+                                                        ) : (
+                                                            <select
+                                                                value={selectedCategoryId}
+                                                                onChange={(e) => {
+                                                                    if (e.target.value === 'NEW') {
+                                                                        setCreatingCategoryForTxId(txId);
+                                                                        setNewCategoryName("");
+                                                                    } else {
+                                                                        updateCategory(txId, e.target.value);
+                                                                    }
+                                                                }}
+                                                                className="flex-1 px-2 py-1 text-sm bg-background/50 border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary/50 h-8"
+                                                            >
+                                                                <option value="">Sem categoria (usar padrão)</option>
+                                                                <option value="NEW" className="font-semibold text-primary">
+                                                                    + Criar Nova Categoria
+                                                                </option>
+                                                                <optgroup label="Minhas Categorias">
+                                                                    {filteredCategories.map((cat) => (
+                                                                        <option key={cat.id} value={cat.id.toString()}>
+                                                                            {cat.descricao}
+                                                                        </option>
+                                                                    ))}
+                                                                </optgroup>
+                                                            </select>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <p className="font-mono font-semibold">{formatCurrency(match.ofxTransaction.amount)}</p>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 </div>
                             )}

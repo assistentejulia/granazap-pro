@@ -127,11 +127,15 @@ export function normalizeOFXTransaction(
     contaId: string,
     categoriaId?: string
 ) {
+    // Extract year-month from date (YYYY-MM format)
+    const mes = ofxTx.date.substring(0, 7); // "2024-01-15" -> "2024-01"
+
     return {
         conta_id: contaId,
         descricao: ofxTx.description,
         valor: ofxTx.amount,
         data: ofxTx.date,
+        mes: mes, // Required NOT NULL field
         tipo: ofxTx.type === 'CREDIT' ? 'entrada' : 'saida',
         categoria_id: categoriaId || null,
         origem: 'ofx_import',

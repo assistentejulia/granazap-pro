@@ -61,19 +61,31 @@ export function matchTransactions(
                 existingTx.descricao.toLowerCase()
             );
 
-            // Exact match criteria: Date within 2 days + Amount exact + Description 70%+ similar
-            if (daysDiff <= 2 && descriptionSimilarity >= 70) {
+            // PRIORITY 1: Exact match - Same date + Same amount (description doesn't matter much)
+            // This catches duplicates even if description differs slightly
+            if (daysDiff === 0) {
+                bestMatch = {
+                    ofxTransaction: ofxTx,
+                    matchType: 'exact',
+                    existingTransaction: existingTx,
+                    confidence: 100, // Perfect date+amount match
+                };
+                break; // Found exact match, no need to continue
+            }
+
+            // PRIORITY 2: Very likely duplicate - Date within 1 day + Amount exact + Description 50%+ similar
+            if (daysDiff <= 1 && descriptionSimilarity >= 50) {
                 bestMatch = {
                     ofxTransaction: ofxTx,
                     matchType: 'exact',
                     existingTransaction: existingTx,
                     confidence: descriptionSimilarity,
                 };
-                break; // Found exact match, no need to continue
+                break;
             }
 
-            // Suggestion criteria: Date within 5 days + Amount exact
-            if (daysDiff <= 5 && descriptionSimilarity >= 50) {
+            // PRIORITY 3: Suggestion - Date within 3 days + Amount exact + Description 40%+ similar
+            if (daysDiff <= 3 && descriptionSimilarity >= 40) {
                 // Only update if this is a better match than current best
                 if (
                     bestMatch.matchType === 'new' ||
@@ -86,6 +98,16 @@ export function matchTransactions(
                         confidence: descriptionSimilarity,
                     };
                 }
+            }
+
+            // PRIORITY 4: Weak suggestion - Date within 7 days + Amount exact (any description)
+            if (daysDiff <= 7 && bestMatch.matchType === 'new') {
+                bestMatch = {
+                    ofxTransaction: ofxTx,
+                    matchType: 'suggestion',
+                    existingTransaction: existingTx,
+                    confidence: Math.max(30, descriptionSimilarity), // Minimum 30% confidence
+                };
             }
         }
 

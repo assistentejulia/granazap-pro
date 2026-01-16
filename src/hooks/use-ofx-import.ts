@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { parseOFXFile, normalizeOFXTransaction, type OFXTransaction } from '@/lib/ofx-parser';
 import { matchTransactions, groupMatchResults, type MatchResult } from '@/lib/transaction-matcher';
-import { useAllTransactions } from './use-all-transactions';
 import { createClient } from '@/lib/supabase/client';
 import { useUser } from './use-user';
 
@@ -11,7 +10,6 @@ export function useOFXImport() {
     const [matchResults, setMatchResults] = useState<MatchResult[]>([]);
     const [ofxData, setOfxData] = useState<any>(null);
 
-    const { transactions } = useAllTransactions('year', null);
     const { profile } = useUser();
 
     /**
@@ -26,13 +24,32 @@ export function useOFXImport() {
             const parsedData = await parseOFXFile(file);
             setOfxData(parsedData);
 
+            // Find date range from OFX file
+            const dates = parsedData.transactions.map(t => new Date(t.date).getTime());
+            const minDate = new Date(Math.min(...dates));
+            const maxDate = new Date(Math.max(...dates));
+
+            // Add buffer of 7 days
+            minDate.setDate(minDate.getDate() - 7);
+            maxDate.setDate(maxDate.getDate() + 7);
+
+            const supabase = createClient();
+
+            // Fetch existing transactions within range
+            const { data: dbTransactions } = await supabase
+                .from('transacoes')
+                .select('*')
+                .eq('usuario_id', profile?.id)
+                .gte('data', minDate.toISOString())
+                .lte('data', maxDate.toISOString());
+
             // Match transactions
-            const existingTransactions = transactions.map(t => ({
+            const existingTransactions = (dbTransactions || []).map(t => ({
                 id: t.id.toString(),
                 data: t.data,
                 valor: Number(t.valor),
                 descricao: t.descricao,
-                tipo: t.tipo,
+                tipo: t.tipo as 'entrada' | 'saida', // Cast type explicitly
                 conta_id: t.conta_id || '',
             }));
 
@@ -59,7 +76,9 @@ export function useOFXImport() {
     const importTransactions = async (
         selectedMatches: MatchResult[],
         accountId: string,
-        defaultCategoryId?: string
+        defaultCategoryId?: string,
+        editedDescriptions?: Map<string, string>,
+        selectedCategories?: Map<string, string>
     ) => {
         setIsProcessing(true);
         setError(null);
@@ -74,9 +93,22 @@ export function useOFXImport() {
             // Only import "new" and "suggestion" transactions that user confirmed
             const transactionsToInsert = selectedMatches
                 .filter(match => match.matchType === 'new' || match.matchType === 'suggestion')
-                .map(match =>
-                    normalizeOFXTransaction(match.ofxTransaction, accountId, defaultCategoryId)
-                )
+                .map(match => {
+                    const txId = match.ofxTransaction.id;
+                    const normalized = normalizeOFXTransaction(match.ofxTransaction, accountId, defaultCategoryId);
+
+                    // Apply edited description if exists
+                    if (editedDescriptions?.has(txId)) {
+                        normalized.descricao = editedDescriptions.get(txId)!;
+                    }
+
+                    // Apply selected category if exists
+                    if (selectedCategories?.has(txId) && selectedCategories.get(txId)) {
+                        normalized.categoria_id = selectedCategories.get(txId)!;
+                    }
+
+                    return normalized;
+                })
                 .map(tx => ({
                     ...tx,
                     usuario_id: profile.id,

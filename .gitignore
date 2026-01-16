@@ -45,4 +45,7 @@ next-env.d.ts
 .env.local
 .env.production
 .env.development
-.env.local
+
+# Financial data
+*.ofx
+NU_*.ofx
