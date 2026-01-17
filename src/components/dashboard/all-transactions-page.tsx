@@ -15,11 +15,13 @@ import { EmptyStateEducational } from "@/components/ui/empty-state-educational";
 import { ExportDropdown } from "./export-dropdown";
 import { TransactionFilters, TransactionType } from "@/components/dashboard/transaction-filters";
 import { OFXReconciliationModal } from "@/components/dashboard/ofx-reconciliation-modal";
+import { usePermissions } from "@/hooks/use-permissions";
 
 export function AllTransactionsPage() {
   const { t, language } = useLanguage();
   const { formatCurrency } = useCurrency();
   const { exportTransactionsToPDF, exportTransactionsToExcel } = useTransactionsExport();
+  const { canCreate } = usePermissions();
   const router = useRouter();
   const searchParams = useSearchParams();
   const contaIdParam = searchParams.get('conta_id');
@@ -145,13 +147,15 @@ export function AllTransactionsPage() {
         </div>
 
         <div className="flex items-center gap-2 md:gap-3">
-          <button
-            onClick={() => setIsOFXModalOpen(true)}
-            className="px-3 md:px-4 py-2 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg font-medium hover:bg-blue-500/20 transition-colors text-sm flex items-center gap-2"
-          >
-            <Upload className="w-4 h-4" />
-            <span className="hidden sm:inline">Importar OFX</span>
-          </button>
+          {canCreate() && (
+            <button
+              onClick={() => setIsOFXModalOpen(true)}
+              className="px-3 md:px-4 py-2 bg-blue-500/10 text-blue-400 border border-blue-500/20 rounded-lg font-medium hover:bg-blue-500/20 transition-colors text-sm flex items-center gap-2"
+            >
+              <Upload className="w-4 h-4" />
+              <span className="hidden sm:inline">Importar OFX</span>
+            </button>
+          )}
           <ExportDropdown
             onExportPDF={handleExportPDF}
             onExportExcel={handleExportExcel}

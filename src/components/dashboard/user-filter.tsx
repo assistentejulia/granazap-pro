@@ -9,14 +9,14 @@ import { useState, useRef, useEffect } from "react";
 
 export function UserFilter() {
   const { t } = useLanguage();
-  const { profile } = useUser();
+  const { profile, isSwitchable, switchContext } = useUser();
   const { filter, setFilter, isDependente } = useUserFilter();
   const { data: teamMembers = [] } = useTeamMembers();
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Buscar permissões do dependente
-  const myPermissions = isDependente 
+  const myPermissions = isDependente
     ? teamMembers?.find(m => m.id === profile?.dependente_id)?.permissoes
     : null;
 
@@ -48,8 +48,9 @@ export function UserFilter() {
   };
 
   // Se não tem permissão para ver dados do admin E não pode ver outros membros
-  // Só mostra "Meus" (não precisa de filtro)
-  if (isDependente && !canViewAdminData && !canViewOtherMembers) {
+  // Só mostra "Meus" (não precisa de filtro) mas precisamos mostrar para TROCAR DE CONTA!
+  // CORREÇÃO: Se isSwitchable for true, SEMPRE mostrar o componente para permitir a troca
+  if (isDependente && !canViewAdminData && !canViewOtherMembers && !isSwitchable) {
     return null; // Não mostrar filtro, só vê seus próprios dados
   }
 
@@ -64,95 +65,115 @@ export function UserFilter() {
         {getFilterLabel()}
         <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
-
       {/* Dropdown */}
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl z-50 py-1">
-          {/* Todos - Só mostra se tiver permissão para ver admin OU outros membros */}
-          {(canViewAdminData || canViewOtherMembers) && (
-            <button
-              onClick={() => {
-                setFilter('todos');
-                setIsOpen(false);
-              }}
-              className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${
-                filter === 'todos'
+      {
+        isOpen && (
+          <div className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl z-50 py-1">
+            {/* Todos - Só mostra se tiver permissão para ver admin OU outros membros */}
+            {(canViewAdminData || canViewOtherMembers) && (
+              <button
+                onClick={() => {
+                  setFilter('todos');
+                  setIsOpen(false);
+                }}
+                className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${filter === 'todos'
                   ? 'bg-blue-600 text-white'
                   : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
-              }`}
-            >
-              <Users className="w-4 h-4" />
-              {t('userFilter.all')}
-            </button>
-          )}
+                  }`}
+              >
+                <Users className="w-4 h-4" />
+                {t('userFilter.all')}
+              </button>
+            )}
 
-          {/* Principal - Só mostra se tiver permissão para ver dados do admin */}
-          {canViewAdminData && (
-            <button
-              onClick={() => {
-                setFilter('principal');
-                setIsOpen(false);
-              }}
-              className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${
-                filter === 'principal'
+            {/* Principal - Só mostra se tiver permissão para ver dados do admin */}
+            {canViewAdminData && (
+              <button
+                onClick={() => {
+                  setFilter('principal');
+                  setIsOpen(false);
+                }}
+                className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${filter === 'principal'
                   ? 'bg-blue-600 text-white'
                   : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
-              }`}
-            >
-              <User className="w-4 h-4" />
-              {isDependente ? t('userFilter.principal') : t('userFilter.mine')}
-            </button>
-          )}
+                  }`}
+              >
+                <User className="w-4 h-4" />
+                {isDependente ? t('userFilter.principal') : t('userFilter.mine')}
+              </button>
+            )}
 
-          {/* Meus - Sempre mostrar para dependentes */}
-          {isDependente && (
-            <button
-              onClick={() => {
-                setFilter(profile?.dependente_id || 0);
-                setIsOpen(false);
-              }}
-              className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${
-                filter === profile?.dependente_id
+            {/* Meus - Sempre mostrar para dependentes */}
+            {isDependente && (
+              <button
+                onClick={() => {
+                  setFilter(profile?.dependente_id || 0);
+                  setIsOpen(false);
+                }}
+                className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${filter === profile?.dependente_id
                   ? 'bg-blue-600 text-white'
                   : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
-              }`}
-            >
-              <User className="w-4 h-4" />
-              {t('userFilter.mine')}
-            </button>
-          )}
+                  }`}
+              >
+                <User className="w-4 h-4" />
+                {t('userFilter.mine')}
+              </button>
+            )}
 
-          {/* Membros da Equipe - Só mostra se tiver permissão para ver outros membros */}
-          {canViewOtherMembers && teamMembers.length > 0 && (
-            <>
-              <div className="border-t border-zinc-800 my-1" />
-              <div className="px-3 py-1 text-xs text-zinc-500 font-medium">
-                Equipe ({teamMembers.length})
-              </div>
-              {teamMembers.map((member) => (
+            {/* Membros da Equipe - Só mostra se tiver permissão para ver outros membros */}
+            {canViewOtherMembers && teamMembers.length > 0 && (
+              <>
+                <div className="border-t border-zinc-800 my-1" />
+                <div className="px-3 py-1 text-xs text-zinc-500 font-medium">
+                  Equipe
+                </div>
+                {teamMembers
+                  .filter(member => member.id !== profile?.dependente_id)
+                  .map((member) => (
+                    <button
+                      key={member.id}
+                      onClick={() => {
+                        setFilter(member.id);
+                        setIsOpen(false);
+                      }}
+                      className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${filter === member.id
+                        ? 'bg-blue-600 text-white'
+                        : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                        }`}
+                    >
+                      <User className="w-4 h-4" />
+                      <span className="truncate">{member.nome}</span>
+                      {member.convite_status === 'pendente' && (
+                        <span className="ml-auto text-xs text-yellow-500">Pendente</span>
+                      )}
+                    </button>
+                  ))}
+              </>
+            )}
+
+            {/* Switch Account Option */}
+            {isSwitchable && (
+              <>
+                <div className="border-t border-zinc-800 my-1" />
                 <button
-                  key={member.id}
                   onClick={() => {
-                    setFilter(member.id);
+                    switchContext(isDependente ? 'personal' : 'dependent');
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${
-                    filter === member.id
-                      ? 'bg-blue-600 text-white'
-                      : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
-                  }`}
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors text-amber-500 hover:text-amber-400 hover:bg-zinc-800"
                 >
-                  <User className="w-4 h-4" />
-                  <span className="truncate">{member.nome}</span>
-                  {member.convite_status === 'pendente' && (
-                    <span className="ml-auto text-xs text-yellow-500">Pendente</span>
-                  )}
+                  <div className="w-4 h-4 flex items-center justify-center">
+                    🔄
+                  </div>
+                  <span className="truncate">
+                    {isDependente ? 'Acessar Minha Conta' : 'Acessar Conta Compartilhada'}
+                  </span>
                 </button>
-              ))}
-            </>
-          )}
-        </div>
-      )}
-    </div>
+              </>
+            )}
+          </div>
+        )
+      }
+    </div >
   );
 }

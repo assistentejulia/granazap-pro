@@ -382,6 +382,7 @@ export function FutureTransactionModal({
         }
       }
 
+      window.dispatchEvent(new CustomEvent('futureTransactionsChanged'));
       onSuccess();
       onClose();
     } catch (error) {

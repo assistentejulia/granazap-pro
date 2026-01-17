@@ -14,6 +14,7 @@ import { useCurrency } from "@/contexts/currency-context";
 import { InfoCard } from "@/components/ui/info-card";
 import { ExportDropdown } from "@/components/dashboard/export-dropdown";
 import { TransactionFilters } from "@/components/dashboard/transaction-filters";
+import { usePermissions } from "@/hooks/use-permissions";
 
 // Dynamic imports
 const TransactionModal = dynamic(() => import("./transaction-modal").then(mod => mod.TransactionModal));
@@ -29,6 +30,7 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
   const { formatCurrency } = useCurrency();
   const { exportTransactionsToPDF, exportTransactionsToExcel } = useTransactionsExport();
   const { filter: accountFilter } = useAccountFilter();
+  const { canCreate, canEdit, canDelete } = usePermissions();
 
   // Initialize filters with defaults
   const currentYear = new Date().getFullYear();
@@ -210,8 +212,10 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
             onClick={() => setIsModalOpen(true)}
             className={cn(
               "flex items-center gap-2 px-3 md:px-4 py-2 min-h-[44px] text-white rounded-lg transition-colors text-xs md:text-sm font-medium",
-              accentColor
+              accentColor,
+              !canCreate() && "opacity-50 cursor-not-allowed hidden"
             )}
+            disabled={!canCreate()}
           >
             <Plus className="w-4 h-4" />
             <span className="hidden sm:inline">{newButtonText}</span>
@@ -357,25 +361,29 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
                     </td>
                     <td className="py-4 px-6 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => handleEdit(transaction)}
-                          className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
-                          title={t('common.edit')}
-                        >
-                          <Pencil className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleDeleteClick(transaction)}
-                          className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
-                          title={t('common.delete')}
-                          disabled={deletingId === transaction.id}
-                        >
-                          {deletingId === transaction.id ? (
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                          ) : (
-                            <Trash2 className="w-4 h-4" />
-                          )}
-                        </button>
+                        {canEdit() && (
+                          <button
+                            onClick={() => handleEdit(transaction)}
+                            className="p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-colors"
+                            title={t('common.edit')}
+                          >
+                            <Pencil className="w-4 h-4" />
+                          </button>
+                        )}
+                        {canDelete() && (
+                          <button
+                            onClick={() => handleDeleteClick(transaction)}
+                            className="p-2 text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors"
+                            title={t('common.delete')}
+                            disabled={deletingId === transaction.id}
+                          >
+                            {deletingId === transaction.id ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <Trash2 className="w-4 h-4" />
+                            )}
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

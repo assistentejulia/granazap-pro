@@ -36,10 +36,9 @@ export async function signupUser(data: SignupData): Promise<SignupResult> {
     if (config?.restringir_cadastro_usuarios_existentes === true) {
       // Verificar se o email existe em usuarios_dependentes com convite pendente
       const { data: dependente } = await supabase
-        .from('usuarios_dependentes')
-        .select('id, email, convite_status')
-        .eq('email', data.email.toLowerCase())
-        .eq('convite_status', 'pendente')
+        .rpc('verificar_convite_pendente', {
+          email_check: data.email
+        })
         .maybeSingle();
 
       // Se não é dependente com convite pendente, bloquear cadastro
@@ -49,7 +48,7 @@ export async function signupUser(data: SignupData): Promise<SignupResult> {
           error: 'CADASTRO_BLOQUEADO' // Código especial para o modal
         };
       }
-      
+
       // Se é dependente, permitir continuar o cadastro
     }
 
@@ -109,7 +108,7 @@ export async function signupUser(data: SignupData): Promise<SignupResult> {
           error: 'Este email já está cadastrado'
         };
       }
-      
+
       if (authError.message.includes('password')) {
         return {
           success: false,
@@ -176,7 +175,7 @@ export async function signupUser(data: SignupData): Promise<SignupResult> {
 export async function checkEmailExists(email: string): Promise<boolean> {
   try {
     const supabase = createClient();
-    
+
     const { data, error } = await supabase
       .from('usuarios')
       .select('email')
@@ -199,10 +198,10 @@ export async function checkEmailExists(email: string): Promise<boolean> {
 export async function checkPhoneExists(phone: string): Promise<boolean> {
   try {
     const supabase = createClient();
-    
+
     // Limpar formatação do telefone para comparação
     const cleanPhone = phone.replace(/\D/g, '');
-    
+
     const { data, error } = await supabase
       .from('usuarios')
       .select('celular')

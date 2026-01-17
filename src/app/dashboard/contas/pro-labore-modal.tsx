@@ -193,6 +193,9 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
 
       setFeedback({ type: 'success', message: 'Pró-labore realizado com sucesso!' });
 
+      window.dispatchEvent(new CustomEvent('accountsChanged'));
+      window.dispatchEvent(new CustomEvent('transactionsChanged'));
+
       setTimeout(() => {
         onSuccess();
         onClose();
@@ -208,12 +211,12 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
 
   if (feedback) {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title={feedback.type === 'success' ? 'Sucesso' : 'Erro'} className="max-w-sm">
-             <div className="flex flex-col items-center text-center space-y-4 p-4">
-                {feedback.type === 'success' ? <CheckCircle2 className="w-12 h-12 text-green-500" /> : <XCircle className="w-12 h-12 text-red-500" />}
-                <p className="text-white text-lg font-medium">{feedback.message}</p>
-             </div>
-        </Modal>
+      <Modal isOpen={isOpen} onClose={onClose} title={feedback.type === 'success' ? 'Sucesso' : 'Erro'} className="max-w-sm">
+        <div className="flex flex-col items-center text-center space-y-4 p-4">
+          {feedback.type === 'success' ? <CheckCircle2 className="w-12 h-12 text-green-500" /> : <XCircle className="w-12 h-12 text-red-500" />}
+          <p className="text-white text-lg font-medium">{feedback.message}</p>
+        </div>
+      </Modal>
     )
   }
 
@@ -234,20 +237,20 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
               Conta PJ (Origem)
             </label>
             <div className="relative group">
-               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500">
                 <Briefcase className="w-4 h-4" />
               </div>
               <select
                 required
                 value={formData.sourceAccountId}
-                onChange={e => setFormData({...formData, sourceAccountId: e.target.value})}
+                onChange={e => setFormData({ ...formData, sourceAccountId: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-purple-500 appearance-none"
               >
                 <option value="">Selecione a conta PJ</option>
                 {accountsPJ.map(acc => (
-                    <option key={acc.id} value={acc.id}>
-                        {acc.nome} {acc.saldo_atual !== undefined ? `(${getCurrencySymbol()} ${acc.saldo_atual.toFixed(2)})` : ''}
-                    </option>
+                  <option key={acc.id} value={acc.id}>
+                    {acc.nome} {acc.saldo_atual !== undefined ? `(${getCurrencySymbol()} ${acc.saldo_atual.toFixed(2)})` : ''}
+                  </option>
                 ))}
               </select>
             </div>
@@ -264,20 +267,20 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
               Conta Pessoal (Destino)
             </label>
             <div className="relative group">
-               <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500">
                 <Wallet className="w-4 h-4" />
               </div>
               <select
                 required
                 value={formData.destinationAccountId}
-                onChange={e => setFormData({...formData, destinationAccountId: e.target.value})}
+                onChange={e => setFormData({ ...formData, destinationAccountId: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 appearance-none"
               >
                 <option value="">Selecione a conta pessoal</option>
                 {accountsPessoal.map(acc => (
-                    <option key={acc.id} value={acc.id}>
-                        {acc.nome}
-                    </option>
+                  <option key={acc.id} value={acc.id}>
+                    {acc.nome}
+                  </option>
                 ))}
               </select>
             </div>
@@ -301,7 +304,7 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
                 required
                 type="date"
                 value={formData.date}
-                onChange={e => setFormData({...formData, date: e.target.value})}
+                onChange={e => setFormData({ ...formData, date: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 [color-scheme:dark]"
               />
             </div>
@@ -322,7 +325,7 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
                 step="0.01"
                 placeholder="0,00"
                 value={formData.amount}
-                onChange={e => setFormData({...formData, amount: e.target.value})}
+                onChange={e => setFormData({ ...formData, amount: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
               />
             </div>
@@ -341,7 +344,7 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
                 type="text"
                 placeholder="Ex: Pró-labore Janeiro"
                 value={formData.description}
-                onChange={e => setFormData({...formData, description: e.target.value})}
+                onChange={e => setFormData({ ...formData, description: e.target.value })}
                 className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
               />
             </div>

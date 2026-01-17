@@ -106,6 +106,17 @@ export function DashboardSidebar() {
   const podeVerPessoal = tiposContaPermitidos.includes('pessoal');
   const podeVerPJ = tiposContaPermitidos.includes('pj');
 
+  // Enforce valid filter
+  useEffect(() => {
+    if (!podeVerPessoal && !podeVerPJ) return; // Should not happen based on logic
+
+    if (accountFilter === 'pessoal' && !podeVerPessoal) {
+      changeFilter('pj');
+    } else if (accountFilter === 'pj' && !podeVerPJ) {
+      changeFilter('pessoal');
+    }
+  }, [accountFilter, podeVerPessoal, podeVerPJ, changeFilter]);
+
   return (
     <>
       {/* Mobile Overlay */}
@@ -162,7 +173,7 @@ export function DashboardSidebar() {
         </div>
 
         {/* Account Filter Toggle */}
-        {!collapsed && permiteModoPJ && (podeVerPessoal || podeVerPJ) && (
+        {!collapsed && (permiteModoPJ || profile?.is_dependente) && (podeVerPessoal || podeVerPJ) && (
           <div className="p-4">
             <div className="flex gap-2 p-1 bg-sidebar-accent/50 rounded-lg">
               {podeVerPessoal && (

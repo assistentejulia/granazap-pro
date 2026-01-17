@@ -47,6 +47,18 @@ export function useAccounts(tipoConta: 'pessoal' | 'pj') {
 
   useEffect(() => {
     fetchAccounts();
+
+    const handleDataChanged = () => {
+      fetchAccounts();
+    };
+
+    window.addEventListener('accountsChanged', handleDataChanged);
+    window.addEventListener('transactionsChanged', handleDataChanged);
+
+    return () => {
+      window.removeEventListener('accountsChanged', handleDataChanged);
+      window.removeEventListener('transactionsChanged', handleDataChanged);
+    };
   }, [fetchAccounts]);
 
   const createAccount = async (data: Omit<BankAccount, 'id' | 'usuario_id' | 'created_at' | 'updated_at' | 'is_archived' | 'tipo_conta'>) => {
@@ -98,8 +110,7 @@ export function useAccounts(tipoConta: 'pessoal' | 'pj') {
     const { error } = await supabase
       .from('contas_bancarias')
       .update(data)
-      .eq('id', id)
-      .eq('usuario_id', user.id);
+      .eq('id', id);
 
     if (error) throw error;
 

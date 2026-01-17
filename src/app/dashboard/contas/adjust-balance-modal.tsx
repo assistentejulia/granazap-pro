@@ -126,6 +126,9 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
 
       setFeedback({ type: 'success', message: t('accounts.adjustSuccess') });
 
+      window.dispatchEvent(new CustomEvent('accountsChanged'));
+      window.dispatchEvent(new CustomEvent('transactionsChanged'));
+
       setTimeout(() => {
         onSuccess();
         onClose();

@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import type { CreditCard } from "@/hooks/use-credit-cards";
 import { useLanguage } from "@/contexts/language-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 interface CreditCardItemProps {
   card: CreditCard;
@@ -20,6 +21,7 @@ interface CreditCardItemProps {
 export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCurrency }: CreditCardItemProps) {
   const { t } = useLanguage();
   const { profile } = useUser();
+  const { permissions } = usePermissions();
   const [limiteUsado, setLimiteUsado] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -45,7 +47,7 @@ export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCur
 
     try {
       const supabase = createClient();
-      
+
       // Buscar todas as parcelas pendentes deste cartão
       const { data, error } = await supabase
         .from('lancamentos_futuros')
@@ -77,7 +79,7 @@ export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCur
       <div
         className="h-48 p-6 relative overflow-hidden"
         style={{
-          background: card.ativo 
+          background: card.ativo
             ? `linear-gradient(135deg, ${card.cor_cartao} 0%, ${card.cor_cartao}dd 100%)`
             : `linear-gradient(135deg, #4B5563 0%, #374151 100%)`,
         }}
@@ -169,38 +171,44 @@ export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCur
                 {t('cards.invoiceDetails')}
                 <ArrowRight className="w-4 h-4" />
               </Link>
-              <button
-                onClick={() => onEdit(card)}
-                className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition-colors"
-                title={t('cards.editCard')}
-              >
-                <Pencil className="w-4 h-4" />
-              </button>
-              <button
-                onClick={() => onDelete(card)}
-                className="p-2 hover:bg-red-500/10 text-zinc-400 hover:text-red-400 rounded-lg transition-colors"
-                title="Excluir ou Inativar"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+              {permissions.pode_gerenciar_cartoes && (
+                <>
+                  <button
+                    onClick={() => onEdit(card)}
+                    className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition-colors"
+                    title={t('cards.editCard')}
+                  >
+                    <Pencil className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => onDelete(card)}
+                    className="p-2 hover:bg-red-500/10 text-zinc-400 hover:text-red-400 rounded-lg transition-colors"
+                    title="Excluir ou Inativar"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </>
+              )}
             </>
           ) : (
-            <>
-              <button
-                onClick={() => onReactivate?.(card)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Reativar Cartão
-              </button>
-              <button
-                onClick={() => onDelete(card)}
-                className="p-2 hover:bg-red-500/10 text-zinc-400 hover:text-red-400 rounded-lg transition-colors"
-                title="Excluir"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </>
+            permissions.pode_gerenciar_cartoes && (
+              <>
+                <button
+                  onClick={() => onReactivate?.(card)}
+                  className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm font-medium"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Reativar Cartão
+                </button>
+                <button
+                  onClick={() => onDelete(card)}
+                  className="p-2 hover:bg-red-500/10 text-zinc-400 hover:text-red-400 rounded-lg transition-colors"
+                  title="Excluir"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </>
+            )
           )}
         </div>
       </div>

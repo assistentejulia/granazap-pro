@@ -54,12 +54,12 @@ export function useTransactions(period: 'day' | 'week' | 'month' | 'year' | 'cus
       setLoading(true);
       try {
         const supabase = createClient();
-        
+
         // Calcular período
         const now = new Date();
         let startDate = new Date();
         let endDate = new Date();
-        
+
         if (period === 'custom' && customRange) {
           // Usar datas customizadas
           startDate = new Date(customRange.start);
@@ -154,10 +154,12 @@ export function useTransactions(period: 'day' | 'week' | 'month' | 'year' | 'cus
 
     window.addEventListener('accountFilterChange', handleFilterChange);
     window.addEventListener('periodFilterChange', handlePeriodChange);
+    window.addEventListener('transactionsChanged', fetchTransactions);
 
     return () => {
       window.removeEventListener('accountFilterChange', handleFilterChange);
       window.removeEventListener('periodFilterChange', handlePeriodChange);
+      window.removeEventListener('transactionsChanged', fetchTransactions);
     };
   }, [profile, filter, period, customRange]);
 

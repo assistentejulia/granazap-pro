@@ -14,11 +14,13 @@ import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { InfoCard } from "@/components/ui/info-card";
 import { EmptyStateEducational } from "@/components/ui/empty-state-educational";
+import { usePermissions } from "@/hooks/use-permissions";
 
 export function CardsPage() {
   const { t, language } = useLanguage();
   const { formatCurrency: formatCurrencyFromContext } = useCurrency();
   const { filter: accountFilter } = useAccountFilter();
+  const { permissions } = usePermissions();
   const [showInactive, setShowInactive] = useState(false);
   const { cards, loading } = useCreditCards(showInactive);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,7 +53,7 @@ export function CardsPage() {
   const handleReactivate = async (card: CreditCard) => {
     try {
       const supabase = createClient();
-      
+
       const { error } = await supabase
         .from('cartoes_credito')
         .update({ ativo: true })
@@ -112,6 +114,7 @@ export function CardsPage() {
             {t('cards.description')}
           </p>
         </div>
+
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowInactive(!showInactive)}
@@ -128,72 +131,77 @@ export function CardsPage() {
               {showInactive ? "Mostrando inativos" : "Apenas ativos"}
             </span>
           </button>
-          <button
-            onClick={handleAddNew}
-            className="flex items-center gap-2 px-4 py-2 min-h-[44px] bg-purple-500 hover:bg-purple-600 active:scale-95 text-white rounded-lg transition-all font-medium text-sm"
-          >
-            <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">{t('cards.newCard')}</span>
-            <span className="sm:hidden">{t('cards.new')}</span>
-          </button>
+
+          {permissions.pode_gerenciar_cartoes && (
+            <button
+              onClick={handleAddNew}
+              className="flex items-center gap-2 px-4 py-2 min-h-[44px] bg-purple-500 hover:bg-purple-600 active:scale-95 text-white rounded-lg transition-all font-medium text-sm"
+            >
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">{t('cards.newCard')}</span>
+              <span className="sm:hidden">{t('cards.new')}</span>
+            </button>
+          )}
         </div>
       </div>
 
       {/* Cards Grid */}
-      {!mounted || loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="animate-pulse bg-[#111827] border border-white/5 rounded-xl h-80" />
-          ))}
-        </div>
-      ) : cards.length === 0 ? (
-        <EmptyStateEducational
-          icon={CreditCardIcon}
-          title={t('cards.emptyStateTitle')}
-          description={t('cards.emptyStateDescription')}
-          whatIs={t('cards.emptyStateWhatIs')}
-          howToUse={[
-            { step: 1, text: t('cards.emptyStateStep1') },
-            { step: 2, text: t('cards.emptyStateStep2') },
-            { step: 3, text: 'Configure o dia de fechamento (quando a fatura fecha)' },
-            { step: 4, text: 'Configure o dia de vencimento (quando você deve pagar)' },
-            { step: 5, text: 'Vincule a uma conta bancária para pagar a fatura automaticamente' }
-          ]}
-          example='Exemplo: Seu cartão fecha dia 10 e vence dia 17. Se você comprar algo dia 5, vai para a fatura que fecha dia 10. Se comprar dia 12, vai para a próxima fatura (fecha dia 10 do mês seguinte).'
-          actionButton={{
-            label: '+ Cadastrar Primeiro Cartão',
-            onClick: handleAddNew
-          }}
-        />
-      ) : (
-        <>
-          {/* Info Card - Dica sobre Cartões */}
-          <InfoCard
-            title={t('creditCards.infoCardTitle')}
-            description={t('creditCards.infoCardDescription')}
-            tips={[
-              t('creditCards.infoCardTip1'),
-              t('creditCards.infoCardTip2'),
-              t('creditCards.infoCardTip3'),
-              t('creditCards.infoCardTip4'),
-            ]}
-            storageKey="credit-cards-tip"
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cards.map((card) => (
-              <CreditCardItem
-                key={card.id}
-                card={card}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-                onReactivate={handleReactivate}
-                formatCurrency={formatCurrency}
-              />
+      {
+        !mounted || loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="animate-pulse bg-[#111827] border border-white/5 rounded-xl h-80" />
             ))}
           </div>
-        </>
-      )}
+        ) : cards.length === 0 ? (
+          <EmptyStateEducational
+            icon={CreditCardIcon}
+            title={t('cards.emptyStateTitle')}
+            description={t('cards.emptyStateDescription')}
+            whatIs={t('cards.emptyStateWhatIs')}
+            howToUse={[
+              { step: 1, text: t('cards.emptyStateStep1') },
+              { step: 2, text: t('cards.emptyStateStep2') },
+              { step: 3, text: 'Configure o dia de fechamento (quando a fatura fecha)' },
+              { step: 4, text: 'Configure o dia de vencimento (quando você deve pagar)' },
+              { step: 5, text: 'Vincule a uma conta bancária para pagar a fatura automaticamente' }
+            ]}
+            example='Exemplo: Seu cartão fecha dia 10 e vence dia 17. Se você comprar algo dia 5, vai para a fatura que fecha dia 10. Se comprar dia 12, vai para a próxima fatura (fecha dia 10 do mês seguinte).'
+            actionButton={{
+              label: '+ Cadastrar Primeiro Cartão',
+              onClick: handleAddNew
+            }}
+          />
+        ) : (
+          <>
+            {/* Info Card - Dica sobre Cartões */}
+            <InfoCard
+              title={t('creditCards.infoCardTitle')}
+              description={t('creditCards.infoCardDescription')}
+              tips={[
+                t('creditCards.infoCardTip1'),
+                t('creditCards.infoCardTip2'),
+                t('creditCards.infoCardTip3'),
+                t('creditCards.infoCardTip4'),
+              ]}
+              storageKey="credit-cards-tip"
+            />
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {cards.map((card) => (
+                <CreditCardItem
+                  key={card.id}
+                  card={card}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  onReactivate={handleReactivate}
+                  formatCurrency={formatCurrency}
+                />
+              ))}
+            </div>
+          </>
+        )
+      }
 
       {/* Modal */}
       <CreditCardModal
@@ -210,6 +218,6 @@ export function CardsPage() {
         onSuccess={handleDeleteSuccess}
         card={cardToDelete}
       />
-    </div>
+    </div >
   );
 }

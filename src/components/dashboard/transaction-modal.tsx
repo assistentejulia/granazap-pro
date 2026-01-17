@@ -347,6 +347,7 @@ export function TransactionModal({
       window.dispatchEvent(new CustomEvent('creditCardsChanged'));
       window.dispatchEvent(new CustomEvent('transactionsChanged'));
       window.dispatchEvent(new CustomEvent('futureTransactionsChanged'));
+      window.dispatchEvent(new CustomEvent('accountsChanged'));
 
       // Se não for cartão de crédito, fechar modal normalmente
       if (formaPagamento !== 'credito') {

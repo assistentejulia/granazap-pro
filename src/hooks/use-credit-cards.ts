@@ -73,9 +73,11 @@ export function useCreditCards(showInactive: boolean = false) {
     };
 
     window.addEventListener('creditCardsChanged', handleCardsChanged);
+    window.addEventListener('transactionsChanged', handleCardsChanged);
 
     return () => {
       window.removeEventListener('creditCardsChanged', handleCardsChanged);
+      window.removeEventListener('transactionsChanged', handleCardsChanged);
     };
   }, [queryClient]);
 

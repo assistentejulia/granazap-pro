@@ -19,12 +19,14 @@ import { InfoCard } from "@/components/ui/info-card";
 import { EmptyStateEducational } from "@/components/ui/empty-state-educational";
 import { useUser } from "@/hooks/use-user";
 import { useUserPlan } from "@/hooks/use-user-plan";
+import { usePermissions } from "@/hooks/use-permissions";
 
 export default function ContasPage() {
   const { t } = useLanguage();
   const { formatCurrency } = useCurrency();
   const { profile } = useUser();
   const { permiteModoPJ } = useUserPlan();
+  const { canManageAccounts, canCreate } = usePermissions();
   const { filter: accountFilter, changeFilter } = useAccountFilter();
   const { accounts, loading, fetchAccounts, updateAccount } = useAccounts(accountFilter);
 
@@ -163,14 +165,16 @@ export default function ContasPage() {
         </div>
 
         <div className="flex gap-2 w-full sm:w-auto flex-wrap">
-          <Button
-            onClick={() => openTransferModal()}
-            className="flex-1 sm:flex-none bg-secondary text-secondary-foreground hover:bg-secondary/80 border-none shadow-lg"
-          >
-            <ArrowRightLeft className="w-4 h-4 mr-2" />
-            {t('accounts.transfer')}
-          </Button>
-          {accountFilter === 'pj' && (
+          {canCreate() && (
+            <Button
+              onClick={() => openTransferModal()}
+              className="flex-1 sm:flex-none bg-secondary text-secondary-foreground hover:bg-secondary/80 border-none shadow-lg"
+            >
+              <ArrowRightLeft className="w-4 h-4 mr-2" />
+              {t('accounts.transfer')}
+            </Button>
+          )}
+          {accountFilter === 'pj' && canManageAccounts() && (
             <Button
               onClick={() => setIsProLaboreModalOpen(true)}
               className="flex-1 sm:flex-none bg-purple-600 hover:bg-purple-700 text-white shadow-lg shadow-purple-900/20"
@@ -179,13 +183,15 @@ export default function ContasPage() {
               Pró-labore
             </Button>
           )}
-          <Button
-            onClick={() => setIsAddModalOpen(true)}
-            className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            {t('accounts.newAccount')}
-          </Button>
+          {canManageAccounts() && (
+            <Button
+              onClick={() => setIsAddModalOpen(true)}
+              className="flex-1 sm:flex-none bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-900/20"
+            >
+              <Plus className="w-4 h-4 mr-2" />
+              {t('accounts.newAccount')}
+            </Button>
+          )}
         </div>
       </div>
 
@@ -215,10 +221,10 @@ export default function ContasPage() {
               { step: 5, text: 'Use "Ajustar Saldo" para corrigir diferenças ou "Transferência" para mover dinheiro entre contas' }
             ]}
             example='Exemplo: Você tem R$ 2.500 na conta corrente do Nubank e R$ 800 em dinheiro. Cadastre duas contas: "Nubank" (saldo R$ 2.500) e "Carteira" (saldo R$ 800). Quando receber salário, lança na conta Nubank. Quando sacar dinheiro, faça transferência de Nubank para Carteira!'
-            actionButton={{
+            actionButton={canManageAccounts() ? {
               label: '+ Cadastrar Primeira Conta',
               onClick: () => setIsAddModalOpen(true)
-            }}
+            } : undefined}
           />
         )
       ) : (
@@ -287,37 +293,43 @@ export default function ContasPage() {
                       </div>
                     </div>
                   ) : (
-                    <button
-                      onClick={() => handleSetDefault(account)}
-                      className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-2 px-2 py-1 -ml-2 rounded-md hover:bg-muted transition-colors w-full"
-                      title={t('accounts.setAsDefault')}
-                    >
-                      <div className="w-2 h-2 rounded-full border border-muted-foreground"></div>
-                      {t('accounts.setAsDefault')}
-                    </button>
+                    canManageAccounts() && (
+                      <button
+                        onClick={() => handleSetDefault(account)}
+                        className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-2 px-2 py-1 -ml-2 rounded-md hover:bg-muted transition-colors w-full"
+                        title={t('accounts.setAsDefault')}
+                      >
+                        <div className="w-2 h-2 rounded-full border border-muted-foreground"></div>
+                        {t('accounts.setAsDefault')}
+                      </button>
+                    )
                   )}
                 </div>
 
                 {/* Ações */}
                 <div className="space-y-3 pt-4 border-t border-border">
                   <div className="grid grid-cols-4 gap-2">
-                    <button
-                      onClick={() => openTransferModal(account)}
-                      className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors group/btn"
-                      title={t('accounts.makeTransfer')}
-                    >
-                      <ArrowRightLeft className="w-5 h-5 text-muted-foreground group-hover/btn:text-foreground transition-colors" />
-                      <span className="text-[10px] text-muted-foreground group-hover/btn:text-foreground">{t('accounts.transfer')}</span>
-                    </button>
+                    {canCreate() && (
+                      <button
+                        onClick={() => openTransferModal(account)}
+                        className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors group/btn"
+                        title={t('accounts.makeTransfer')}
+                      >
+                        <ArrowRightLeft className="w-5 h-5 text-muted-foreground group-hover/btn:text-foreground transition-colors" />
+                        <span className="text-[10px] text-muted-foreground group-hover/btn:text-foreground">{t('accounts.transfer')}</span>
+                      </button>
+                    )}
 
-                    <button
-                      onClick={() => setAdjustingAccount(account)}
-                      className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors group/btn"
-                      title={t('accounts.adjustBalance')}
-                    >
-                      <DollarSign className="w-5 h-5 text-muted-foreground group-hover/btn:text-foreground transition-colors" />
-                      <span className="text-[10px] text-muted-foreground group-hover/btn:text-foreground">{t('accounts.adjustBalance')}</span>
-                    </button>
+                    {canManageAccounts() && (
+                      <button
+                        onClick={() => setAdjustingAccount(account)}
+                        className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors group/btn"
+                        title={t('accounts.adjustBalance')}
+                      >
+                        <DollarSign className="w-5 h-5 text-muted-foreground group-hover/btn:text-foreground transition-colors" />
+                        <span className="text-[10px] text-muted-foreground group-hover/btn:text-foreground">{t('accounts.adjustBalance')}</span>
+                      </button>
+                    )}
 
                     <Link
                       href={`/dashboard/transacoes?conta_id=${account.id}`}
@@ -328,24 +340,28 @@ export default function ContasPage() {
                       <span className="text-[10px] text-muted-foreground group-hover/btn:text-foreground">{t('accounts.viewStatement')}</span>
                     </Link>
 
-                    <button
-                      onClick={() => setEditingAccount(account)}
-                      className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors group/btn"
-                      title={t('accounts.editAccount')}
-                    >
-                      <Edit2 className="w-5 h-5 text-muted-foreground group-hover/btn:text-foreground transition-colors" />
-                      <span className="text-[10px] text-muted-foreground group-hover/btn:text-foreground">{t('common.edit')}</span>
-                    </button>
+                    {canManageAccounts() && (
+                      <button
+                        onClick={() => setEditingAccount(account)}
+                        className="flex flex-col items-center gap-1 p-2 rounded-lg hover:bg-muted transition-colors group/btn"
+                        title={t('accounts.editAccount')}
+                      >
+                        <Edit2 className="w-5 h-5 text-muted-foreground group-hover/btn:text-foreground transition-colors" />
+                        <span className="text-[10px] text-muted-foreground group-hover/btn:text-foreground">{t('common.edit')}</span>
+                      </button>
+                    )}
                   </div>
 
-                  <button
-                    onClick={() => setDeletingAccount(account)}
-                    className="w-full flex items-center justify-center gap-2 py-2 text-xs text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors border border-transparent hover:border-red-500/10"
-                    title={t('accounts.deleteAccount')}
-                  >
-                    <Archive className="w-3.5 h-3.5" />
-                    {t('accounts.deleteAccount')}
-                  </button>
+                  {canManageAccounts() && (
+                    <button
+                      onClick={() => setDeletingAccount(account)}
+                      className="w-full flex items-center justify-center gap-2 py-2 text-xs text-muted-foreground hover:text-red-500 hover:bg-red-500/10 rounded-lg transition-colors border border-transparent hover:border-red-500/10"
+                      title={t('accounts.deleteAccount')}
+                    >
+                      <Archive className="w-3.5 h-3.5" />
+                      {t('accounts.deleteAccount')}
+                    </button>
+                  )}
                 </div>
 
               </div>

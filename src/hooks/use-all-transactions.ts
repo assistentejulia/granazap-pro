@@ -40,8 +40,11 @@ async function fetchAllTransactions(
   let endDate = new Date();
 
   if (period === 'custom' && customRange) {
-    startDate = new Date(customRange.start);
-    endDate = new Date(customRange.end);
+    const [startYear, startMonth, startDay] = customRange.start.split('-').map(Number);
+    startDate = new Date(startYear, startMonth - 1, startDay);
+
+    const [endYear, endMonth, endDay] = customRange.end.split('-').map(Number);
+    endDate = new Date(endYear, endMonth - 1, endDay, 23, 59, 59, 999);
   } else {
     switch (period) {
       case 'day':
@@ -68,22 +71,15 @@ async function fetchAllTransactions(
     }
   }
 
-  const formatLocalDate = (date: Date): string => {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  };
-
-  const startDateStr = formatLocalDate(startDate);
-  const endDateStr = formatLocalDate(endDate);
+  const startDateStr = startDate.toISOString();
+  const endDateStr = endDate.toISOString();
 
 
   let query = supabase
     .from('transacoes')
     .select(`
       *,
-      categoria:categoria_trasacoes!inner(descricao, icon_key)
+      categoria:categoria_trasacoes(descricao, icon_key)
     `)
     .eq('usuario_id', userId)
     .eq('tipo_conta', accountFilter)

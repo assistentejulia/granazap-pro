@@ -11,11 +11,13 @@ import { useLanguage } from "@/contexts/language-context";
 import { TransactionModal } from "@/components/dashboard/transaction-modal";
 import { UserFilter } from "@/components/dashboard/user-filter";
 import { useSidebar } from "@/contexts/sidebar-context";
+import { usePermissions } from "@/hooks/use-permissions";
 
 export function DashboardHeader() {
   const { profile } = useUser();
   const { t, language } = useLanguage();
   const { toggle } = useSidebar();
+  const { canCreate } = usePermissions();
   const [showQuickMenu, setShowQuickMenu] = useState(false);
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<'receita' | 'despesa'>('despesa');
@@ -31,7 +33,7 @@ export function DashboardHeader() {
   const currentMonth = new Date().toLocaleDateString(locales[language], { month: 'long', year: 'numeric' });
 
   return (
-    <header className="border-b border-border bg-background/95 backdrop-blur px-4 md:px-6 py-3 md:py-4">
+    <header className="border-b border-border bg-background/95 backdrop-blur px-4 md:px-6 py-3 md:py-4 relative z-50">
       <div className="flex items-center justify-between gap-3">
         {/* Mobile: Hamburger Menu */}
         <button
@@ -66,63 +68,65 @@ export function DashboardHeader() {
           </button>
 
           {/* New Transaction */}
-          <div className="relative">
-            <Button
-              onClick={() => setShowQuickMenu(!showQuickMenu)}
-              className="bg-primary hover:bg-primary/90 text-primary-foreground h-9 md:h-10"
-              size="sm"
-            >
-              <Plus className="w-4 h-4 md:mr-2" />
-              <span className="hidden md:inline">{t('header.new')}</span>
-            </Button>
+          {canCreate() && (
+            <div className="relative">
+              <Button
+                onClick={() => setShowQuickMenu(!showQuickMenu)}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground h-9 md:h-10"
+                size="sm"
+              >
+                <Plus className="w-4 h-4 md:mr-2" />
+                <span className="hidden md:inline">{t('header.new')}</span>
+              </Button>
 
-            {/* Quick Menu Dropdown */}
-            {showQuickMenu && (
-              <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setShowQuickMenu(false)}
-                />
-                <div className="absolute right-0 mt-2 w-56 bg-popover border border-border rounded-lg shadow-xl z-50 overflow-hidden">
-                  <button
-                    onClick={() => {
-                      setTransactionType('despesa');
-                      setTransactionModalOpen(true);
-                      setShowQuickMenu(false);
-                    }}
-                    className="w-full px-4 py-3 flex items-center gap-3 hover:bg-accent hover:text-accent-foreground transition-colors text-left"
-                  >
-                    <div className="p-2 bg-red-500/10 rounded-lg">
-                      <TrendingDown className="w-5 h-5 text-red-600 dark:text-red-400" />
-                    </div>
-                    <div>
-                      <div className="font-medium text-foreground">{t('modal.newExpense')}</div>
-                      <div className="text-xs text-muted-foreground">{t('header.quickAddExpense')}</div>
-                    </div>
-                  </button>
+              {/* Quick Menu Dropdown */}
+              {showQuickMenu && (
+                <>
+                  <div
+                    className="fixed inset-0 z-40"
+                    onClick={() => setShowQuickMenu(false)}
+                  />
+                  <div className="absolute right-0 mt-2 w-56 bg-popover border border-border rounded-lg shadow-xl z-50 overflow-hidden">
+                    <button
+                      onClick={() => {
+                        setTransactionType('despesa');
+                        setTransactionModalOpen(true);
+                        setShowQuickMenu(false);
+                      }}
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-accent hover:text-accent-foreground transition-colors text-left"
+                    >
+                      <div className="p-2 bg-red-500/10 rounded-lg">
+                        <TrendingDown className="w-5 h-5 text-red-600 dark:text-red-400" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-foreground">{t('modal.newExpense')}</div>
+                        <div className="text-xs text-muted-foreground">{t('header.quickAddExpense')}</div>
+                      </div>
+                    </button>
 
-                  <div className="h-px bg-border" />
+                    <div className="h-px bg-border" />
 
-                  <button
-                    onClick={() => {
-                      setTransactionType('receita');
-                      setTransactionModalOpen(true);
-                      setShowQuickMenu(false);
-                    }}
-                    className="w-full px-4 py-3 flex items-center gap-3 hover:bg-accent hover:text-accent-foreground transition-colors text-left"
-                  >
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <TrendingUp className="w-5 h-5 text-primary" />
-                    </div>
-                    <div>
-                      <div className="font-medium text-foreground">{t('modal.newIncome')}</div>
-                      <div className="text-xs text-muted-foreground">{t('header.quickAddIncome')}</div>
-                    </div>
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+                    <button
+                      onClick={() => {
+                        setTransactionType('receita');
+                        setTransactionModalOpen(true);
+                        setShowQuickMenu(false);
+                      }}
+                      className="w-full px-4 py-3 flex items-center gap-3 hover:bg-accent hover:text-accent-foreground transition-colors text-left"
+                    >
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <TrendingUp className="w-5 h-5 text-primary" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-foreground">{t('modal.newIncome')}</div>
+                        <div className="text-xs text-muted-foreground">{t('header.quickAddIncome')}</div>
+                      </div>
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

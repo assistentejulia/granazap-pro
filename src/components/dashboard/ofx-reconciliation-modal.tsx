@@ -189,6 +189,8 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
         );
 
         if (result.success) {
+            window.dispatchEvent(new CustomEvent('accountsChanged'));
+            window.dispatchEvent(new CustomEvent('transactionsChanged'));
             setStep('confirm');
             onSuccess?.();
         }
@@ -327,7 +329,7 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                                     <p className="text-2xl font-bold text-green-600">{stats.exactMatches}</p>
                                 </div>
                                 <div className="bg-yellow-500/10 rounded-lg p-4">
-                                    <p className="text-sm text-yellow-600">Sugestões</p>
+                                    <p className="text-sm text-yellow-600">Possíveis Duplicatas</p>
                                     <p className="text-2xl font-bold text-yellow-600">{stats.suggestions}</p>
                                 </div>
                                 <div className="bg-blue-500/10 rounded-lg p-4">
@@ -360,10 +362,19 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                             {/* Suggestions */}
                             {groupedResults.suggestions.length > 0 && (
                                 <div>
-                                    <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                                    <h3 className="text-lg font-semibold mb-1 flex items-center gap-2">
                                         <AlertCircle className="w-5 h-5 text-yellow-500" />
-                                        Sugestões ({groupedResults.suggestions.length})
+                                        Possíveis Duplicatas ({groupedResults.suggestions.length})
                                     </h3>
+                                    <div className="mb-3 px-3 py-2 bg-yellow-500/10 border border-yellow-500/20 rounded-lg text-sm text-yellow-600/90">
+                                        <p>
+                                            <strong>Atenção:</strong> Encontramos transações no sistema com data e valor similares a estes itens.
+                                        </p>
+                                        <p className="mt-1">
+                                            Isso geralmente indica que a transação já foi registrada anteriormente.
+                                            Selecione apenas se tiver certeza de que se trata de um novo lançamento (ex: duas compras de mesmo valor no mesmo dia).
+                                        </p>
+                                    </div>
                                     <div className="space-y-2 max-h-[60vh] overflow-y-auto">
                                         {groupedResults.suggestions.map((match) => (
                                             <div key={match.ofxTransaction.id} className="flex items-center gap-3 p-3 bg-yellow-500/5 border border-yellow-500/20 rounded-lg">

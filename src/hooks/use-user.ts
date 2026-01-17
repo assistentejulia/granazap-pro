@@ -36,7 +36,9 @@ export function useUser() {
       const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
 
       if (authError) throw authError;
-      if (!authUser) return { user: null, profile: null };
+      if (!authUser) return { user: null, profile: null, isSwitchable: false };
+
+      let isSwitchable = false;
 
       // 2. PRIMEIRO: Verificar se é usuário dependente (Prioridade para acesso compartilhado)
       const { data: dependenteData, error: dependenteError } = await supabase
@@ -47,6 +49,9 @@ export function useUser() {
         .single();
 
       if (dependenteData) {
+        // Encontrou vínculo de dependente, então é possível trocar
+        isSwitchable = true;
+
         // Buscar dados do usuário principal para herdar configurações
         const { data: principalData } = await supabase
           .from('usuarios')
@@ -54,6 +59,7 @@ export function useUser() {
             idioma, 
             moeda, 
             plano,
+            plano_id,
             planos_sistema!plano_id (
               max_usuarios_dependentes,
               permite_compartilhamento
@@ -69,6 +75,7 @@ export function useUser() {
 
         const tiposContaPermitidos = (dependenteData.permissoes as any)?.tipos_conta_permitidos || ['pessoal', 'pj'];
 
+
         const finalProfile = {
           user: authUser,
           profile: {
@@ -80,6 +87,7 @@ export function useUser() {
             idioma: principalData?.idioma || 'pt',
             moeda: principalData?.moeda || 'BRL',
             plano: principalData?.plano,
+            plano_id: principalData?.plano_id,
             is_dependente: true,
             usuario_principal_id: dependenteData.usuario_principal_id,
             dependente_id: dependenteData.id,
@@ -95,10 +103,15 @@ export function useUser() {
         } catch (e) {
         }
 
-        return finalProfile;
+        // Retornar perfil dependente se não houver preferência explícita pelo pessoal
+        const contextPreference = localStorage.getItem('user_context_preference');
+        if (contextPreference !== 'personal') {
+          return { ...finalProfile, isSwitchable: true };
+        }
+        // Se preferência for pessoal, continuamos para buscar o perfil pessoal...
       }
 
-      // 3. SE NÃO FOR DEPENDENTE: Buscar como usuário principal (Fallback)
+      // 3. SE NÃO FOR DEPENDENTE OU PREFERÊNCIA FOR PESSOAL: Buscar como usuário principal
       const { data: profileData, error: profileError } = await supabase
         .from('usuarios')
         .select(`
@@ -126,8 +139,21 @@ export function useUser() {
             is_dependente: false,
             max_usuarios_dependentes: planosData?.max_usuarios_dependentes || 0,
             permite_compartilhamento: planosData?.permite_compartilhamento || false
-          } as UserProfile
+          } as UserProfile,
+          isSwitchable: isSwitchable
         };
+
+        // Se não definimos canSwitchToDependent acima, precisamos verificar se ele é dependente
+        // mas está acessando o pessoal por não ter preferência ou por não ter sido encontrado no passo 2 (se alterarmos a lógica)
+        // No fluxo atual, se chegou aqui sem passar pelo IF do dependenteData, é porque não achou dependenteData
+        // ENTÃO: Só precisamos verificar dependenteData se quisermos garantir que canSwitchToDependent seja true
+        // Mas o código acima já faz o fetch. Se dependenteData existe, ele entra no IF.
+        // Se entrarmos no IF e tivermos preferência 'personal', setamos canSwitchToDependent = true e caímos aqui.
+        // Se NÃO entrarmos no IF, canSwitchToDependent é undefined (falso).
+
+        // CORREÇÃO: Se não entrou no IF do dependenteData, precisamos verificar se existe vínculo
+        // para dar a opção de "Ir para Conta Compartilhada" caso ele tenha ativado o "personal" antes
+        // e agora queira voltar, mas o código acima já cobre isso pois se ele tem vínculo, dependenteData NÃO será null.
 
         // Salvar no localStorage para evitar flash no refresh
         try {
@@ -139,7 +165,7 @@ export function useUser() {
       }
 
       // 4. Se não encontrou nada
-      return { user: authUser, profile: null };
+      return { user: authUser, profile: null, isSwitchable: false };
     },
     initialData: () => {
       // Tentar restaurar do localStorage antes de buscar do Supabase
@@ -183,6 +209,7 @@ export function useUser() {
   return {
     user: data?.user ?? null,
     profile: data?.profile ?? null,
+    isSwitchable: (data as any)?.isSwitchable ?? false,
     loading: isLoading,
     error: error ? (error as Error).message : null,
     updateProfile: async (updates: Partial<UserProfile>) => {
@@ -193,6 +220,14 @@ export function useUser() {
         return { success: false, error: err.message };
       }
     },
-    refresh: () => queryClient.invalidateQueries({ queryKey: ['user-profile'] })
+    refresh: () => queryClient.invalidateQueries({ queryKey: ['user-profile'] }),
+    switchContext: (mode: 'personal' | 'dependent') => {
+      localStorage.setItem('user_context_preference', mode);
+      // Resetar filtro de conta ao trocar de contexto para evitar ficar preso em visualização vazia
+      localStorage.setItem('account_filter', 'pessoal');
+      window.dispatchEvent(new Event('storage')); // Notificar outros hooks se necessário
+      // Recarregar a página para aplicar a mudança limpa
+      window.location.reload();
+    }
   };
 }

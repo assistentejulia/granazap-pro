@@ -158,6 +158,9 @@ export function TransferModal({ isOpen, onClose, onSuccess, initialSourceAccount
 
       setFeedback({ type: 'success', message: t('accounts.transferSuccess') });
 
+      window.dispatchEvent(new CustomEvent('accountsChanged'));
+      window.dispatchEvent(new CustomEvent('transactionsChanged'));
+
       setTimeout(() => {
         onSuccess();
         onClose();
