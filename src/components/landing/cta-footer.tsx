@@ -17,7 +17,7 @@ export function CtaFooter() {
                         Leva menos de 2 minutos para começar. Sem cartão de crédito. Sem compromisso.
                     </p>
 
-                    <Link href="/cadastro">
+                    <Link href="/cadastro" prefetch={false}>
                         <Button size="lg" className="h-14 px-8 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-lg shadow-xl shadow-blue-600/20">
                             Criar conta gratuita
                             <ArrowRight className="w-5 h-5 ml-2" />

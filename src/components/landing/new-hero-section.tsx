@@ -11,7 +11,7 @@ export function NewHeroSection() {
     return (
         <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
             {/* Animated Background */}
-            <div className="absolute inset-0 bg-gradient-to-br from-[#1a0b2e] via-[#0A0F1C] to-black">
+            <div className="absolute inset-0 bg-gradient-to-br from-background via-muted/50 to-background dark:from-[#1a0b2e] dark:via-[#0A0F1C] dark:to-black">
                 {/* Grid Pattern */}
                 <div
                     className="absolute inset-0 opacity-20"
@@ -77,7 +77,7 @@ export function NewHeroSection() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="text-4xl lg:text-6xl xl:text-7xl font-bold text-white mb-6 leading-tight"
+                            className="text-4xl lg:text-6xl xl:text-7xl font-bold text-foreground mb-6 leading-tight"
                         >
                             Transforme Seu{" "}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-green-500 to-emerald-400 animate-gradient">
@@ -95,7 +95,7 @@ export function NewHeroSection() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.4 }}
-                            className="text-xl text-zinc-400 mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
+                            className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto lg:mx-0 leading-relaxed"
                         >
                             Controle total das suas finanças pessoais e empresariais direto do WhatsApp + Dashboard Web Completo
                         </motion.p>
@@ -112,7 +112,7 @@ export function NewHeroSection() {
                                 className="h-14 px-8 rounded-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-lg font-semibold shadow-2xl shadow-green-500/30 transition-all hover:scale-105 hover:shadow-green-500/50 group"
                                 asChild
                             >
-                                <Link href="/cadastro">
+                                <Link href="/cadastro" prefetch={false}>
                                     COMEÇAR AGORA
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                                 </Link>
@@ -126,7 +126,7 @@ export function NewHeroSection() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.6 }}
-                            className="mt-12 flex items-center justify-center lg:justify-start gap-8 text-zinc-500"
+                            className="mt-12 flex items-center justify-center lg:justify-start gap-8 text-muted-foreground"
                         >
                             <div className="flex items-center gap-2">
                                 <div className="flex -space-x-2">

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'Assistente Julia-v1';
+const CACHE_NAME = 'Assistente Julia-v3';
 const RUNTIME_CACHE = 'Assistente Julia-runtime';
 
 // Assets to cache on install
@@ -32,7 +32,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch event - network first, fallback to cache
+// Fetch event
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
@@ -69,6 +69,29 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Navigation requests (HTML) - Network First to avoid stale pages
+  if (request.mode === 'navigate') {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          // Cache successful responses
+          if (response.ok) {
+            const responseClone = response.clone();
+            caches.open(RUNTIME_CACHE).then((cache) => {
+              cache.put(request, responseClone);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Fallback to cache, then home
+          return caches.match(request)
+            .then((response) => response || caches.match('/'));
+        })
+    );
+    return;
+  }
+
   // Static assets - cache first
   event.respondWith(
     caches.match(request)
@@ -100,7 +123,6 @@ self.addEventListener('sync', (event) => {
 
 async function syncTransactions() {
   // Placeholder for background sync logic
-  // Will be implemented when needed
   return Promise.resolve();
 }
 

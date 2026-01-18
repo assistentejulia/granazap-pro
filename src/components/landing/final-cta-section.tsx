@@ -7,7 +7,7 @@ import Link from "next/link";
 
 export function FinalCtaSection() {
     return (
-        <section className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-black via-[#1a0b2e] to-black">
+        <section className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-background via-muted/50 to-background dark:from-black dark:via-[#1a0b2e] dark:to-black">
             {/* Animated Background */}
             <div className="absolute inset-0">
                 <div
@@ -61,7 +61,7 @@ export function FinalCtaSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.3 }}
-                        className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6 leading-tight"
+                        className="text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-6 leading-tight"
                     >
                         Comece Sua Jornada
                         <br />
@@ -76,7 +76,7 @@ export function FinalCtaSection() {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.4 }}
-                        className="text-xl text-zinc-400 mb-12 max-w-2xl mx-auto leading-relaxed"
+                        className="text-xl text-muted-foreground mb-12 max-w-2xl mx-auto leading-relaxed"
                     >
                         Junte-se a mais de 10.000 pessoas que já transformaram suas finanças com a Assistente Julia
                     </motion.p>
@@ -94,7 +94,7 @@ export function FinalCtaSection() {
                             className="h-16 px-10 rounded-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white text-xl font-bold shadow-2xl shadow-green-500/40 transition-all hover:scale-110 hover:shadow-green-500/60 group"
                             asChild
                         >
-                            <Link href="/cadastro">
+                            <Link href="/cadastro" prefetch={false}>
                                 CRIAR MINHA CONTA AGORA
                                 <ArrowRight className="w-6 h-6 ml-3 group-hover:translate-x-2 transition-transform" />
                             </Link>
@@ -107,7 +107,7 @@ export function FinalCtaSection() {
                         whileInView={{ opacity: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.6 }}
-                        className="flex items-center justify-center gap-3 text-zinc-400"
+                        className="flex items-center justify-center gap-3 text-muted-foreground"
                     >
                         <Shield className="w-5 h-5 text-green-400" />
                         <span className="text-sm">
@@ -142,8 +142,8 @@ export function FinalCtaSection() {
                         ].map((feature, index) => (
                             <div key={index} className="text-center">
                                 <div className="text-4xl mb-3">{feature.icon}</div>
-                                <h3 className="text-white font-semibold mb-2">{feature.title}</h3>
-                                <p className="text-sm text-zinc-400">{feature.description}</p>
+                                <h3 className="text-foreground font-semibold mb-2">{feature.title}</h3>
+                                <p className="text-sm text-muted-foreground">{feature.description}</p>
                             </div>
                         ))}
                     </motion.div>

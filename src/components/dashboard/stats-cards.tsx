@@ -9,6 +9,9 @@ import { useCurrency } from "@/contexts/currency-context";
 import { usePeriodFilter } from "@/hooks/use-period-filter";
 import { useDashboardFilter } from "@/contexts/dashboard-filter-context";
 import { useMemo } from "react";
+import { motion } from "framer-motion";
+import { Sparkline } from "@/components/dashboard/ui/sparkline";
+import { generateSparklineData } from "@/lib/dashboard-utils";
 
 interface StatCard {
   title: string;
@@ -18,6 +21,8 @@ interface StatCard {
   icon: React.ElementType;
   iconColor: string;
   count?: string;
+  sparklineData?: number[];
+  sparklineColor?: string;
 }
 
 export function StatsCards() {
@@ -122,6 +127,8 @@ export function StatsCards() {
       changeType: stats.balance >= 0 ? "positive" : "negative",
       icon: Wallet,
       iconColor: "text-blue-400",
+      sparklineData: generateSparklineData(12, stats.balance >= 0 ? 'up' : 'down'),
+      sparklineColor: "#3B82F6",
     },
     {
       title: t('dashboard.stats.income'),
@@ -131,6 +138,8 @@ export function StatsCards() {
       icon: TrendingUp,
       iconColor: "text-[#22C55E]",
       count: `${stats.incomeCount} ${t('dashboard.stats.transactions')}`,
+      sparklineData: generateSparklineData(12, 'up'),
+      sparklineColor: "#22C55E",
     },
     {
       title: t('dashboard.stats.expenses'),
@@ -140,6 +149,8 @@ export function StatsCards() {
       icon: TrendingDown,
       iconColor: "text-[#EF4444]",
       count: `${stats.expensesCount} ${t('dashboard.stats.transactions')}`,
+      sparklineData: generateSparklineData(12, 'flat'),
+      sparklineColor: "#EF4444",
     },
     {
       title: `${t('dashboard.stats.toReceive')} (${getPeriodLabel()})`,
@@ -149,6 +160,8 @@ export function StatsCards() {
       icon: CalendarCheck,
       iconColor: "text-[#22C55E]",
       count: `${payableReceivable.receivableCount} ${t('dashboard.stats.pending')}`,
+      sparklineData: generateSparklineData(12, 'up'),
+      sparklineColor: "#A855F7",
     },
     {
       title: `${t('dashboard.stats.toPay')} (${getPeriodLabel()})`,
@@ -158,6 +171,8 @@ export function StatsCards() {
       icon: CalendarClock,
       iconColor: "text-[#EF4444]",
       count: `${payableReceivable.payableCount} ${t('dashboard.stats.pending')}`,
+      sparklineData: generateSparklineData(12, 'flat'),
+      sparklineColor: "#FBBF24",
     },
   ];
 
@@ -168,6 +183,8 @@ export function StatsCards() {
     changeType: "positive",
     icon: PiggyBank,
     iconColor: "text-[#F59E0B]",
+    sparklineData: generateSparklineData(12, stats.savingsRate > 0 ? 'up' : 'flat'),
+    sparklineColor: "#F59E0B",
   };
 
   return (
@@ -175,9 +192,12 @@ export function StatsCards() {
       {/* Main Stats Cards - 5 cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4">
         {mainStatsCards.map((stat, index) => (
-          <div
+          <motion.div
             key={index}
-            className="bg-card border border-border rounded-xl p-4 md:p-6 hover:border-foreground/10 transition-colors"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            className="bg-card border border-border rounded-xl p-4 md:p-6 hover:border-foreground/10 transition-all hover:shadow-lg"
           >
             {/* Icon & Change */}
             <div className="flex items-start justify-between mb-3 md:mb-4">
@@ -198,14 +218,28 @@ export function StatsCards() {
             <p className="text-xs md:text-sm text-muted-foreground mb-2 line-clamp-2">{stat.title}</p>
 
             {/* Value */}
-            <p className="text-base md:text-lg xl:text-xl font-bold font-mono mb-1 whitespace-nowrap overflow-hidden text-ellipsis">{stat.value}</p>
+            <p className="text-base md:text-lg xl:text-xl font-bold font-mono mb-2 whitespace-nowrap overflow-hidden text-ellipsis">{stat.value}</p>
+
+            {/* Sparkline */}
+            {stat.sparklineData && stat.sparklineColor && (
+              <div className="mb-2">
+                <Sparkline
+                  data={stat.sparklineData}
+                  color={stat.sparklineColor}
+                  height={32}
+                  width={120}
+                  showArea={true}
+                  animate={true}
+                />
+              </div>
+            )}
 
             {/* Count */}
             {stat.count && (
               <p className="text-[10px] md:text-xs text-muted-foreground">{stat.count}</p>
             )}
 
-          </div>
+          </motion.div>
         ))}
       </div>
 

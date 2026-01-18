@@ -90,7 +90,7 @@ const features = [
 
 export function FeaturesGridSection() {
     return (
-        <section className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-black via-[#0A0F1C] to-black">
+        <section id="recursos" className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background dark:from-black dark:via-[#0A0F1C] dark:to-black">
             {/* Background Elements */}
             <div className="absolute inset-0 opacity-30">
                 <div
@@ -117,7 +117,7 @@ export function FeaturesGridSection() {
                         </span>
                     </div>
 
-                    <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6">
+                    <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-6">
                         Tudo que você precisa para
                         <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
@@ -125,7 +125,7 @@ export function FeaturesGridSection() {
                         </span>
                     </h2>
 
-                    <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
+                    <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                         Uma plataforma completa com todas as ferramentas necessárias para transformar sua gestão financeira
                     </p>
                 </motion.div>
@@ -148,7 +148,7 @@ export function FeaturesGridSection() {
                                 className="group relative"
                             >
                                 {/* Card */}
-                                <div className="relative h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 lg:p-8 transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:shadow-2xl hover:shadow-green-500/10">
+                                <div className="relative h-full bg-card/50 dark:bg-white/5 backdrop-blur-xl border border-border/50 dark:border-white/10 rounded-2xl p-6 lg:p-8 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/10">
                                     {/* Glow Effect on Hover */}
                                     <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-green-500/0 to-blue-500/0 group-hover:from-green-500/5 group-hover:to-blue-500/5 transition-all duration-300" />
 
@@ -158,11 +158,11 @@ export function FeaturesGridSection() {
                                     </div>
 
                                     {/* Content */}
-                                    <h3 className="text-xl font-bold text-white mb-3 group-hover:text-green-400 transition-colors">
+                                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-green-500 transition-colors">
                                         {feature.title}
                                     </h3>
 
-                                    <p className="text-zinc-400 leading-relaxed">
+                                    <p className="text-muted-foreground leading-relaxed">
                                         {feature.description}
                                     </p>
 
@@ -182,7 +182,7 @@ export function FeaturesGridSection() {
                     transition={{ duration: 0.6, delay: 0.3 }}
                     className="mt-16 text-center"
                 >
-                    <p className="text-zinc-400 text-lg mb-6">
+                    <p className="text-muted-foreground text-lg mb-6">
                         E muito mais recursos sendo adicionados constantemente
                     </p>
                     <div className="flex items-center justify-center gap-2 text-green-400">

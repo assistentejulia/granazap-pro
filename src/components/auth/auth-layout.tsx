@@ -6,6 +6,7 @@ import { LucideIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { useLanguage } from "@/contexts/language-context";
 import { LanguageSelector } from "@/components/ui/language-selector";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { useBranding } from "@/contexts/branding-context";
 
 interface FeatureCard {
@@ -114,8 +115,9 @@ export function AuthLayout({
       {/* --- RIGHT PANEL (40% Desktop, Full Mobile) --- */}
       <div className="w-full lg:w-[40%] flex flex-col items-center justify-center p-6 lg:p-8 xl:p-12 bg-background lg:border-l border-border relative min-h-screen">
 
-        {/* Back to Home Button */}
-        <div className="absolute top-4 right-4 lg:top-8 lg:right-8 z-20">
+        {/* Back to Home Button and Theme Toggle */}
+        <div className="absolute top-4 right-4 lg:top-8 lg:right-8 z-20 flex items-center gap-3">
+          <ThemeToggle />
           <Link href="/" className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors flex items-center gap-2">
             Voltar para o início
           </Link>

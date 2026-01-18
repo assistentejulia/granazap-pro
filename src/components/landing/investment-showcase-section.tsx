@@ -8,7 +8,7 @@ import Link from "next/link";
 
 export function InvestmentShowcaseSection() {
     return (
-        <section className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-black via-[#0A0F1C] to-[#1a0b2e]">
+        <section id="investimentos" className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background dark:from-black dark:via-[#0A0F1C] dark:to-[#1a0b2e]">
             {/* Background Elements */}
             <div className="absolute inset-0">
                 <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[150px]" />
@@ -31,7 +31,7 @@ export function InvestmentShowcaseSection() {
                         </span>
                     </div>
 
-                    <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6">
+                    <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-6">
                         Seus Investimentos
                         <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
@@ -39,7 +39,7 @@ export function InvestmentShowcaseSection() {
                         </span>
                     </h2>
 
-                    <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
+                    <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                         Acompanhe ações, FIIs, ETFs, renda fixa, criptomoedas e BDRs com atualização automática de preços
                     </p>
                 </motion.div>
@@ -74,7 +74,7 @@ export function InvestmentShowcaseSection() {
                                     alt="Dashboard de Investimentos - Assistente Julia"
                                     width={700}
                                     height={600}
-                                    className="rounded-2xl shadow-2xl border border-white/10"
+                                    className="rounded-2xl shadow-2xl border border-border/10 dark:border-white/10"
                                 />
                             </motion.div>
 
@@ -96,7 +96,7 @@ export function InvestmentShowcaseSection() {
                                         <TrendingUp className="w-5 h-5 text-green-400" />
                                     </div>
                                     <div>
-                                        <div className="text-xs text-zinc-400">Lucro Total</div>
+                                        <div className="text-xs text-muted-foreground">Lucro Total</div>
                                         <div className="text-lg font-bold text-green-400">+R$ 17.784,50</div>
                                     </div>
                                 </div>
@@ -119,8 +119,8 @@ export function InvestmentShowcaseSection() {
                                         <PieChart className="w-5 h-5 text-blue-400" />
                                     </div>
                                     <div>
-                                        <div className="text-xs text-zinc-400">Total de Ativos</div>
-                                        <div className="text-lg font-bold text-white">12 ativos</div>
+                                        <div className="text-xs text-muted-foreground">Total de Ativos</div>
+                                        <div className="text-lg font-bold text-foreground">12 ativos</div>
                                     </div>
                                 </div>
                             </motion.div>
@@ -141,10 +141,10 @@ export function InvestmentShowcaseSection() {
                                 <Wallet className="w-6 h-6 text-blue-400" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white mb-2">
+                                <h3 className="text-xl font-bold text-foreground mb-2">
                                     Portfólio Completo
                                 </h3>
-                                <p className="text-zinc-400 leading-relaxed">
+                                <p className="text-muted-foreground leading-relaxed">
                                     Visualize todos os seus investimentos em um único lugar com valores atualizados em tempo real
                                 </p>
                             </div>
@@ -156,10 +156,10 @@ export function InvestmentShowcaseSection() {
                                 <TrendingUp className="w-6 h-6 text-green-400" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white mb-2">
+                                <h3 className="text-xl font-bold text-foreground mb-2">
                                     Análise de Rentabilidade
                                 </h3>
-                                <p className="text-zinc-400 leading-relaxed">
+                                <p className="text-muted-foreground leading-relaxed">
                                     Acompanhe lucros, prejuízos e rentabilidade percentual de cada ativo automaticamente
                                 </p>
                             </div>
@@ -171,10 +171,10 @@ export function InvestmentShowcaseSection() {
                                 <DollarSign className="w-6 h-6 text-purple-400" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white mb-2">
+                                <h3 className="text-xl font-bold text-foreground mb-2">
                                     Controle de Dividendos
                                 </h3>
-                                <p className="text-zinc-400 leading-relaxed">
+                                <p className="text-muted-foreground leading-relaxed">
                                     Registre e acompanhe todos os dividendos recebidos de FIIs e ações com histórico completo
                                 </p>
                             </div>
@@ -186,10 +186,10 @@ export function InvestmentShowcaseSection() {
                                 <PieChart className="w-6 h-6 text-pink-400" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white mb-2">
+                                <h3 className="text-xl font-bold text-foreground mb-2">
                                     Distribuição de Ativos
                                 </h3>
-                                <p className="text-zinc-400 leading-relaxed">
+                                <p className="text-muted-foreground leading-relaxed">
                                     Veja a distribuição do seu portfólio por tipo de ativo com gráficos interativos e percentuais
                                 </p>
                             </div>
@@ -202,7 +202,7 @@ export function InvestmentShowcaseSection() {
                                 className="h-12 px-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold shadow-xl shadow-purple-500/20 transition-all hover:scale-105 group"
                                 asChild
                             >
-                                <Link href="/cadastro">
+                                <Link href="/cadastro" prefetch={false}>
                                     Começar a Investir Melhor
                                     <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                                 </Link>

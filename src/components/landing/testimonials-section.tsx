@@ -32,7 +32,7 @@ const testimonials = [
 
 export function TestimonialsSection() {
     return (
-        <section className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-black via-[#0A0F1C] to-black">
+        <section id="depoimentos" className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background dark:from-black dark:via-[#0A0F1C] dark:to-black">
             {/* Background Elements */}
             <div className="absolute inset-0 opacity-30">
                 <div
@@ -60,7 +60,7 @@ export function TestimonialsSection() {
                         </span>
                     </div>
 
-                    <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-6">
+                    <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-6">
                         O que nossos usuários
                         <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">
@@ -68,7 +68,7 @@ export function TestimonialsSection() {
                         </span>
                     </h2>
 
-                    <p className="text-xl text-zinc-400 max-w-3xl mx-auto">
+                    <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                         Mais de 10.000 pessoas já transformaram suas finanças com a Assistente Julia
                     </p>
                 </motion.div>
@@ -86,7 +86,7 @@ export function TestimonialsSection() {
                             className="group relative"
                         >
                             {/* Card */}
-                            <div className="relative h-full bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-8 transition-all duration-300 hover:bg-white/10 hover:border-white/20 hover:shadow-2xl hover:shadow-green-500/10">
+                            <div className="relative h-full bg-card/50 dark:bg-white/5 backdrop-blur-xl border border-border/50 dark:border-white/10 rounded-2xl p-8 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/10">
                                 {/* Quote Icon */}
                                 <div className="absolute top-6 right-6 opacity-10 group-hover:opacity-20 transition-opacity">
                                     <Quote className="w-12 h-12 text-green-400" />
@@ -100,7 +100,7 @@ export function TestimonialsSection() {
                                 </div>
 
                                 {/* Testimonial Text */}
-                                <p className="text-zinc-300 leading-relaxed mb-6 relative z-10">
+                                <p className="text-foreground/80 dark:text-zinc-300 leading-relaxed mb-6 relative z-10">
                                     "{testimonial.text}"
                                 </p>
 
@@ -110,8 +110,8 @@ export function TestimonialsSection() {
                                         {testimonial.avatar}
                                     </div>
                                     <div>
-                                        <div className="text-white font-semibold">{testimonial.name}</div>
-                                        <div className="text-zinc-400 text-sm">{testimonial.role}</div>
+                                        <div className="text-foreground font-semibold">{testimonial.name}</div>
+                                        <div className="text-muted-foreground text-sm">{testimonial.role}</div>
                                     </div>
                                 </div>
                             </div>

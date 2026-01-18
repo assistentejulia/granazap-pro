@@ -83,7 +83,7 @@ export function HeroSection() {
 
                     <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                         <Button size="lg" className="h-14 rounded-full bg-[#25D366] hover:bg-[#128C7E] text-white px-8 text-lg font-semibold shadow-xl shadow-green-500/20 transition-all hover:scale-105" asChild>
-                            <Link href="/cadastro">
+                            <Link href="/cadastro" prefetch={false}>
                                 <MessageCircle className="w-5 h-5 mr-2" />
                                 Começar no WhatsApp
                             </Link>

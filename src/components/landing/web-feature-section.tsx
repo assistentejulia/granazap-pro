@@ -161,7 +161,7 @@ export function WebFeatureSection() {
 
                         <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
                             <Button size="lg" className="h-12 rounded-full bg-blue-600 hover:bg-blue-700 text-white px-8 text-base shadow-lg shadow-blue-600/20" asChild>
-                                <Link href="/cadastro">
+                                <Link href="/cadastro" prefetch={false}>
                                     Criar conta Web
                                     <ArrowRight className="w-5 h-5 ml-2" />
                                 </Link>
