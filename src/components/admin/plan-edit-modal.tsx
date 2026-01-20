@@ -68,21 +68,21 @@ export function PlanEditModal({ isOpen, onClose, plan, onSave }: PlanEditModalPr
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Nome *</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-2">Nome *</label>
             <input
               type="text"
               value={formData.nome}
               onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-2 text-white"
+              className="w-full bg-background border border-input rounded-lg px-4 py-2 text-foreground"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Período *</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-2">Período *</label>
             <select
               value={formData.tipo_periodo}
               onChange={(e) => setFormData({ ...formData, tipo_periodo: e.target.value })}
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-2 text-white"
+              className="w-full bg-background border border-input rounded-lg px-4 py-2 text-foreground"
             >
               <option value="free">Gratuito</option>
               <option value="mensal">Mensal</option>
@@ -96,72 +96,72 @@ export function PlanEditModal({ isOpen, onClose, plan, onSave }: PlanEditModalPr
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Valor (R$) *</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-2">Valor (R$) *</label>
             <input
               type="number"
               step="0.01"
               value={formData.valor}
               onChange={(e) => setFormData({ ...formData, valor: e.target.value })}
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-2 text-white"
+              className="w-full bg-background border border-input rounded-lg px-4 py-2 text-foreground"
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">Ordem *</label>
+            <label className="block text-sm font-medium text-muted-foreground mb-2">Ordem *</label>
             <input
               type="number"
               value={formData.ordem_exibicao}
               onChange={(e) => setFormData({ ...formData, ordem_exibicao: parseInt(e.target.value) })}
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-2 text-white"
+              className="w-full bg-background border border-input rounded-lg px-4 py-2 text-foreground"
               required
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Link Checkout</label>
+          <label className="block text-sm font-medium text-muted-foreground mb-2">Link Checkout</label>
           <input
             type="url"
             value={formData.link_checkout}
             onChange={(e) => setFormData({ ...formData, link_checkout: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-2 text-white"
+            className="w-full bg-background border border-input rounded-lg px-4 py-2 text-foreground"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Descrição</label>
+          <label className="block text-sm font-medium text-muted-foreground mb-2">Descrição</label>
           <textarea
             value={formData.descricao}
             onChange={(e) => setFormData({ ...formData, descricao: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-2 text-white"
+            className="w-full bg-background border border-input rounded-lg px-4 py-2 text-foreground"
             rows={2}
           />
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">Recursos</label>
+          <label className="block text-sm font-medium text-muted-foreground mb-2">Recursos</label>
           <div className="flex gap-2 mb-2">
             <input
               type="text"
               value={newRecurso}
               onChange={(e) => setNewRecurso(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), setRecursos([...recursos, newRecurso.trim()]), setNewRecurso(''))}
-              className="flex-1 bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-2 text-white"
+              className="flex-1 bg-background border border-input rounded-lg px-4 py-2 text-foreground"
               placeholder="Digite um recurso..."
             />
             <button
               type="button"
               onClick={() => { setRecursos([...recursos, newRecurso.trim()]); setNewRecurso(''); }}
-              className="bg-[#22C55E] hover:bg-[#16A34A] text-white px-4 py-2 rounded-lg"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg"
             >
               <Plus className="w-5 h-5" />
             </button>
           </div>
           <div className="space-y-1 max-h-40 overflow-y-auto">
             {recursos.map((r, i) => (
-              <div key={i} className="flex items-center justify-between bg-[#0A0F1C] border border-white/10 rounded px-3 py-2">
-                <span className="text-sm text-white">{r}</span>
-                <button type="button" onClick={() => setRecursos(recursos.filter((_, idx) => idx !== i))} className="text-red-400 hover:text-red-300">
+              <div key={i} className="flex items-center justify-between bg-card border border-border rounded px-3 py-2">
+                <span className="text-sm text-foreground">{r}</span>
+                <button type="button" onClick={() => setRecursos(recursos.filter((_, idx) => idx !== i))} className="text-destructive hover:text-destructive/80">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -170,47 +170,47 @@ export function PlanEditModal({ isOpen, onClose, plan, onSave }: PlanEditModalPr
         </div>
 
         <div className="grid grid-cols-3 gap-4">
-          <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-4">
+          <div className="bg-card border border-border rounded-xl p-4">
             <label className="flex items-center justify-between cursor-pointer">
-              <div className="text-white font-medium">Plano Ativo</div>
+              <div className="text-foreground font-medium">Plano Ativo</div>
               <input
                 type="checkbox"
                 checked={formData.ativo}
                 onChange={(e) => setFormData({ ...formData, ativo: e.target.checked })}
-                className="w-5 h-5 rounded"
+                className="w-5 h-5 rounded border-input bg-background text-primary focus:ring-primary"
               />
             </label>
           </div>
-          <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-4">
+          <div className="bg-card border border-border rounded-xl p-4">
             <label className="flex items-center justify-between cursor-pointer">
-              <div className="text-white font-medium">Plano Destaque</div>
+              <div className="text-foreground font-medium">Plano Destaque</div>
               <input
                 type="checkbox"
                 checked={formData.destaque}
                 onChange={(e) => setFormData({ ...formData, destaque: e.target.checked })}
-                className="w-5 h-5 rounded"
+                className="w-5 h-5 rounded border-input bg-background text-primary focus:ring-primary"
               />
             </label>
           </div>
-          <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-4">
+          <div className="bg-card border border-border rounded-xl p-4">
             <label className="flex items-center justify-between cursor-pointer">
-              <div className="text-white font-medium">Compartilhamento</div>
+              <div className="text-foreground font-medium">Compartilhamento</div>
               <input
                 type="checkbox"
                 checked={formData.permite_compartilhamento}
                 onChange={(e) => setFormData({ ...formData, permite_compartilhamento: e.target.checked })}
-                className="w-5 h-5 rounded"
+                className="w-5 h-5 rounded border-input bg-background text-primary focus:ring-primary"
               />
             </label>
           </div>
-          <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-4">
+          <div className="bg-card border border-border rounded-xl p-4">
             <label className="flex items-center justify-between cursor-pointer">
-              <div className="text-white font-medium">Modo PJ (Pessoa Jurídica)</div>
+              <div className="text-foreground font-medium">Modo PJ (Pessoa Jurídica)</div>
               <input
                 type="checkbox"
                 checked={formData.permite_modo_pj}
                 onChange={(e) => setFormData({ ...formData, permite_modo_pj: e.target.checked })}
-                className="w-5 h-5 rounded"
+                className="w-5 h-5 rounded border-input bg-background text-primary focus:ring-primary"
               />
             </label>
           </div>
@@ -218,21 +218,21 @@ export function PlanEditModal({ isOpen, onClose, plan, onSave }: PlanEditModalPr
 
         {formData.permite_compartilhamento && (
           <div>
-            <label className="block text-sm text-zinc-400 mb-1">Máx. Dependentes (-1 = ilimitado)</label>
+            <label className="block text-sm text-muted-foreground mb-1">Máx. Dependentes (-1 = ilimitado)</label>
             <input
               type="number"
               value={formData.max_usuarios_dependentes || 0}
               onChange={(e) => setFormData({ ...formData, max_usuarios_dependentes: parseInt(e.target.value) || 0 })}
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded px-3 py-2 text-white"
+              className="w-full bg-background border border-input rounded px-3 py-2 text-foreground"
             />
           </div>
         )}
 
         <div className="flex gap-3 pt-4">
-          <button type="button" onClick={onClose} className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium">
+          <button type="button" onClick={onClose} className="flex-1 bg-secondary hover:bg-secondary/80 text-secondary-foreground px-6 py-3 rounded-lg font-medium transition-colors">
             Cancelar
           </button>
-          <button type="submit" disabled={saving} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium disabled:opacity-50">
+          <button type="submit" disabled={saving} className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50">
             {saving ? 'Salvando...' : 'Salvar Alterações'}
           </button>
         </div>

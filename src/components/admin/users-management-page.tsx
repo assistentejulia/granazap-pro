@@ -168,81 +168,81 @@ export function UsersManagementPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <Shield className="w-8 h-8 text-[#22C55E]" />
-          <h1 className="text-3xl font-bold text-white">Gestão de Usuários</h1>
+          <Shield className="w-8 h-8 text-primary" />
+          <h1 className="text-3xl font-bold text-foreground">Gestão de Usuários</h1>
         </div>
-        <p className="text-zinc-400">Visualize e gerencie todos os usuários da plataforma</p>
+        <p className="text-muted-foreground">Visualize e gerencie todos os usuários da plataforma</p>
       </div>
 
       {/* Stats Cards - Melhorados */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 border border-blue-500/20 rounded-xl p-5 hover:border-blue-500/40 transition-all">
+        <div className="bg-card border border-border rounded-xl p-5 hover:border-primary/40 transition-all shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-medium text-blue-400">TOTAL</div>
-            <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
-              <Shield className="w-4 h-4 text-blue-400" />
+            <div className="text-xs font-medium text-muted-foreground">TOTAL</div>
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+              <Shield className="w-4 h-4 text-primary" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.total_usuarios || 0}</div>
-          <div className="text-xs text-zinc-500 mt-1">Usuários</div>
+          <div className="text-2xl font-bold text-foreground">{stats?.total_usuarios || 0}</div>
+          <div className="text-xs text-muted-foreground mt-1">Usuários</div>
         </div>
 
-        <div className="bg-gradient-to-br from-green-500/10 to-green-600/5 border border-green-500/20 rounded-xl p-5 hover:border-green-500/40 transition-all">
+        <div className="bg-card border border-border rounded-xl p-5 hover:border-green-500/40 transition-all shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-medium text-green-400">ATIVOS</div>
-            <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+            <div className="text-xs font-medium text-green-500">ATIVOS</div>
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.usuarios_ativos || 0}</div>
-          <div className="text-xs text-zinc-500 mt-1">Online</div>
+          <div className="text-2xl font-bold text-foreground">{stats?.usuarios_ativos || 0}</div>
+          <div className="text-xs text-muted-foreground mt-1">Online</div>
         </div>
 
-        <div className="bg-gradient-to-br from-red-500/10 to-red-600/5 border border-red-500/20 rounded-xl p-5 hover:border-red-500/40 transition-all">
+        <div className="bg-card border border-border rounded-xl p-5 hover:border-red-500/40 transition-all shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-medium text-red-400">INATIVOS</div>
-            <div className="w-2 h-2 rounded-full bg-red-400"></div>
+            <div className="text-xs font-medium text-red-500">INATIVOS</div>
+            <div className="w-2 h-2 rounded-full bg-red-500"></div>
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.usuarios_inativos || 0}</div>
-          <div className="text-xs text-zinc-500 mt-1">Offline</div>
+          <div className="text-2xl font-bold text-foreground">{stats?.usuarios_inativos || 0}</div>
+          <div className="text-xs text-muted-foreground mt-1">Offline</div>
         </div>
 
-        <div className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 border border-purple-500/20 rounded-xl p-5 hover:border-purple-500/40 transition-all">
+        <div className="bg-card border border-border rounded-xl p-5 hover:border-purple-500/40 transition-all shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-medium text-purple-400">ADMINS</div>
-            <div className="w-8 h-8 rounded-lg bg-purple-500/20 flex items-center justify-center">
-              <Shield className="w-4 h-4 text-purple-400" />
+            <div className="text-xs font-medium text-purple-500">ADMINS</div>
+            <div className="w-8 h-8 rounded-lg bg-purple-500/10 flex items-center justify-center">
+              <Shield className="w-4 h-4 text-purple-500" />
             </div>
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.administradores || 0}</div>
-          <div className="text-xs text-zinc-500 mt-1">Gestores</div>
+          <div className="text-2xl font-bold text-foreground">{stats?.administradores || 0}</div>
+          <div className="text-xs text-muted-foreground mt-1">Gestores</div>
         </div>
 
-        <div className="bg-gradient-to-br from-yellow-500/10 to-yellow-600/5 border border-yellow-500/20 rounded-xl p-5 hover:border-yellow-500/40 transition-all">
+        <div className="bg-card border border-border rounded-xl p-5 hover:border-yellow-500/40 transition-all shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-medium text-yellow-400">PREMIUM</div>
-            <div className="text-xs bg-yellow-500/20 px-2 py-1 rounded text-yellow-400">PRO</div>
+            <div className="text-xs font-medium text-yellow-500">PREMIUM</div>
+            <div className="text-xs bg-yellow-500/10 px-2 py-1 rounded text-yellow-500">PRO</div>
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.usuarios_premium || 0}</div>
-          <div className="text-xs text-zinc-500 mt-1">Pagantes</div>
+          <div className="text-2xl font-bold text-foreground">{stats?.usuarios_premium || 0}</div>
+          <div className="text-xs text-muted-foreground mt-1">Pagantes</div>
         </div>
 
-        <div className="bg-gradient-to-br from-orange-500/10 to-orange-600/5 border border-orange-500/20 rounded-xl p-5 hover:border-orange-500/40 transition-all">
+        <div className="bg-card border border-border rounded-xl p-5 hover:border-orange-500/40 transition-all shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <div className="text-xs font-medium text-orange-400">NOVOS</div>
-            <div className="text-xs bg-orange-500/20 px-2 py-1 rounded text-orange-400">30d</div>
+            <div className="text-xs font-medium text-orange-500">NOVOS</div>
+            <div className="text-xs bg-orange-500/10 px-2 py-1 rounded text-orange-500">30d</div>
           </div>
-          <div className="text-2xl font-bold text-white">{stats?.novos_30_dias || 0}</div>
-          <div className="text-xs text-zinc-500 mt-1">Este mês</div>
+          <div className="text-2xl font-bold text-foreground">{stats?.novos_30_dias || 0}</div>
+          <div className="text-xs text-muted-foreground mt-1">Este mês</div>
         </div>
       </div>
 
       {/* Filters Section */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-6 mb-6">
+      <div className="bg-card border border-border rounded-xl p-6 mb-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <Filter className="w-5 h-5 text-[#22C55E]" />
-            <h3 className="text-white font-semibold">Filtros Avançados</h3>
+            <Filter className="w-5 h-5 text-primary" />
+            <h3 className="text-foreground font-semibold">Filtros Avançados</h3>
             {activeFiltersCount > 0 && (
-              <span className="px-2 py-1 bg-[#22C55E]/20 text-[#22C55E] text-xs font-medium rounded-full">
+              <span className="px-2 py-1 bg-primary/20 text-primary text-xs font-medium rounded-full">
                 {activeFiltersCount} {activeFiltersCount === 1 ? 'filtro ativo' : 'filtros ativos'}
               </span>
             )}
@@ -251,7 +251,7 @@ export function UsersManagementPage() {
             {activeFiltersCount > 0 && (
               <button
                 onClick={handleClearFilters}
-                className="flex items-center gap-2 px-4 py-2 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg transition-colors text-sm"
+                className="flex items-center gap-2 px-4 py-2 bg-destructive/10 hover:bg-destructive/20 text-destructive rounded-lg transition-colors text-sm"
               >
                 <X className="w-4 h-4" />
                 Limpar Filtros
@@ -259,7 +259,7 @@ export function UsersManagementPage() {
             )}
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 text-white rounded-lg transition-colors text-sm"
+              className="flex items-center gap-2 px-4 py-2 bg-secondary hover:bg-secondary/80 text-foreground rounded-lg transition-colors text-sm"
             >
               {showFilters ? 'Ocultar' : 'Mostrar'} Filtros
             </button>
@@ -267,15 +267,15 @@ export function UsersManagementPage() {
         </div>
 
         {showFilters && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-white/5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-border">
             {/* Filtro por Plano - Dinâmico */}
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-2">Plano</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-2">Plano</label>
               <div className="space-y-2 max-h-48 overflow-y-auto pr-2">
                 {loadingPlans ? (
-                  <div className="text-sm text-zinc-500">Carregando planos...</div>
+                  <div className="text-sm text-muted-foreground">Carregando planos...</div>
                 ) : availablePlans.length === 0 ? (
-                  <div className="text-sm text-zinc-500">Nenhum plano disponível</div>
+                  <div className="text-sm text-muted-foreground">Nenhum plano disponível</div>
                 ) : (
                   availablePlans
                     .sort((a, b) => a.ordem_exibicao - b.ordem_exibicao)
@@ -285,11 +285,11 @@ export function UsersManagementPage() {
                           type="checkbox"
                           checked={selectedPlanos.includes(plano.id)}
                           onChange={() => togglePlano(plano.id)}
-                          className="w-4 h-4 rounded border-white/10 bg-[#0A0F1C] text-[#22C55E] focus:ring-[#22C55E] focus:ring-offset-0"
+                          className="w-4 h-4 rounded border-input bg-background text-primary focus:ring-primary focus:ring-offset-0"
                         />
-                        <span className="text-sm text-white">{plano.nome}</span>
+                        <span className="text-sm text-foreground">{plano.nome}</span>
                         {!plano.ativo && (
-                          <span className="text-xs text-zinc-500">(Inativo)</span>
+                          <span className="text-xs text-muted-foreground">(Inativo)</span>
                         )}
                       </label>
                     ))
@@ -299,7 +299,7 @@ export function UsersManagementPage() {
 
             {/* Filtro por Status */}
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-2">Status</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-2">Status</label>
               <div className="space-y-2">
                 {['ativo', 'inativo', 'bloqueado'].map((status) => (
                   <label key={status} className="flex items-center gap-2 cursor-pointer">
@@ -307,9 +307,9 @@ export function UsersManagementPage() {
                       type="checkbox"
                       checked={selectedStatus.includes(status)}
                       onChange={() => toggleStatus(status)}
-                      className="w-4 h-4 rounded border-white/10 bg-[#0A0F1C] text-[#22C55E] focus:ring-[#22C55E] focus:ring-offset-0"
+                      className="w-4 h-4 rounded border-input bg-background text-primary focus:ring-primary focus:ring-offset-0"
                     />
-                    <span className="text-sm text-white capitalize">{status}</span>
+                    <span className="text-sm text-foreground capitalize">{status}</span>
                   </label>
                 ))}
               </div>
@@ -317,7 +317,7 @@ export function UsersManagementPage() {
 
             {/* Filtro por Tipo de Usuário */}
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-2">Tipo de Usuário</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-2">Tipo de Usuário</label>
               <select
                 value={filterAdmin === undefined ? '' : filterAdmin ? 'admin' : 'user'}
                 onChange={(e) => {
@@ -325,7 +325,7 @@ export function UsersManagementPage() {
                   setFilterAdmin(value === '' ? undefined : value === 'admin');
                   setCurrentPage(1);
                 }}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#22C55E]"
+                className="w-full bg-background border border-input rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-primary"
               >
                 <option value="">Todos</option>
                 <option value="admin">Apenas Admins</option>
@@ -335,7 +335,7 @@ export function UsersManagementPage() {
 
             {/* Filtro por Login */}
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-2">Conta de Login</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-2">Conta de Login</label>
               <select
                 value={filterHasPassword === undefined ? '' : filterHasPassword ? 'yes' : 'no'}
                 onChange={(e) => {
@@ -343,7 +343,7 @@ export function UsersManagementPage() {
                   setFilterHasPassword(value === '' ? undefined : value === 'yes');
                   setCurrentPage(1);
                 }}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#22C55E]"
+                className="w-full bg-background border border-input rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-primary"
               >
                 <option value="">Todos</option>
                 <option value="yes">Com Login</option>
@@ -353,7 +353,7 @@ export function UsersManagementPage() {
 
             {/* Filtro por Validade do Plano */}
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-2">Validade do Plano</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-2">Validade do Plano</label>
               <select
                 value={filterPlanoValido === undefined ? '' : filterPlanoValido ? 'valid' : 'expired'}
                 onChange={(e) => {
@@ -361,7 +361,7 @@ export function UsersManagementPage() {
                   setFilterPlanoValido(value === '' ? undefined : value === 'valid');
                   setCurrentPage(1);
                 }}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#22C55E]"
+                className="w-full bg-background border border-input rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-primary"
               >
                 <option value="">Todos</option>
                 <option value="valid">Plano Válido</option>
@@ -371,7 +371,7 @@ export function UsersManagementPage() {
 
             {/* Filtro por Último Acesso */}
             <div>
-              <label className="block text-sm font-medium text-zinc-400 mb-2">Último Acesso</label>
+              <label className="block text-sm font-medium text-muted-foreground mb-2">Último Acesso</label>
               <select
                 value={filterUltimoAcesso || ''}
                 onChange={(e) => {
@@ -379,7 +379,7 @@ export function UsersManagementPage() {
                   setFilterUltimoAcesso(value === '' ? undefined : Number(value));
                   setCurrentPage(1);
                 }}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#22C55E]"
+                className="w-full bg-background border border-input rounded-lg px-3 py-2 text-foreground text-sm focus:outline-none focus:border-primary"
               >
                 <option value="">Todos</option>
                 <option value="1">Hoje</option>
@@ -393,34 +393,34 @@ export function UsersManagementPage() {
       </div>
 
       {/* Search Bar */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-6 mb-6">
+      <div className="bg-card border border-border rounded-xl p-6 mb-6 shadow-sm">
         <div className="flex items-center gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               placeholder="Buscar usuários..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-10 pr-4 py-3 text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#22C55E]"
+              className="w-full bg-background border border-input rounded-lg pl-10 pr-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             />
           </div>
-          <div className="text-sm text-zinc-400">
-            Total: <span className="text-white font-semibold">{users.length} usuários</span>
+          <div className="text-sm text-muted-foreground">
+            Total: <span className="text-foreground font-semibold">{users.length} usuários</span>
           </div>
           <select
             value={itemsPerPage}
             onChange={(e) => setItemsPerPage(Number(e.target.value))}
-            className="bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E]"
+            className="bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary"
           >
             <option value={25}>25</option>
             <option value={50}>50</option>
             <option value={100}>100</option>
           </select>
-          <span className="text-zinc-400">por página</span>
+          <span className="text-muted-foreground">por página</span>
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center gap-2 bg-[#22C55E] hover:bg-[#16A34A] text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors"
           >
             <Plus className="w-5 h-5" />
             Adicionar Usuário
@@ -429,89 +429,89 @@ export function UsersManagementPage() {
       </div>
 
       {/* Users Table */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl overflow-hidden">
-        <div className="p-6 border-b border-white/5">
-          <h2 className="text-xl font-bold text-white">Lista de Usuários</h2>
-          <p className="text-sm text-zinc-400 mt-1">
+      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
+        <div className="p-6 border-b border-border">
+          <h2 className="text-xl font-bold text-foreground">Lista de Usuários</h2>
+          <p className="text-sm text-muted-foreground mt-1">
             Página {currentPage} de {Math.ceil((stats?.total_usuarios || 0) / itemsPerPage)} ({stats?.total_usuarios || 0} total)
           </p>
         </div>
 
         {loading ? (
-          <div className="p-12 text-center text-zinc-400">Carregando...</div>
+          <div className="p-12 text-center text-muted-foreground">Carregando...</div>
         ) : users.length === 0 ? (
-          <div className="p-12 text-center text-zinc-400">Nenhum usuário encontrado</div>
+          <div className="p-12 text-center text-muted-foreground">Nenhum usuário encontrado</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="bg-[#0A0F1C] border-b border-white/5">
+              <thead className="bg-muted/50 border-b border-border">
                 <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-zinc-400">Nome</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-zinc-400">Email</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-zinc-400">Plano</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-zinc-400">Admin</th>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-zinc-400">Status</th>
-                  <th className="px-6 py-4 text-right text-sm font-semibold text-zinc-400">Ações</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">Nome</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">Email</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">Plano</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">Admin</th>
+                  <th className="px-6 py-4 text-left text-sm font-semibold text-muted-foreground">Status</th>
+                  <th className="px-6 py-4 text-right text-sm font-semibold text-muted-foreground">Ações</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-border">
                 {users.map((user) => {
                   const daysRemaining = getDaysRemaining(user.data_final_plano);
 
                   return (
-                    <tr key={user.id} className="hover:bg-white/5 transition-colors">
+                    <tr key={user.id} className="hover:bg-muted/50 transition-colors">
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-sm">
                             {getInitials(user.nome)}
                           </div>
                           <div>
-                            <div className="text-white font-medium">{user.nome}</div>
-                            <div className="text-xs text-zinc-400">ID: #{user.id} • {formatDate(user.created_at)}</div>
+                            <div className="text-foreground font-medium">{user.nome}</div>
+                            <div className="text-xs text-muted-foreground">ID: #{user.id} • {formatDate(user.created_at)}</div>
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-white">{user.email}</div>
+                        <div className="text-foreground">{user.email}</div>
                         {user.celular && (
-                          <div className="text-xs text-zinc-400">{user.celular}</div>
+                          <div className="text-xs text-muted-foreground">{user.celular}</div>
                         )}
                         <div className="mt-1">
                           {user.has_password ? (
-                            <span className="text-xs text-green-400">✓ Conta ativa</span>
+                            <span className="text-xs text-green-600 dark:text-green-400">✓ Conta ativa</span>
                           ) : (
-                            <span className="text-xs text-orange-400">🔒 Sem conta de login</span>
+                            <span className="text-xs text-orange-600 dark:text-orange-400">🔒 Sem conta de login</span>
                           )}
                         </div>
                       </td>
                       <td className="px-6 py-4">
                         <div className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${user.plano === 'free' || !user.plano
-                            ? 'bg-zinc-500/20 text-zinc-300'
-                            : 'bg-yellow-500/20 text-yellow-300'
+                          ? 'bg-muted text-muted-foreground'
+                          : 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400'
                           }`}>
                           {user.plano || 'Free'}
                         </div>
                         {daysRemaining !== null && (
-                          <div className="text-xs text-zinc-400 mt-1">
+                          <div className="text-xs text-muted-foreground mt-1">
                             Válido: {daysRemaining} dias
                           </div>
                         )}
                       </td>
                       <td className="px-6 py-4">
                         {user.is_admin ? (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-500/20 text-purple-300">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400">
                             Admin
                           </span>
                         ) : (
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-zinc-500/20 text-zinc-400">
+                          <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">
                             Usuário
                           </span>
                         )}
                       </td>
                       <td className="px-6 py-4">
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${user.status === 'ativo'
-                            ? 'bg-green-500/20 text-green-300'
-                            : 'bg-red-500/20 text-red-300'
+                          ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                          : 'bg-red-500/10 text-red-600 dark:text-red-400'
                           }`}>
                           {user.status}
                         </span>
@@ -520,21 +520,21 @@ export function UsersManagementPage() {
                         <div className="flex items-center justify-end gap-2">
                           <button
                             onClick={() => handleEdit(user)}
-                            className="p-2 hover:bg-white/5 rounded-lg transition-colors text-blue-400"
+                            className="p-2 hover:bg-muted rounded-lg transition-colors text-blue-600 dark:text-blue-400"
                             title="Editar"
                           >
                             <Edit className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleViewDetails(user)}
-                            className="p-2 hover:bg-white/5 rounded-lg transition-colors text-green-400"
+                            className="p-2 hover:bg-muted rounded-lg transition-colors text-green-600 dark:text-green-400"
                             title="Detalhes"
                           >
                             <Eye className="w-4 h-4" />
                           </button>
                           <button
                             onClick={() => handleDelete(user)}
-                            className="p-2 hover:bg-white/5 rounded-lg transition-colors text-red-400"
+                            className="p-2 hover:bg-muted rounded-lg transition-colors text-red-600 dark:text-red-400"
                             title="Excluir"
                           >
                             <Trash2 className="w-4 h-4" />

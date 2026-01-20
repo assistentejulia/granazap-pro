@@ -78,7 +78,7 @@ export function UserEditModal({
       if (error) {
         throw error;
       }
-      
+
       setShowSuccessModal(true);
       setShowCreateLoginSection(false);
       setSenha('');
@@ -105,56 +105,56 @@ export function UserEditModal({
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Nome */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Nome *
           </label>
           <input
             type="text"
             value={formData.nome}
             onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E]"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary"
             required
           />
         </div>
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Email *
           </label>
           <input
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E]"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary"
             required
           />
         </div>
 
         {/* Celular */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Celular
           </label>
           <input
             type="text"
             value={formData.celular}
             onChange={(e) => setFormData({ ...formData, celular: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E]"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary"
             placeholder="(XX) XXXXX-XXXX"
           />
         </div>
 
         {/* Plano */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Plano *
           </label>
           <select
             value={formData.plano_id}
             onChange={(e) => setFormData({ ...formData, plano_id: Number(e.target.value) })}
             disabled={loadingPlans}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E] disabled:opacity-50"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary disabled:opacity-50"
           >
             {loadingPlans ? (
               <option>Carregando planos...</option>
@@ -170,27 +170,27 @@ export function UserEditModal({
 
         {/* Data de Compra */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Data de Compra
           </label>
           <input
             type="date"
             value={formData.data_compra ? formData.data_compra.split('T')[0] : ''}
             onChange={(e) => setFormData({ ...formData, data_compra: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E]"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary"
           />
         </div>
 
         {/* Data Final do Plano */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Data Final do Plano
           </label>
           <input
             type="date"
             value={formData.data_final_plano ? formData.data_final_plano.split('T')[0] : ''}
             onChange={(e) => setFormData({ ...formData, data_final_plano: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E]"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary"
           />
         </div>
 
@@ -236,7 +236,7 @@ export function UserEditModal({
 
                 {/* Senha */}
                 <div>
-                  <label className="block text-sm font-medium text-zinc-300 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Senha *
                   </label>
                   <div className="relative">
@@ -263,7 +263,7 @@ export function UserEditModal({
 
                 {/* Confirmar Senha */}
                 <div>
-                  <label className="block text-sm font-medium text-zinc-300 mb-2">
+                  <label className="block text-sm font-medium text-muted-foreground mb-2">
                     Confirmar Senha *
                   </label>
                   <div className="relative">
@@ -304,30 +304,30 @@ export function UserEditModal({
         )}
 
         {/* Administrador */}
-        <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-4">
+        <div className="bg-card border border-border rounded-xl p-4">
           <label className="flex items-center justify-between cursor-pointer">
             <div>
-              <div className="text-white font-medium">Administrador</div>
-              <div className="text-sm text-zinc-400">Usuário terá acesso ao painel administrativo</div>
+              <div className="text-foreground font-medium">Administrador</div>
+              <div className="text-sm text-muted-foreground">Usuário terá acesso ao painel administrativo</div>
             </div>
             <input
               type="checkbox"
               checked={formData.is_admin}
               onChange={(e) => setFormData({ ...formData, is_admin: e.target.checked })}
-              className="w-5 h-5 rounded border-white/10 bg-[#0A0F1C] text-[#22C55E] focus:ring-[#22C55E]"
+              className="w-5 h-5 rounded border-input bg-background text-primary focus:ring-primary"
             />
           </label>
         </div>
 
         {/* Status */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Status *
           </label>
           <select
             value={formData.status}
             onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E]"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary"
           >
             <option value="ativo">Ativo</option>
             <option value="inativo">Inativo</option>
@@ -340,14 +340,14 @@ export function UserEditModal({
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            className="flex-1 bg-secondary hover:bg-secondary/80 text-secondary-foreground px-6 py-3 rounded-lg font-medium transition-colors"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="flex-1 bg-[#22C55E] hover:bg-[#16A34A] text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
+            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
           >
             {saving ? 'Salvando...' : 'Salvar Alterações'}
           </button>

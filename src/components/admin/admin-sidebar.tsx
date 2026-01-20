@@ -32,14 +32,14 @@ export function AdminSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 bg-[#111827] border-r border-white/5 flex flex-col">
+    <aside className="w-64 bg-card border-r border-border flex flex-col">
       {/* Header */}
-      <div className="p-6 border-b border-white/5">
+      <div className="p-6 border-b border-border">
         <div className="flex items-center gap-2 mb-2">
           <Shield className="w-6 h-6 text-primary" />
-          <h1 className="text-xl font-bold text-white">Admin Panel</h1>
+          <h1 className="text-xl font-bold text-foreground">Admin Panel</h1>
         </div>
-        <p className="text-sm text-zinc-400">Painel Administrativo</p>
+        <p className="text-sm text-muted-foreground">Painel Administrativo</p>
       </div>
 
       {/* Menu */}
@@ -55,8 +55,8 @@ export function AdminSidebar() {
               className={cn(
                 "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
                 isActive
-                  ? "bg-primary text-white"
-                  : "text-zinc-400 hover:bg-white/5 hover:text-white"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
               )}
             >
               <Icon className="w-5 h-5" />
@@ -67,10 +67,10 @@ export function AdminSidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-white/5">
+      <div className="p-4 border-t border-border">
         <Link
           href="/dashboard"
-          className="flex items-center gap-3 px-4 py-3 rounded-lg text-zinc-400 hover:bg-white/5 hover:text-white transition-colors"
+          className="flex items-center gap-3 px-4 py-3 rounded-lg text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
         >
           <ArrowLeft className="w-5 h-5" />
           <span className="font-medium">Voltar ao Dashboard</span>

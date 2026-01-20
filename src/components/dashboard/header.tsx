@@ -82,17 +82,37 @@ export function DashboardHeader() {
                 <div className="absolute top-full right-0 mt-2 w-80 bg-popover border border-border rounded-lg shadow-xl z-50 overflow-hidden">
                   <div className="p-3 border-b border-border flex justify-between items-center">
                     <h3 className="font-semibold text-sm">Notificações</h3>
-                    <span className="text-xs text-muted-foreground">Marcar todas como lidas</span>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowNotifications(false);
+                      }}
+                      className="text-xs text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                    >
+                      Marcar todas como lidas
+                    </button>
                   </div>
                   <div className="max-h-[300px] overflow-y-auto">
-                    <div className="p-4 border-b border-border/50 hover:bg-accent/50 transition-colors cursor-pointer">
-                      <p className="text-sm font-medium">Bem-vindo ao GranaZap Pro!</p>
+                    <div
+                      className="p-4 border-b border-border/50 hover:bg-accent/50 transition-colors cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setShowNotifications(false);
+                      }}
+                    >
+                      <p className="text-sm font-medium">Bem Vindo (a) a Assistente Julia</p>
                       <p className="text-xs text-muted-foreground mt-1">Configure suas contas e cartões para começar.</p>
                       <p className="text-[10px] text-muted-foreground mt-2">Há 2 minutos</p>
                     </div>
-                    <div className="p-4 border-b border-border/50 hover:bg-accent/50 transition-colors cursor-pointer">
+                    <div
+                      className="p-4 border-b border-border/50 hover:bg-accent/50 transition-colors cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.location.href = '/dashboard/categorias';
+                      }}
+                    >
                       <p className="text-sm font-medium">Dica do Dia</p>
-                      <p className="text-xs text-muted-foreground mt-1">Você pode personalizar categorias na página de configurações.</p>
+                      <p className="text-xs text-muted-foreground mt-1">Você pode personalizar categorias na tela de Categorias.</p>
                       <p className="text-[10px] text-muted-foreground mt-2">Há 1 hora</p>
                     </div>
                   </div>

@@ -22,9 +22,9 @@ export function WebhookSettings() {
         .select('webhook_convite_membro')
         .eq('id', 1)
         .single();
-      
+
       if (error) throw error;
-      
+
       if (data) {
         setWebhookUrl(data.webhook_convite_membro || '');
       }
@@ -55,20 +55,20 @@ export function WebhookSettings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+        <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
           <Webhook className="w-6 h-6 text-blue-500" />
           Webhook N8N - Convites de Membros
         </h2>
-        <p className="text-sm text-zinc-400 mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Configure o webhook do N8N para enviar convites via WhatsApp quando adicionar novos membros à equipe.
         </p>
       </div>
 
       {/* Card de Configurações */}
-      <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 space-y-6">
+      <div className="bg-card border border-border rounded-xl p-6 space-y-6">
         {/* URL do Webhook */}
         <div>
-          <label className="block text-sm font-medium text-white mb-2">
+          <label className="block text-sm font-medium text-foreground mb-2">
             URL do Webhook N8N
           </label>
           <input
@@ -76,18 +76,18 @@ export function WebhookSettings() {
             value={webhookUrl}
             onChange={(e) => setWebhookUrl(e.target.value)}
             placeholder="https://seu-n8n.com/webhook/convite-membro"
-            className="w-full px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-blue-500"
+            className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-blue-500"
           />
-          <p className="text-xs text-zinc-500 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             Cole aqui a URL do webhook do seu N8N. Este webhook receberá os dados do convite quando você clicar em "Enviar convite WhatsApp".
           </p>
         </div>
 
         {/* Informações sobre os dados enviados */}
-        <div className="bg-zinc-950 border border-zinc-800 rounded-lg p-4">
-          <h3 className="text-white font-medium mb-3 text-sm">📦 Dados Enviados ao Webhook</h3>
-          <div className="space-y-2 text-xs text-zinc-400 font-mono">
-            <div className="bg-zinc-900 p-3 rounded border border-zinc-800">
+        <div className="bg-muted border border-border rounded-lg p-4">
+          <h3 className="text-foreground font-medium mb-3 text-sm">📦 Dados Enviados ao Webhook</h3>
+          <div className="space-y-2 text-xs text-muted-foreground font-mono">
+            <div className="bg-background border border-input p-3 rounded">
               <pre className="whitespace-pre-wrap">{`{
   "admin": {
     "id": 123,
@@ -105,7 +105,7 @@ export function WebhookSettings() {
 }`}</pre>
             </div>
           </div>
-          <p className="text-xs text-zinc-500 mt-3">
+          <p className="text-xs text-muted-foreground mt-3">
             Use esses dados no N8N para personalizar a mensagem do WhatsApp e enviar o convite.
           </p>
         </div>

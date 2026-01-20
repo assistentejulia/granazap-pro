@@ -79,7 +79,7 @@ export function UserDetailsModal({
       if (error) {
         throw new Error(error.message || 'Erro ao resetar senha');
       }
-      
+
       // Mostrar modal de sucesso
       setShowSuccessModal(true);
       onRefresh();
@@ -96,46 +96,45 @@ export function UserDetailsModal({
     <Modal isOpen={isOpen} onClose={onClose} title="Detalhes Completos do Usuário">
       <div className="space-y-6">
         {/* Informações Pessoais */}
-        <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <span>👤</span> Informações Pessoais
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-sm text-zinc-400">ID:</div>
-              <div className="text-white font-medium">#{user.id}</div>
+              <div className="text-sm text-muted-foreground">ID:</div>
+              <div className="text-foreground font-medium">#{user.id}</div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Nome:</div>
-              <div className="text-white font-medium">{user.nome}</div>
+              <div className="text-sm text-muted-foreground">Nome:</div>
+              <div className="text-foreground font-medium">{user.nome}</div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Email:</div>
-              <div className="text-white font-medium">{user.email}</div>
+              <div className="text-sm text-muted-foreground">Email:</div>
+              <div className="text-foreground font-medium">{user.email}</div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Celular:</div>
-              <div className="text-white font-medium">{user.celular || '-'}</div>
+              <div className="text-sm text-muted-foreground">Celular:</div>
+              <div className="text-foreground font-medium">{user.celular || '-'}</div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Status:</div>
+              <div className="text-sm text-muted-foreground">Status:</div>
               <div>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                  user.status === 'ativo'
-                    ? 'bg-green-500/20 text-green-300'
-                    : 'bg-red-500/20 text-red-300'
-                }`}>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${user.status === 'ativo'
+                    ? 'bg-green-500/10 text-green-600 dark:text-green-400'
+                    : 'bg-red-500/10 text-red-600 dark:text-red-400'
+                  }`}>
                   {user.status}
                 </span>
               </div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Login:</div>
+              <div className="text-sm text-muted-foreground">Login:</div>
               <div>
                 {user.has_password ? (
-                  <span className="text-green-400">✓ Conta ativa</span>
+                  <span className="text-green-600 dark:text-green-400">✓ Conta ativa</span>
                 ) : (
-                  <span className="text-orange-400">🔒 Sem conta de login</span>
+                  <span className="text-orange-600 dark:text-orange-400">🔒 Sem conta de login</span>
                 )}
               </div>
             </div>
@@ -143,40 +142,39 @@ export function UserDetailsModal({
         </div>
 
         {/* Plano e Permissões */}
-        <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <span>👑</span> Plano e Permissões
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-sm text-zinc-400">Plano:</div>
+              <div className="text-sm text-muted-foreground">Plano:</div>
               <div>
-                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
-                  user.plano === 'free' || !user.plano
-                    ? 'bg-zinc-500/20 text-zinc-300'
-                    : 'bg-yellow-500/20 text-yellow-300'
-                }`}>
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${user.plano === 'free' || !user.plano
+                    ? 'bg-muted text-muted-foreground'
+                    : 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400'
+                  }`}>
                   {user.plano || 'Free'}
                 </span>
               </div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Tipo:</div>
+              <div className="text-sm text-muted-foreground">Tipo:</div>
               <div>
                 {user.is_admin ? (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-500/20 text-purple-300">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-500/10 text-purple-600 dark:text-purple-400">
                     Administrador
                   </span>
                 ) : (
-                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-zinc-500/20 text-zinc-400">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">
                     Usuário
                   </span>
                 )}
               </div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Validade:</div>
-              <div className="text-white font-medium">
+              <div className="text-sm text-muted-foreground">Validade:</div>
+              <div className="text-foreground font-medium">
                 {daysRemaining !== null ? `${daysRemaining} dias` : '-'}
               </div>
             </div>
@@ -184,26 +182,26 @@ export function UserDetailsModal({
         </div>
 
         {/* Histórico de Datas */}
-        <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <span>📅</span> Histórico de Datas
           </h3>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-sm text-zinc-400">Cadastro:</div>
-              <div className="text-white font-medium">{formatDate(user.created_at)}</div>
+              <div className="text-sm text-muted-foreground">Cadastro:</div>
+              <div className="text-foreground font-medium">{formatDate(user.created_at)}</div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Compra do Plano:</div>
-              <div className="text-white font-medium">{formatDate(user.data_compra)}</div>
+              <div className="text-sm text-muted-foreground">Compra do Plano:</div>
+              <div className="text-foreground font-medium">{formatDate(user.data_compra)}</div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Fim do Plano:</div>
-              <div className="text-white font-medium">{formatDate(user.data_final_plano)}</div>
+              <div className="text-sm text-muted-foreground">Fim do Plano:</div>
+              <div className="text-foreground font-medium">{formatDate(user.data_final_plano)}</div>
             </div>
             <div>
-              <div className="text-sm text-zinc-400">Último Acesso:</div>
-              <div className="text-green-400 font-medium">{formatDateTime(user.data_ultimo_acesso)}</div>
+              <div className="text-sm text-muted-foreground">Último Acesso:</div>
+              <div className="text-green-600 dark:text-green-400 font-medium">{formatDateTime(user.data_ultimo_acesso)}</div>
             </div>
           </div>
         </div>

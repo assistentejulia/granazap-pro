@@ -90,120 +90,119 @@ export function PlansManagementPage() {
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
-            <CreditCard className="w-8 h-8 text-[#22C55E]" />
-            <h1 className="text-3xl font-bold text-white">Gestão de Planos</h1>
+            <CreditCard className="w-8 h-8 text-primary" />
+            <h1 className="text-3xl font-bold text-foreground">Gestão de Planos</h1>
           </div>
           <button
             onClick={() => setIsCreateModalOpen(true)}
-            className="flex items-center gap-2 bg-[#22C55E] hover:bg-[#16A34A] text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors"
           >
             <Plus className="w-5 h-5" />
             Novo Plano
           </button>
         </div>
-        <p className="text-zinc-400">Gerencie os planos disponíveis na plataforma</p>
+        <p className="text-muted-foreground">Gerencie os planos disponíveis na plataforma</p>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
-          <div className="text-sm text-zinc-400 mb-1">Total de Planos</div>
-          <div className="text-3xl font-bold text-white">{plans.length}</div>
+        <div className="bg-card border border-border rounded-xl p-6">
+          <div className="text-sm text-muted-foreground mb-1">Total de Planos</div>
+          <div className="text-3xl font-bold text-foreground">{plans.length}</div>
         </div>
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
-          <div className="text-sm text-zinc-400 mb-1">Planos Ativos</div>
-          <div className="text-3xl font-bold text-green-400">{plans.filter(p => p.ativo).length}</div>
+        <div className="bg-card border border-border rounded-xl p-6">
+          <div className="text-sm text-muted-foreground mb-1">Planos Ativos</div>
+          <div className="text-3xl font-bold text-green-600 dark:text-green-400">{plans.filter(p => p.ativo).length}</div>
         </div>
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
-          <div className="text-sm text-zinc-400 mb-1">Planos Inativos</div>
-          <div className="text-3xl font-bold text-red-400">{plans.filter(p => !p.ativo).length}</div>
+        <div className="bg-card border border-border rounded-xl p-6">
+          <div className="text-sm text-muted-foreground mb-1">Planos Inativos</div>
+          <div className="text-3xl font-bold text-red-600 dark:text-red-400">{plans.filter(p => !p.ativo).length}</div>
         </div>
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
-          <div className="text-sm text-zinc-400 mb-1">Planos Pagos</div>
-          <div className="text-3xl font-bold text-blue-400">{plans.filter(p => p.valor > 0).length}</div>
+        <div className="bg-card border border-border rounded-xl p-6">
+          <div className="text-sm text-muted-foreground mb-1">Planos Pagos</div>
+          <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">{plans.filter(p => p.valor > 0).length}</div>
         </div>
       </div>
 
       {/* Plans Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {loading ? (
-          <div className="col-span-full text-center py-12 text-zinc-400">Carregando...</div>
+          <div className="col-span-full text-center py-12 text-muted-foreground">Carregando...</div>
         ) : plans.length === 0 ? (
-          <div className="col-span-full text-center py-12 text-zinc-400">Nenhum plano encontrado</div>
+          <div className="col-span-full text-center py-12 text-muted-foreground">Nenhum plano encontrado</div>
         ) : (
           plans.map((plan) => (
             <div
               key={plan.id}
-              className={`bg-[#111827] border ${plan.ativo ? 'border-[#22C55E]/20' : 'border-white/5'} rounded-xl p-6 hover:border-[#22C55E]/40 transition-colors`}
+              className={`bg-card border ${plan.ativo ? 'border-primary/20' : 'border-border'} rounded-xl p-6 hover:border-primary/40 transition-colors`}
             >
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <h3 className="text-xl font-bold text-white">{plan.nome}</h3>
+                    <h3 className="text-xl font-bold text-foreground">{plan.nome}</h3>
                     {plan.destaque && (
-                      <div className="bg-yellow-500/20 p-1 rounded-full" title="Plano Destaque">
-                        <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                      <div className="bg-yellow-500/10 p-1 rounded-full" title="Plano Destaque">
+                        <Star className="w-4 h-4 text-yellow-600 dark:text-yellow-400 fill-yellow-600 dark:fill-yellow-400" />
                       </div>
                     )}
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${
-                      plan.ativo ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'
-                    }`}>
+                    <span className={`px-2 py-1 rounded text-xs font-medium ${plan.ativo ? 'bg-green-500/10 text-green-600 dark:text-green-400' : 'bg-red-500/10 text-red-600 dark:text-red-400'
+                      }`}>
                       {plan.ativo ? 'Ativo' : 'Inativo'}
                     </span>
-                    <span className="px-2 py-1 rounded text-xs font-medium bg-blue-500/20 text-blue-400">
+                    <span className="px-2 py-1 rounded text-xs font-medium bg-blue-500/10 text-blue-600 dark:text-blue-400">
                       {getPeriodLabel(plan.tipo_periodo)}
                     </span>
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-2xl font-bold text-[#22C55E]">
+                  <div className="text-2xl font-bold text-primary">
                     {plan.valor === 0 ? 'Grátis' : formatCurrency(plan.valor)}
                   </div>
-                  <div className="text-xs text-zinc-500">Ordem: {plan.ordem_exibicao}</div>
+                  <div className="text-xs text-muted-foreground">Ordem: {plan.ordem_exibicao}</div>
                 </div>
               </div>
 
               {/* Description */}
-              <p className="text-sm text-zinc-400 mb-4 line-clamp-2">{plan.descricao}</p>
+              <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{plan.descricao}</p>
 
               {/* Resources */}
               <div className="mb-4">
-                <div className="text-xs text-zinc-500 mb-2">Recursos ({plan.recursos?.length || 0}):</div>
+                <div className="text-xs text-muted-foreground mb-2">Recursos ({plan.recursos?.length || 0}):</div>
                 <div className="space-y-1">
                   {plan.recursos?.slice(0, 3).map((recurso, idx) => (
-                    <div key={idx} className="text-xs text-zinc-400 flex items-center gap-2">
-                      <span className="text-[#22C55E]">✓</span>
+                    <div key={idx} className="text-xs text-muted-foreground flex items-center gap-2">
+                      <span className="text-primary">✓</span>
                       <span className="line-clamp-1">{recurso}</span>
                     </div>
                   ))}
                   {plan.recursos?.length > 3 && (
-                    <div className="text-xs text-zinc-500">+{plan.recursos.length - 3} mais...</div>
+                    <div className="text-xs text-muted-foreground">+{plan.recursos.length - 3} mais...</div>
                   )}
                 </div>
               </div>
 
               {/* Sharing Info */}
               {plan.permite_compartilhamento && (
-                <div className="mb-4 p-2 bg-blue-500/10 border border-blue-500/20 rounded text-xs text-blue-400">
+                <div className="mb-4 p-2 bg-blue-500/10 border border-blue-500/20 rounded text-xs text-blue-600 dark:text-blue-400">
                   👥 Permite {plan.max_usuarios_dependentes === -1 ? 'ilimitados' : plan.max_usuarios_dependentes} dependentes
                 </div>
               )}
 
               {/* Actions */}
-              <div className="flex gap-2 pt-4 border-t border-white/5">
+              <div className="flex gap-2 pt-4 border-t border-border">
                 <button
                   onClick={() => handleEdit(plan)}
-                  className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="flex-1 flex items-center justify-center gap-2 bg-secondary hover:bg-secondary/80 text-secondary-foreground px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   <Edit className="w-4 h-4" />
                   Editar
                 </button>
                 <button
                   onClick={() => handleDelete(plan)}
-                  className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="flex items-center justify-center gap-2 bg-destructive hover:bg-destructive/90 text-destructive-foreground px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

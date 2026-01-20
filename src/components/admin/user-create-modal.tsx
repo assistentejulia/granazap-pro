@@ -44,7 +44,7 @@ export function UserCreateModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validar senhas se criar_login estiver marcado
     if (formData.criar_login) {
       if (!formData.senha || formData.senha.length < 6) {
@@ -56,12 +56,12 @@ export function UserCreateModal({
         return;
       }
     }
-    
+
     setSaving(true);
     try {
       // Converter plano para plano_id
       const planoId = plans.find(p => p.tipo_periodo === formData.plano)?.id;
-      
+
       await onSave({
         nome: formData.nome,
         email: formData.email,
@@ -72,10 +72,10 @@ export function UserCreateModal({
         criar_login: formData.criar_login,
         senha: formData.criar_login ? formData.senha : undefined,
       });
-      
+
       // Mostrar modal de sucesso
       setShowSuccessModal(true);
-      
+
       // Reset form
       setFormData({
         nome: '',
@@ -95,18 +95,18 @@ export function UserCreateModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Criar Novo Usuário">
       <p className="text-zinc-400 mb-6">Preencha os dados para criar um novo usuário</p>
-      
+
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Nome */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Nome *
           </label>
           <input
             type="text"
             value={formData.nome}
             onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#22C55E]"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             placeholder="Nome do usuário"
             required
           />
@@ -114,14 +114,14 @@ export function UserCreateModal({
 
         {/* Email */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Email *
           </label>
           <input
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#22C55E]"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             placeholder="email@exemplo.com"
             required
           />
@@ -129,29 +129,29 @@ export function UserCreateModal({
 
         {/* Celular */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Celular
           </label>
           <input
             type="text"
             value={formData.celular}
             onChange={(e) => setFormData({ ...formData, celular: e.target.value })}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-zinc-500 focus:outline-none focus:border-[#22C55E]"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             placeholder="(XX) XXXXX-XXXX"
           />
-          <p className="text-xs text-zinc-500 mt-1">Formato: (XX) XXXXX-XXXX • Salvo como: 55</p>
+          <p className="text-xs text-muted-foreground mt-1">Formato: (XX) XXXXX-XXXX • Salvo como: 55</p>
         </div>
 
         {/* Plano */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-muted-foreground mb-2">
             Plano *
           </label>
           <select
             value={formData.plano}
             onChange={(e) => setFormData({ ...formData, plano: e.target.value })}
             disabled={loadingPlans}
-            className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E] disabled:opacity-50"
+            className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary disabled:opacity-50"
           >
             {loadingPlans ? (
               <option>Carregando planos...</option>
@@ -166,17 +166,17 @@ export function UserCreateModal({
         </div>
 
         {/* Criar Conta de Autenticação */}
-        <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-4">
+        <div className="bg-card border border-border rounded-xl p-4">
           <label className="flex items-center justify-between cursor-pointer mb-3">
             <div>
               <div className="text-orange-400 font-medium">🔒 Criar Conta de Login</div>
-              <div className="text-xs text-zinc-400 mt-1">Permitir que o usuário faça login no sistema</div>
+              <div className="text-xs text-muted-foreground mt-1">Permitir que o usuário faça login no sistema</div>
             </div>
             <input
               type="checkbox"
               checked={formData.criar_login}
               onChange={(e) => setFormData({ ...formData, criar_login: e.target.checked })}
-              className="w-5 h-5 rounded border-white/10 bg-[#0A0F1C] text-orange-500 focus:ring-orange-500"
+              className="w-5 h-5 rounded border-input bg-background text-orange-500 focus:ring-orange-500"
             />
           </label>
 
@@ -185,7 +185,7 @@ export function UserCreateModal({
             <div className="space-y-4 mt-4 pt-4 border-t border-white/10">
               {/* Senha */}
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
+                <label className="block text-sm font-medium text-muted-foreground mb-2">
                   Senha *
                 </label>
                 <div className="relative">
@@ -196,7 +196,7 @@ export function UserCreateModal({
                     placeholder="Mínimo 6 caracteres"
                     required={formData.criar_login}
                     minLength={6}
-                    className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 pr-12 text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500"
+                    className="w-full bg-background border border-input rounded-lg px-4 py-3 pr-12 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-orange-500"
                   />
                   <button
                     type="button"
@@ -214,7 +214,7 @@ export function UserCreateModal({
 
               {/* Confirmar Senha */}
               <div>
-                <label className="block text-sm font-medium text-zinc-300 mb-2">
+                <label className="block text-sm font-medium text-muted-foreground mb-2">
                   Confirmar Senha *
                 </label>
                 <div className="relative">
@@ -225,7 +225,7 @@ export function UserCreateModal({
                     placeholder="Digite a senha novamente"
                     required={formData.criar_login}
                     minLength={6}
-                    className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 pr-12 text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500"
+                    className="w-full bg-background border border-input rounded-lg px-4 py-3 pr-12 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-orange-500"
                   />
                   <button
                     type="button"
@@ -245,26 +245,26 @@ export function UserCreateModal({
         </div>
 
         {/* Administrador */}
-        <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-4">
+        <div className="bg-card border border-border rounded-xl p-4">
           <label className="flex items-center justify-between cursor-pointer">
             <div>
-              <div className="text-white font-medium">Administrador</div>
-              <div className="text-sm text-zinc-400">Usuário terá acesso ao painel administrativo</div>
+              <div className="text-foreground font-medium">Administrador</div>
+              <div className="text-sm text-muted-foreground">Usuário terá acesso ao painel administrativo</div>
             </div>
             <input
               type="checkbox"
               checked={formData.is_admin}
               onChange={(e) => setFormData({ ...formData, is_admin: e.target.checked })}
-              className="w-5 h-5 rounded border-white/10 bg-[#0A0F1C] text-[#22C55E] focus:ring-[#22C55E]"
+              className="w-5 h-5 rounded border-input bg-background text-primary focus:ring-primary"
             />
           </label>
         </div>
 
         {/* Status */}
-        <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-4">
-          <div className="text-sm text-zinc-400 mb-1">Status *</div>
-          <div className="text-white font-medium">Ativo</div>
-          <p className="text-xs text-zinc-500 mt-1">O usuário será criado com status ativo</p>
+        <div className="bg-card border border-border rounded-xl p-4">
+          <div className="text-sm text-muted-foreground mb-1">Status *</div>
+          <div className="text-foreground font-medium">Ativo</div>
+          <p className="text-xs text-muted-foreground mt-1">O usuário será criado com status ativo</p>
         </div>
 
         {/* Actions */}
@@ -272,14 +272,14 @@ export function UserCreateModal({
           <button
             type="button"
             onClick={onClose}
-            className="flex-1 bg-zinc-700 hover:bg-zinc-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+            className="flex-1 bg-secondary hover:bg-secondary/80 text-secondary-foreground px-6 py-3 rounded-lg font-medium transition-colors"
           >
             Cancelar
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="flex-1 bg-[#22C55E] hover:bg-[#16A34A] text-white px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
+            className="flex-1 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-medium transition-colors disabled:opacity-50"
           >
             {saving ? 'Criando...' : 'Criar Usuário'}
           </button>

@@ -10,7 +10,7 @@ export function LogoSettings() {
   const { settings } = useBranding();
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  
+
   const [showSidebarLogo, setShowSidebarLogo] = useState(false);
   const [showSidebarName, setShowSidebarName] = useState(true);
   const [showLoginLogo, setShowLoginLogo] = useState(false);
@@ -39,7 +39,7 @@ export function LogoSettings() {
   }, [settings]);
 
   const handleSave = async () => {
-    
+
     setLoading(true);
     try {
       const result = await updateLogoSettings({
@@ -74,40 +74,38 @@ export function LogoSettings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+        <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
           <Image className="w-6 h-6 text-purple-500" />
           Configurações de Logo e Nome
         </h2>
-        <p className="text-sm text-zinc-400 mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Controle a exibição de logo e nome da plataforma na sidebar e tela de login
         </p>
       </div>
 
       {/* Card de Configurações */}
-      <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 space-y-6">
-        
+      <div className="bg-card border border-border rounded-xl p-6 space-y-6">
+
         {/* Sidebar */}
         <div className="space-y-4">
-          <h3 className="text-white font-medium text-lg border-b border-zinc-800 pb-2">
+          <h3 className="text-foreground font-medium text-lg border-b border-border pb-2">
             Sidebar (Menu Lateral)
           </h3>
-          
+
           {/* Mostrar Logo Sidebar */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Eye className="w-4 h-4 text-zinc-400" />
-              <span className="text-white text-sm">Mostrar Logo na Sidebar</span>
+              <Eye className="w-4 h-4 text-muted-foreground" />
+              <span className="text-foreground text-sm">Mostrar Logo na Sidebar</span>
             </div>
             <button
               onClick={() => setShowSidebarLogo(!showSidebarLogo)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                showSidebarLogo ? 'bg-purple-600' : 'bg-zinc-700'
-              }`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showSidebarLogo ? 'bg-purple-600' : 'bg-secondary'
+                }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  showSidebarLogo ? 'translate-x-6' : 'translate-x-1'
-                }`}
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showSidebarLogo ? 'translate-x-6' : 'translate-x-1'
+                  }`}
               />
             </button>
           </div>
@@ -115,7 +113,7 @@ export function LogoSettings() {
           {/* URL Logo Sidebar */}
           {showSidebarLogo && (
             <div>
-              <label className="block text-sm font-medium text-white mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 URL do Logo (Sidebar)
               </label>
               <input
@@ -123,11 +121,11 @@ export function LogoSettings() {
                 value={logoUrlSidebar}
                 onChange={(e) => setLogoUrlSidebar(e.target.value)}
                 placeholder="https://..."
-                className="w-full px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500"
+                className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-purple-500"
               />
-              <p className="text-xs text-zinc-500 mt-2">
-                📐 <strong>Tamanho recomendado:</strong> 180x40px (largura x altura)<br/>
-                📁 <strong>Formatos:</strong> PNG, SVG, WebP (fundo transparente recomendado)<br/>
+              <p className="text-xs text-muted-foreground mt-2">
+                📐 <strong>Tamanho recomendado:</strong> 180x40px (largura x altura)<br />
+                📁 <strong>Formatos:</strong> PNG, SVG, WebP (fundo transparente recomendado)<br />
                 💡 <strong>Dica:</strong> Use <a href="https://realfavicongenerator.net/" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 underline">RealFaviconGenerator</a> para gerar logos otimizados
               </p>
             </div>
@@ -137,37 +135,35 @@ export function LogoSettings() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               {showSidebarName ? (
-                <Eye className="w-4 h-4 text-zinc-400" />
+                <Eye className="w-4 h-4 text-muted-foreground" />
               ) : (
-                <EyeOff className="w-4 h-4 text-zinc-400" />
+                <EyeOff className="w-4 h-4 text-muted-foreground" />
               )}
-              <span className="text-white text-sm">Mostrar Nome na Sidebar</span>
+              <span className="text-foreground text-sm">Mostrar Nome na Sidebar</span>
             </div>
             <button
               onClick={() => setShowSidebarName(!showSidebarName)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                showSidebarName ? 'bg-purple-600' : 'bg-zinc-700'
-              }`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showSidebarName ? 'bg-purple-600' : 'bg-secondary'
+                }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  showSidebarName ? 'translate-x-6' : 'translate-x-1'
-                }`}
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showSidebarName ? 'translate-x-6' : 'translate-x-1'
+                  }`}
               />
             </button>
           </div>
         </div>
 
-        <div className="border-t border-zinc-800"></div>
+        <div className="border-t border-border"></div>
 
         {/* Favicon */}
         <div className="space-y-4">
-          <h3 className="text-white font-medium text-lg border-b border-zinc-800 pb-2">
+          <h3 className="text-foreground font-medium text-lg border-b border-border pb-2">
             Favicon (Ícone da Aba do Navegador)
           </h3>
-          
+
           <div>
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               URL do Favicon
             </label>
             <input
@@ -175,36 +171,36 @@ export function LogoSettings() {
               value={faviconUrl}
               onChange={(e) => setFaviconUrl(e.target.value)}
               placeholder="https://..."
-              className="w-full px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500"
+              className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-purple-500"
             />
-            <p className="text-xs text-zinc-500 mt-2">
-              📐 <strong>Tamanho recomendado:</strong> 32x32px ou 64x64px (quadrado)<br/>
-              📁 <strong>Formatos:</strong> PNG, ICO, SVG<br/>
+            <p className="text-xs text-muted-foreground mt-2">
+              📐 <strong>Tamanho recomendado:</strong> 32x32px ou 64x64px (quadrado)<br />
+              📁 <strong>Formatos:</strong> PNG, ICO, SVG<br />
               💡 <strong>Dica:</strong> Use <a href="https://realfavicongenerator.net/" target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 underline">RealFaviconGenerator</a> para gerar favicons otimizados para todos os dispositivos
             </p>
-            
+
             {faviconUrl && (
-              <div className="mt-3 p-3 bg-zinc-950 border border-zinc-800 rounded-lg">
-                <p className="text-xs text-zinc-400 mb-2">Preview:</p>
+              <div className="mt-3 p-3 bg-muted border border-border rounded-lg">
+                <p className="text-xs text-muted-foreground mb-2">Preview:</p>
                 <div className="flex items-center gap-2">
                   <img src={faviconUrl} alt="Favicon" className="w-8 h-8" onError={(e) => e.currentTarget.style.display = 'none'} />
-                  <span className="text-sm text-zinc-300">Este ícone aparecerá na aba do navegador</span>
+                  <span className="text-sm text-muted-foreground">Este ícone aparecerá na aba do navegador</span>
                 </div>
               </div>
             )}
           </div>
         </div>
 
-        <div className="border-t border-zinc-800"></div>
+        <div className="border-t border-border"></div>
 
         {/* PWA Icons */}
         <div className="space-y-4">
-          <h3 className="text-white font-medium text-lg border-b border-zinc-800 pb-2">
+          <h3 className="text-foreground font-medium text-lg border-b border-border pb-2">
             Ícones PWA (Progressive Web App)
           </h3>
-          
+
           <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-4 mb-4">
-            <p className="text-sm text-blue-200">
+            <p className="text-sm text-blue-500">
               <strong>💡 Importante:</strong> Estes ícones aparecem quando o usuário instala o app no celular/desktop.
               Se não configurados, o sistema usará o favicon como fallback.
             </p>
@@ -212,7 +208,7 @@ export function LogoSettings() {
 
           {/* PWA Icon 192x192 */}
           <div>
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Ícone PWA 192x192px
             </label>
             <input
@@ -220,16 +216,16 @@ export function LogoSettings() {
               value={pwaIcon192Url}
               onChange={(e) => setPwaIcon192Url(e.target.value)}
               placeholder="https://..."
-              className="w-full px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500"
+              className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-purple-500"
             />
-            <p className="text-xs text-zinc-500 mt-2">
-              📐 <strong>Tamanho:</strong> 192x192px (quadrado)<br/>
-              📁 <strong>Formatos:</strong> PNG com fundo sólido ou transparente<br/>
+            <p className="text-xs text-muted-foreground mt-2">
+              📐 <strong>Tamanho:</strong> 192x192px (quadrado)<br />
+              📁 <strong>Formatos:</strong> PNG com fundo sólido ou transparente<br />
               💡 <strong>Uso:</strong> Ícone principal do app instalado (Android/Chrome)
             </p>
             {pwaIcon192Url && (
-              <div className="mt-3 p-3 bg-zinc-950 border border-zinc-800 rounded-lg">
-                <p className="text-xs text-zinc-400 mb-2">Preview:</p>
+              <div className="mt-3 p-3 bg-muted border border-border rounded-lg">
+                <p className="text-xs text-muted-foreground mb-2">Preview:</p>
                 <img src={pwaIcon192Url} alt="PWA Icon 192" className="w-12 h-12 rounded-lg" onError={(e) => e.currentTarget.style.display = 'none'} />
               </div>
             )}
@@ -237,7 +233,7 @@ export function LogoSettings() {
 
           {/* PWA Icon 512x512 */}
           <div>
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Ícone PWA 512x512px
             </label>
             <input
@@ -245,16 +241,16 @@ export function LogoSettings() {
               value={pwaIcon512Url}
               onChange={(e) => setPwaIcon512Url(e.target.value)}
               placeholder="https://..."
-              className="w-full px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500"
+              className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-purple-500"
             />
-            <p className="text-xs text-zinc-500 mt-2">
-              📐 <strong>Tamanho:</strong> 512x512px (quadrado)<br/>
-              📁 <strong>Formatos:</strong> PNG com fundo sólido ou transparente<br/>
+            <p className="text-xs text-muted-foreground mt-2">
+              📐 <strong>Tamanho:</strong> 512x512px (quadrado)<br />
+              📁 <strong>Formatos:</strong> PNG com fundo sólido ou transparente<br />
               💡 <strong>Uso:</strong> Ícone de alta resolução (splash screen, app drawer)
             </p>
             {pwaIcon512Url && (
-              <div className="mt-3 p-3 bg-zinc-950 border border-zinc-800 rounded-lg">
-                <p className="text-xs text-zinc-400 mb-2">Preview:</p>
+              <div className="mt-3 p-3 bg-muted border border-border rounded-lg">
+                <p className="text-xs text-muted-foreground mb-2">Preview:</p>
                 <img src={pwaIcon512Url} alt="PWA Icon 512" className="w-16 h-16 rounded-lg" onError={(e) => e.currentTarget.style.display = 'none'} />
               </div>
             )}
@@ -262,7 +258,7 @@ export function LogoSettings() {
 
           {/* Apple Touch Icon */}
           <div>
-            <label className="block text-sm font-medium text-white mb-2">
+            <label className="block text-sm font-medium text-foreground mb-2">
               Apple Touch Icon (iOS)
             </label>
             <input
@@ -270,46 +266,44 @@ export function LogoSettings() {
               value={appleTouchIconUrl}
               onChange={(e) => setAppleTouchIconUrl(e.target.value)}
               placeholder="https://..."
-              className="w-full px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500"
+              className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-purple-500"
             />
-            <p className="text-xs text-zinc-500 mt-2">
-              📐 <strong>Tamanho:</strong> 180x180px (quadrado)<br/>
-              📁 <strong>Formatos:</strong> PNG com fundo sólido (iOS adiciona bordas arredondadas automaticamente)<br/>
+            <p className="text-xs text-muted-foreground mt-2">
+              📐 <strong>Tamanho:</strong> 180x180px (quadrado)<br />
+              📁 <strong>Formatos:</strong> PNG com fundo sólido (iOS adiciona bordas arredondadas automaticamente)<br />
               💡 <strong>Uso:</strong> Ícone quando adicionado à tela inicial do iPhone/iPad
             </p>
             {appleTouchIconUrl && (
-              <div className="mt-3 p-3 bg-zinc-950 border border-zinc-800 rounded-lg">
-                <p className="text-xs text-zinc-400 mb-2">Preview:</p>
+              <div className="mt-3 p-3 bg-muted border border-border rounded-lg">
+                <p className="text-xs text-muted-foreground mb-2">Preview:</p>
                 <img src={appleTouchIconUrl} alt="Apple Touch Icon" className="w-12 h-12 rounded-lg" onError={(e) => e.currentTarget.style.display = 'none'} />
               </div>
             )}
           </div>
         </div>
 
-        <div className="border-t border-zinc-800"></div>
+        <div className="border-t border-border"></div>
 
         {/* Login */}
         <div className="space-y-4">
-          <h3 className="text-white font-medium text-lg border-b border-zinc-800 pb-2">
+          <h3 className="text-foreground font-medium text-lg border-b border-border pb-2">
             Tela de Login
           </h3>
-          
+
           {/* Mostrar Logo Login */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Eye className="w-4 h-4 text-zinc-400" />
-              <span className="text-white text-sm">Mostrar Logo no Login</span>
+              <Eye className="w-4 h-4 text-muted-foreground" />
+              <span className="text-foreground text-sm">Mostrar Logo no Login</span>
             </div>
             <button
               onClick={() => setShowLoginLogo(!showLoginLogo)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                showLoginLogo ? 'bg-purple-600' : 'bg-zinc-700'
-              }`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showLoginLogo ? 'bg-purple-600' : 'bg-secondary'
+                }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  showLoginLogo ? 'translate-x-6' : 'translate-x-1'
-                }`}
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showLoginLogo ? 'translate-x-6' : 'translate-x-1'
+                  }`}
               />
             </button>
           </div>
@@ -317,7 +311,7 @@ export function LogoSettings() {
           {/* URL Logo Login */}
           {showLoginLogo && (
             <div>
-              <label className="block text-sm font-medium text-white mb-2">
+              <label className="block text-sm font-medium text-foreground mb-2">
                 URL do Logo (Login)
               </label>
               <input
@@ -325,11 +319,11 @@ export function LogoSettings() {
                 value={logoUrlLogin}
                 onChange={(e) => setLogoUrlLogin(e.target.value)}
                 placeholder="https://..."
-                className="w-full px-4 py-2 bg-zinc-900 border border-zinc-800 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:border-purple-500"
+                className="w-full px-4 py-2 bg-background border border-input rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-purple-500"
               />
-              <p className="text-xs text-zinc-500 mt-2">
-                📐 <strong>Tamanho recomendado:</strong> 200x60px ou 300x90px (largura x altura)<br/>
-                📁 <strong>Formatos:</strong> PNG, SVG, WebP (fundo transparente recomendado)<br/>
+              <p className="text-xs text-muted-foreground mt-2">
+                📐 <strong>Tamanho recomendado:</strong> 200x60px ou 300x90px (largura x altura)<br />
+                📁 <strong>Formatos:</strong> PNG, SVG, WebP (fundo transparente recomendado)<br />
                 💡 <strong>Dica:</strong> Logos maiores funcionam melhor na tela de login
               </p>
             </div>
@@ -339,29 +333,27 @@ export function LogoSettings() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               {showLoginName ? (
-                <Eye className="w-4 h-4 text-zinc-400" />
+                <Eye className="w-4 h-4 text-muted-foreground" />
               ) : (
-                <EyeOff className="w-4 h-4 text-zinc-400" />
+                <EyeOff className="w-4 h-4 text-muted-foreground" />
               )}
-              <span className="text-white text-sm">Mostrar Nome no Login</span>
+              <span className="text-foreground text-sm">Mostrar Nome no Login</span>
             </div>
             <button
               onClick={() => setShowLoginName(!showLoginName)}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                showLoginName ? 'bg-purple-600' : 'bg-zinc-700'
-              }`}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${showLoginName ? 'bg-purple-600' : 'bg-secondary'
+                }`}
             >
               <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  showLoginName ? 'translate-x-6' : 'translate-x-1'
-                }`}
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showLoginName ? 'translate-x-6' : 'translate-x-1'
+                  }`}
               />
             </button>
           </div>
         </div>
 
         {/* Botão Salvar */}
-        <div className="flex justify-end pt-4 border-t border-zinc-800">
+        <div className="flex justify-end pt-4 border-t border-border">
           <button
             onClick={handleSave}
             disabled={loading}

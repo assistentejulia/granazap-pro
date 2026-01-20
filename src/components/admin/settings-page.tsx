@@ -138,9 +138,9 @@ export function SettingsPage() {
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
           <Settings className="w-8 h-8 text-primary" />
-          <h1 className="text-3xl font-bold text-white">Configurações da Plataforma</h1>
+          <h1 className="text-3xl font-bold text-foreground">Configurações da Plataforma</h1>
         </div>
-        <p className="text-zinc-400">Personalize a aparência da plataforma</p>
+        <p className="text-muted-foreground">Personalize a aparência da plataforma</p>
       </div>
 
       {/* Admin Settings */}
@@ -164,15 +164,15 @@ export function SettingsPage() {
       </div>
 
       {/* Identidade Visual */}
-      <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-6">
+      <div className="bg-card border border-border rounded-xl p-6">
         <div className="flex items-center gap-2 mb-6">
           <Palette className="w-6 h-6 text-primary" />
-          <h2 className="text-xl font-bold text-white">Identidade Visual</h2>
+          <h2 className="text-xl font-bold text-foreground">Identidade Visual</h2>
         </div>
 
         {/* Temas Pré-definidos */}
         <div className="mb-8">
-          <label className="block text-sm font-medium text-zinc-300 mb-3">
+          <label className="block text-sm font-medium text-muted-foreground mb-3">
             Temas Pré-definidos
           </label>
           <div className="flex flex-wrap gap-4">
@@ -180,10 +180,10 @@ export function SettingsPage() {
               <button
                 key={theme.name}
                 onClick={() => applyTheme(theme)}
-                className="group relative flex items-center gap-3 px-4 py-3 bg-[#111827] border border-white/10 rounded-xl hover:border-white/20 hover:bg-[#1F2937] transition-all"
+                className="group relative flex items-center gap-3 px-4 py-3 bg-card border border-border rounded-xl hover:border-border/80 hover:bg-accent transition-all"
               >
                 <div className={`w-4 h-4 rounded-full ${theme.preview}`} />
-                <span className="text-sm font-medium text-white">{theme.name}</span>
+                <span className="text-sm font-medium text-foreground">{theme.name}</span>
               </button>
             ))}
           </div>
@@ -192,20 +192,20 @@ export function SettingsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Nome do App */}
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               Nome da Aplicação
             </label>
             <input
               type="text"
               value={settings.app_name}
               onChange={(e) => setSettings({ ...settings, app_name: e.target.value })}
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-primary"
+              className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-primary"
             />
           </div>
 
           {/* Email de Suporte */}
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               Email de Suporte
             </label>
             <input
@@ -213,16 +213,16 @@ export function SettingsPage() {
               value={settings.support_email}
               onChange={(e) => setSettings({ ...settings, support_email: e.target.value })}
               placeholder="suporte@seudominio.com"
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-zinc-500 focus:outline-none focus:border-primary"
+              className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             />
-            <p className="text-xs text-zinc-500 mt-2">
+            <p className="text-xs text-muted-foreground mt-2">
               Email exibido nas páginas de Termos, Política de Privacidade e suporte geral
             </p>
           </div>
 
           {/* Logo URL */}
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               URL do Logo
             </label>
             <input
@@ -230,13 +230,13 @@ export function SettingsPage() {
               value={settings.app_logo_url}
               onChange={(e) => setSettings({ ...settings, app_logo_url: e.target.value })}
               placeholder="https://..."
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white placeholder:text-zinc-500 focus:outline-none focus:border-primary"
+              className="w-full bg-background border border-input rounded-lg px-4 py-3 text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
             />
           </div>
 
           {/* Cor Primária */}
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               Cor Primária
             </label>
             <div className="flex gap-2">
@@ -250,14 +250,14 @@ export function SettingsPage() {
                 type="text"
                 value={settings.primary_color}
                 onChange={(e) => setSettings({ ...settings, primary_color: e.target.value })}
-                className="flex-1 bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E]"
+                className="flex-1 bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-[#22C55E]"
               />
             </div>
           </div>
 
           {/* Cor Secundária */}
           <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-muted-foreground mb-2">
               Cor Secundária
             </label>
             <div className="flex gap-2">
@@ -271,7 +271,7 @@ export function SettingsPage() {
                 type="text"
                 value={settings.secondary_color}
                 onChange={(e) => setSettings({ ...settings, secondary_color: e.target.value })}
-                className="flex-1 bg-[#0A0F1C] border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#22C55E]"
+                className="flex-1 bg-background border border-input rounded-lg px-4 py-3 text-foreground focus:outline-none focus:border-[#22C55E]"
               />
             </div>
           </div>

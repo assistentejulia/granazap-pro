@@ -10,7 +10,7 @@ export function AdminSettings() {
   const { settings } = useBranding();
   const [loading, setLoading] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  
+
   const [restringirCadastro, setRestringirCadastro] = useState(false);
 
   // Carregar dados quando settings mudar
@@ -22,7 +22,7 @@ export function AdminSettings() {
   }, [settings]);
 
   const handleSave = async () => {
-    
+
     setLoading(true);
     try {
       const result = await updateAdminSettings({
@@ -48,49 +48,47 @@ export function AdminSettings() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+        <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
           <Shield className="w-6 h-6 text-red-500" />
           Configurações Administrativas
         </h2>
-        <p className="text-sm text-zinc-400 mt-1">
+        <p className="text-sm text-muted-foreground mt-1">
           Controle de acesso e funcionalidades da plataforma
         </p>
       </div>
 
       {/* Card de Configurações */}
-      <div className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-6 space-y-6">
-        
+      <div className="bg-card border border-border rounded-xl p-6 space-y-6">
+
         {/* Bloquear Cadastros */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
             <Lock className="w-5 h-5 text-red-400 mt-0.5" />
             <div>
-              <h3 className="text-white font-medium">Restringir Cadastro a Usuários Existentes</h3>
-              <p className="text-sm text-zinc-400 mt-1">
-                <strong className="text-zinc-300">Desligado:</strong> Qualquer pessoa pode se cadastrar livremente (modo público).<br/>
-                <strong className="text-zinc-300">Ligado:</strong> Apenas usuários pré-cadastrados (via WhatsApp/N8N) podem fazer login.
+              <h3 className="text-foreground font-medium">Restringir Cadastro a Usuários Existentes</h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                <strong className="text-foreground">Desligado:</strong> Qualquer pessoa pode se cadastrar livremente (modo público).<br />
+                <strong className="text-foreground">Ligado:</strong> Apenas usuários pré-cadastrados (via WhatsApp/N8N) podem fazer login.
               </p>
-              <p className="text-xs text-zinc-500 mt-2">
+              <p className="text-xs text-muted-foreground mt-2">
                 💡 Use o modo restrito quando quiser controlar quem tem acesso à plataforma.
               </p>
             </div>
           </div>
           <button
             onClick={() => setRestringirCadastro(!restringirCadastro)}
-            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${
-              restringirCadastro ? 'bg-red-600' : 'bg-green-600'
-            }`}
+            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors flex-shrink-0 ${restringirCadastro ? 'bg-red-600' : 'bg-secondary'
+              }`}
           >
             <span
-              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                restringirCadastro ? 'translate-x-6' : 'translate-x-1'
-              }`}
+              className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${restringirCadastro ? 'translate-x-6' : 'translate-x-1'
+                }`}
             />
           </button>
         </div>
 
         {/* Botão Salvar */}
-        <div className="flex justify-end pt-4 border-t border-zinc-800">
+        <div className="flex justify-end pt-4 border-t border-border">
           <button
             onClick={handleSave}
             disabled={loading}
