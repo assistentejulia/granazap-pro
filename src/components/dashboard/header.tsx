@@ -21,6 +21,7 @@ export function DashboardHeader() {
   const [showQuickMenu, setShowQuickMenu] = useState(false);
   const [transactionModalOpen, setTransactionModalOpen] = useState(false);
   const [transactionType, setTransactionType] = useState<'receita' | 'despesa'>('despesa');
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const locales = {
     pt: 'pt-BR',
@@ -62,10 +63,43 @@ export function DashboardHeader() {
         <div className="flex items-center gap-2 md:gap-3">
           {/* Notifications - Hidden on small mobile */}
           <ThemeToggle />
-          <button className="hidden sm:block relative p-2 hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors">
-            <Bell className="w-5 h-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 bg-[#EF4444] rounded-full" />
-          </button>
+          <div className="relative">
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="hidden sm:block relative p-2 hover:bg-accent hover:text-accent-foreground rounded-lg transition-colors"
+            >
+              <Bell className="w-5 h-5" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-[#EF4444] rounded-full" />
+            </button>
+
+            {/* Notifications Dropdown */}
+            {showNotifications && (
+              <>
+                <div
+                  className="fixed inset-0 z-40"
+                  onClick={() => setShowNotifications(false)}
+                />
+                <div className="absolute top-full right-0 mt-2 w-80 bg-popover border border-border rounded-lg shadow-xl z-50 overflow-hidden">
+                  <div className="p-3 border-b border-border flex justify-between items-center">
+                    <h3 className="font-semibold text-sm">Notificações</h3>
+                    <span className="text-xs text-muted-foreground">Marcar todas como lidas</span>
+                  </div>
+                  <div className="max-h-[300px] overflow-y-auto">
+                    <div className="p-4 border-b border-border/50 hover:bg-accent/50 transition-colors cursor-pointer">
+                      <p className="text-sm font-medium">Bem-vindo ao GranaZap Pro!</p>
+                      <p className="text-xs text-muted-foreground mt-1">Configure suas contas e cartões para começar.</p>
+                      <p className="text-[10px] text-muted-foreground mt-2">Há 2 minutos</p>
+                    </div>
+                    <div className="p-4 border-b border-border/50 hover:bg-accent/50 transition-colors cursor-pointer">
+                      <p className="text-sm font-medium">Dica do Dia</p>
+                      <p className="text-xs text-muted-foreground mt-1">Você pode personalizar categorias na página de configurações.</p>
+                      <p className="text-[10px] text-muted-foreground mt-2">Há 1 hora</p>
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
 
           {/* New Transaction */}
           {canCreate() && (

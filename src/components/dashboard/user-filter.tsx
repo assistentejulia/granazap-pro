@@ -59,16 +59,16 @@ export function UserFilter() {
       {/* Botão Principal */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-zinc-900/50 border border-zinc-800 text-white hover:bg-zinc-800"
+        className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium transition-colors bg-background border border-input text-foreground hover:bg-accent hover:text-accent-foreground shadow-sm"
       >
-        <Users className="w-4 h-4" />
-        {getFilterLabel()}
-        <ChevronDown className={`w-4 h-4 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <Users className="w-4 h-4 text-muted-foreground" />
+        <span>{getFilterLabel()}</span>
+        <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
       {/* Dropdown */}
       {
         isOpen && (
-          <div className="absolute top-full left-0 mt-2 w-48 bg-zinc-900 border border-zinc-800 rounded-lg shadow-xl z-50 py-1">
+          <div className="absolute top-full left-0 mt-2 w-48 bg-popover border border-border rounded-lg shadow-xl z-50 py-1">
             {/* Todos - Só mostra se tiver permissão para ver admin OU outros membros */}
             {(canViewAdminData || canViewOtherMembers) && (
               <button
@@ -77,8 +77,8 @@ export function UserFilter() {
                   setIsOpen(false);
                 }}
                 className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${filter === 'todos'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                   }`}
               >
                 <Users className="w-4 h-4" />
@@ -94,8 +94,8 @@ export function UserFilter() {
                   setIsOpen(false);
                 }}
                 className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${filter === 'principal'
-                  ? 'bg-blue-600 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                   }`}
               >
                 <User className="w-4 h-4" />
@@ -111,8 +111,8 @@ export function UserFilter() {
                   setIsOpen(false);
                 }}
                 className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${filter === profile?.dependente_id
-                  ? 'bg-blue-600 text-white'
-                  : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                   }`}
               >
                 <User className="w-4 h-4" />
@@ -123,8 +123,8 @@ export function UserFilter() {
             {/* Membros da Equipe - Só mostra se tiver permissão para ver outros membros */}
             {canViewOtherMembers && teamMembers.length > 0 && (
               <>
-                <div className="border-t border-zinc-800 my-1" />
-                <div className="px-3 py-1 text-xs text-zinc-500 font-medium">
+                <div className="border-t border-border my-1" />
+                <div className="px-3 py-1 text-xs text-muted-foreground font-medium">
                   Equipe
                 </div>
                 {teamMembers
@@ -137,14 +137,14 @@ export function UserFilter() {
                         setIsOpen(false);
                       }}
                       className={`w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors ${filter === member.id
-                        ? 'bg-blue-600 text-white'
-                        : 'text-zinc-400 hover:text-white hover:bg-zinc-800'
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-accent'
                         }`}
                     >
                       <User className="w-4 h-4" />
                       <span className="truncate">{member.nome}</span>
                       {member.convite_status === 'pendente' && (
-                        <span className="ml-auto text-xs text-yellow-500">Pendente</span>
+                        <span className="ml-auto text-xs text-amber-500">Pendente</span>
                       )}
                     </button>
                   ))}
@@ -154,13 +154,13 @@ export function UserFilter() {
             {/* Switch Account Option */}
             {isSwitchable && (
               <>
-                <div className="border-t border-zinc-800 my-1" />
+                <div className="border-t border-border my-1" />
                 <button
                   onClick={() => {
                     switchContext(isDependente ? 'personal' : 'dependent');
                     setIsOpen(false);
                   }}
-                  className="w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors text-amber-500 hover:text-amber-400 hover:bg-zinc-800"
+                  className="w-full flex items-center gap-2 px-3 py-2 text-sm transition-colors text-amber-500 hover:text-amber-600 hover:bg-accent"
                 >
                   <div className="w-4 h-4 flex items-center justify-center">
                     🔄
