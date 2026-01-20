@@ -162,6 +162,14 @@ export async function signupUser(data: SignupData): Promise<SignupResult> {
     };
 
   } catch (error: any) {
+    // Tratamento de limite de taxa (Rate Limit)
+    if (error.message?.includes('security purposes') || error.message?.includes('seconds')) {
+      return {
+        success: false,
+        error: 'Muitas tentativas. Por segurança, aguarde alguns instantes antes de tentar novamente.'
+      };
+    }
+
     return {
       success: false,
       error: error.message || 'Erro ao criar conta. Tente novamente.'
