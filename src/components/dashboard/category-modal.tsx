@@ -142,12 +142,19 @@ export function CategoryModal({
         error = insertError;
       }
 
-      if (error) throw error;
+      if (error) {
+        if (error.code === '23505') {
+          alert('Esta categoria já existe para este tipo (Receita/Despesa).');
+        } else {
+          alert('Erro ao salvar: ' + error.message);
+        }
+        return;
+      }
 
       onSuccess();
       onClose();
-    } catch (error) {
-      alert('Erro ao salvar. Tente novamente.');
+    } catch (error: any) {
+      alert('Erro ao salvar: ' + (error.message || 'Tente novamente.'));
     }
   };
 

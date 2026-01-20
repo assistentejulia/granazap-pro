@@ -146,8 +146,7 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                     tipo: tipo === 'entrada' ? 'entrada' : 'saida', // 'entrada' | 'saida'
                     usuario_id: profile.id,
                     tipo_conta: 'pessoal', // Default for now, could be dynamic
-                    icon_key: 'FileText', // Default icon
-                    cor: '#94a3b8' // Default color (slate-400)
+                    icon_key: 'FileText' // Default icon
                 })
                 .select()
                 .single();
