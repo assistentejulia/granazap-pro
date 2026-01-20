@@ -498,8 +498,8 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                   <button
                     onClick={() => setPaymentMode('total')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${paymentMode === 'total'
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-muted dark:bg-white/5 text-muted-foreground hover:bg-muted/80'
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-muted dark:bg-white/5 text-muted-foreground hover:bg-muted/80'
                       }`}
                   >
                     Pagar Tudo
@@ -507,8 +507,8 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                   <button
                     onClick={() => setPaymentMode('partial')}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${paymentMode === 'partial'
-                        ? 'bg-purple-600 text-white'
-                        : 'bg-muted dark:bg-white/5 text-muted-foreground hover:bg-muted/80'
+                      ? 'bg-purple-600 text-white'
+                      : 'bg-muted dark:bg-white/5 text-muted-foreground hover:bg-muted/80'
                       }`}
                   >
                     Pagamento Parcial
@@ -571,10 +571,10 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                   <div
                     key={item.id}
                     className={`bg-card dark:bg-[#0A0F1C] border rounded-lg p-4 transition-colors ${item.status === 'pago'
-                        ? 'border-green-500/20 opacity-60'
-                        : selectedItemIds.includes(item.id)
-                          ? 'border-purple-500/50 bg-purple-500/5'
-                          : 'border-border hover:border-muted-foreground/30'
+                      ? 'border-green-500/20 opacity-60'
+                      : selectedItemIds.includes(item.id)
+                        ? 'border-purple-500/50 bg-purple-500/5'
+                        : 'border-border hover:border-muted-foreground/30'
                       }`}
                   >
                     <div className="flex items-center justify-between">
@@ -699,8 +699,8 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                   onClick={() => setIsPayModalOpen(true)}
                   disabled={paymentMode === 'partial' && selectedItemIds.length === 0}
                   className={`w-full px-6 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 ${paymentMode === 'partial'
-                      ? 'bg-purple-600 hover:bg-purple-700 text-white disabled:opacity-50 disabled:cursor-not-allowed'
-                      : 'bg-green-600 hover:bg-green-700 text-white'
+                    ? 'bg-purple-600 hover:bg-purple-700 text-white disabled:opacity-50 disabled:cursor-not-allowed'
+                    : 'bg-green-600 hover:bg-green-700 text-white'
                     }`}
                 >
                   {paymentMode === 'partial' ? (
@@ -799,20 +799,12 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
             setIsDeleteModalOpen(false);
             setSelectedTransaction(null);
           }}
-          onConfirm={async () => {
-            const supabase = createClient();
-            await supabase
-              .from('lancamentos_futuros')
-              .delete()
-              .eq('id', selectedTransaction.id);
-
+          onSuccess={() => {
             setIsDeleteModalOpen(false);
             setSelectedTransaction(null);
             refetchInvoice();
           }}
-          transactionTitle={selectedTransaction.descricao}
-          transactionValue={selectedTransaction.valor}
-          isRecurring={false}
+          transaction={selectedTransaction}
         />
       )}
     </div>
