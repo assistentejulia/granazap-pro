@@ -1,193 +1,244 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
 import {
     MessageCircle,
     BarChart3,
-    TrendingUp,
-    Target,
+    Brain,
     FileText,
-    Shield,
+    Target,
+    Tag,
     Smartphone,
-    FolderTree,
-    Building2,
+    Shield
 } from "lucide-react";
 
 const features = [
     {
         icon: MessageCircle,
         title: "Controle via WhatsApp",
-        description: "Registre despesas, receitas e consulte relatórios direto do WhatsApp com comandos simples",
-        color: "from-green-400 to-green-600",
-        iconBg: "bg-green-500/10",
-        iconColor: "text-green-500",
+        description: "Registre receitas e despesas conversando naturalmente com a Julia",
+        gradient: "from-green-400 to-emerald-500"
     },
     {
         icon: BarChart3,
-        title: "Dashboard Web Completo",
-        description: "Acesse gráficos detalhados, análises e visualizações completas em tempo real",
-        color: "from-blue-400 to-blue-600",
-        iconBg: "bg-blue-500/10",
-        iconColor: "text-blue-500",
+        title: "Dashboard Profissional",
+        description: "Visualize suas finanças com gráficos e relatórios em tempo real",
+        gradient: "from-blue-400 to-cyan-500"
     },
     {
-        icon: TrendingUp,
-        title: "Gestão de Investimentos",
-        description: "Acompanhe ações, FIIs, ETFs, renda fixa, criptomoedas e BDRs em um só lugar",
-        color: "from-purple-400 to-purple-600",
-        iconBg: "bg-purple-500/10",
-        iconColor: "text-purple-500",
+        icon: Brain,
+        title: "Assistente com IA",
+        description: "Inteligência artificial que aprende seus padrões financeiros",
+        gradient: "from-purple-400 to-pink-500"
+    },
+    {
+        icon: FileText,
+        title: "Relatórios Automáticos",
+        description: "Exporte para PDF e Excel com um clique, sempre atualizados",
+        gradient: "from-orange-400 to-red-500"
     },
     {
         icon: Target,
         title: "Metas Financeiras",
-        description: "Defina objetivos, acompanhe progresso e alcance suas metas com planejamento inteligente",
-        color: "from-pink-400 to-pink-600",
-        iconBg: "bg-pink-500/10",
-        iconColor: "text-pink-500",
+        description: "Defina objetivos e acompanhe seu progresso automaticamente",
+        gradient: "from-teal-400 to-green-500"
     },
     {
-        icon: FileText,
-        title: "Relatórios Inteligentes",
-        description: "Relatórios automáticos personalizados com insights poderosos sobre suas finanças",
-        color: "from-orange-400 to-orange-600",
-        iconBg: "bg-orange-500/10",
-        iconColor: "text-orange-500",
-    },
-    {
-        icon: Shield,
-        title: "Segurança Total",
-        description: "Proteção de dados com criptografia de ponta a ponta e conformidade LGPD",
-        color: "from-red-400 to-red-600",
-        iconBg: "bg-red-500/10",
-        iconColor: "text-red-500",
+        icon: Tag,
+        title: "Categorias Personalizadas",
+        description: "Organize seus gastos do seu jeito com categorias customizáveis",
+        gradient: "from-indigo-400 to-purple-500"
     },
     {
         icon: Smartphone,
-        title: "Acesso Multi-dispositivo",
-        description: "Use no celular, tablet ou computador. Seus dados sincronizados em todos os dispositivos",
-        color: "from-cyan-400 to-cyan-600",
-        iconBg: "bg-cyan-500/10",
-        iconColor: "text-cyan-500",
+        title: "Acesso Multi-Dispositivo",
+        description: "Sincronize dados entre celular, tablet e computador",
+        gradient: "from-pink-400 to-rose-500"
     },
     {
-        icon: FolderTree,
-        title: "Categorias Personalizáveis",
-        description: "Crie e organize categorias do seu jeito para um controle financeiro sob medida",
-        color: "from-yellow-400 to-yellow-600",
-        iconBg: "bg-yellow-500/10",
-        iconColor: "text-yellow-500",
-    },
-    {
-        icon: Building2,
-        title: "Contas PJ e Pessoal",
-        description: "Gerencie finanças pessoais e empresariais separadamente com total organização",
-        color: "from-indigo-400 to-indigo-600",
-        iconBg: "bg-indigo-500/10",
-        iconColor: "text-indigo-500",
-    },
+        icon: FileText,
+        title: "Conciliação Bancária",
+        description: "Sincronize seus extratos importando arquivos OFX de forma simples",
+        gradient: "from-emerald-400 to-teal-500"
+    }
 ];
 
+const containerVariants = {
+    hidden: {},
+    visible: {
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 30, scale: 0.9 },
+    visible: {
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: {
+            duration: 0.6,
+            ease: "circOut" as any
+        }
+    }
+};
+
 export function FeaturesGridSection() {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, amount: 0.2 });
+
     return (
-        <section id="recursos" className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background dark:from-black dark:via-[#0A0F1C] dark:to-black">
+        <section id="recursos" className="relative py-20 lg:py-28 overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background dark:from-black dark:via-[#0A0F1C] dark:to-black">
             {/* Background Elements */}
-            <div className="absolute inset-0 opacity-30">
+            <div className="absolute inset-0">
+                {/* Grid Pattern */}
                 <div
-                    className="absolute inset-0"
+                    className="absolute inset-0 opacity-5"
                     style={{
-                        backgroundImage: `radial-gradient(circle at 2px 2px, rgba(34, 197, 94, 0.15) 1px, transparent 0)`,
-                        backgroundSize: '40px 40px'
+                        backgroundImage: `linear-gradient(rgba(34, 197, 94, 0.1) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(34, 197, 94, 0.1) 1px, transparent 1px)`,
+                        backgroundSize: '60px 60px'
                     }}
+                />
+
+                {/* Glowing Orbs */}
+                <motion.div
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.1, 0.2, 0.1],
+                    }}
+                    transition={{
+                        duration: 10,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                    className="absolute top-1/3 left-1/4 w-96 h-96 bg-green-500/20 rounded-full blur-3xl"
+                />
+                <motion.div
+                    animate={{
+                        scale: [1.1, 1, 1.1],
+                        opacity: [0.08, 0.15, 0.08],
+                    }}
+                    transition={{
+                        duration: 12,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 2
+                    }}
+                    className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-blue-500/15 rounded-full blur-3xl"
                 />
             </div>
 
-            <div className="container mx-auto px-4 relative z-10">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-16 lg:mb-20"
+                    className="text-center mb-16"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 mb-6 backdrop-blur-sm">
-                        <span className="text-sm font-semibold text-green-400">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                        transition={{ delay: 0.2 }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 mb-6 backdrop-blur-sm"
+                    >
+                        <span className="text-sm font-semibold text-green-600 dark:text-green-400">
                             Recursos Completos
                         </span>
-                    </div>
+                    </motion.div>
 
-                    <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-6">
-                        Tudo que você precisa para
-                        <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500">
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground mb-4">
+                        Tudo que você precisa para{" "}
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-emerald-600">
                             dominar suas finanças
                         </span>
                     </h2>
-
-                    <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                        Uma plataforma completa com todas as ferramentas necessárias para transformar sua gestão financeira
+                    <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
+                        Ferramentas poderosas que trabalham juntas para transformar sua gestão financeira
                     </p>
                 </motion.div>
 
                 {/* Features Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                    {features.map((feature, index) => {
-                        const Icon = feature.icon;
-                        return (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                whileHover={{
-                                    scale: 1.05,
-                                    transition: { duration: 0.2 }
-                                }}
-                                className="group relative"
-                            >
-                                {/* Card */}
-                                <div className="relative h-full bg-card/50 dark:bg-white/5 backdrop-blur-xl border border-border/50 dark:border-white/10 rounded-2xl p-6 lg:p-8 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/10">
-                                    {/* Glow Effect on Hover */}
-                                    <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-green-500/0 to-blue-500/0 group-hover:from-green-500/5 group-hover:to-blue-500/5 transition-all duration-300" />
+                <motion.div
+                    ref={ref}
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate={isInView ? "visible" : "hidden"}
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 max-w-7xl mx-auto"
+                >
+                    {features.map((feature, index) => (
+                        <motion.div
+                            key={index}
+                            variants={itemVariants}
+                            whileHover={{
+                                scale: 1.05,
+                                transition: { duration: 0.2 }
+                            }}
+                            className="group relative p-6 rounded-2xl bg-card/50 dark:bg-white/5 backdrop-blur-sm border border-border/50 hover:border-green-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-green-500/20"
+                        >
+                            {/* Gradient Glow on Hover */}
+                            <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-10 transition-opacity duration-300 blur-xl`} />
 
-                                    {/* Icon */}
-                                    <div className={`relative w-14 h-14 ${feature.iconBg} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                                        <Icon className={`w-7 h-7 ${feature.iconColor}`} />
-                                    </div>
+                            {/* Content */}
+                            <div className="relative z-10">
+                                {/* Icon */}
+                                <motion.div
+                                    whileHover={{ rotate: [0, -10, 10, -10, 0] }}
+                                    transition={{ duration: 0.5 }}
+                                    className={`w-14 h-14 rounded-xl bg-gradient-to-br ${feature.gradient} p-3 mb-4 shadow-lg group-hover:shadow-2xl transition-shadow duration-300`}
+                                >
+                                    <feature.icon className="w-full h-full text-white" />
+                                </motion.div>
 
-                                    {/* Content */}
-                                    <h3 className="text-xl font-bold text-foreground mb-3 group-hover:text-green-500 transition-colors">
-                                        {feature.title}
-                                    </h3>
+                                {/* Title */}
+                                <h3 className="text-xl font-bold text-foreground mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
+                                    {feature.title}
+                                </h3>
 
-                                    <p className="text-muted-foreground leading-relaxed">
-                                        {feature.description}
-                                    </p>
+                                {/* Description */}
+                                <p className="text-sm text-muted-foreground leading-relaxed">
+                                    {feature.description}
+                                </p>
 
-                                    {/* Decorative Corner */}
-                                    <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-green-500/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                                </div>
-                            </motion.div>
-                        );
-                    })}
-                </div>
+                                {/* Hover Indicator */}
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    whileHover={{ width: "100%" }}
+                                    transition={{ duration: 0.3 }}
+                                    className={`h-1 rounded-full bg-gradient-to-r ${feature.gradient} mt-4`}
+                                />
+                            </div>
+                        </motion.div>
+                    ))}
+                </motion.div>
 
                 {/* Bottom CTA */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
-                    className="mt-16 text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 0.8 }}
+                    className="text-center mt-16"
                 >
-                    <p className="text-muted-foreground text-lg mb-6">
-                        E muito mais recursos sendo adicionados constantemente
+                    <p className="text-muted-foreground mb-4">
+                        E muito mais recursos sendo desenvolvidos...
                     </p>
-                    <div className="flex items-center justify-center gap-2 text-green-400">
-                        <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                        <span className="text-sm font-semibold">Atualizações semanais</span>
+                    <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                            <span className="text-foreground font-medium">Atualizações semanais</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                            <span className="text-foreground font-medium">Suporte prioritário</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
+                            <span className="text-foreground font-medium">Sem custo adicional</span>
+                        </div>
                     </div>
                 </motion.div>
             </div>

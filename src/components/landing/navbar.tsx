@@ -8,47 +8,49 @@ import { LandingLogo } from "@/components/landing/logo";
 
 export function Navbar() {
     return (
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
-            <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-                <Link href="#inicio" className="flex items-center gap-3 group">
-                    <LandingLogo />
-                    <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-blue-600 dark:from-green-400 dark:to-blue-400 bg-clip-text text-transparent transition-all group-hover:opacity-80">
+        <header className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+            <nav className="pointer-events-auto h-16 max-w-5xl w-full bg-[#030712]/60 backdrop-blur-2xl border border-white/10 rounded-full px-6 flex items-center justify-between shadow-2xl shadow-black/50">
+                <Link href="#inicio" className="flex items-center gap-2 group shrink-0">
+                    <LandingLogo className="w-8 h-8 sm:w-9 sm:h-9" />
+                    <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         Assistente Julia
                     </span>
                 </Link>
 
-                <div className="hidden md:flex items-center gap-8">
-                    <Link href="#inicio" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors self-center">
-                        Início
-                    </Link>
-                    <Link href="#recursos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors self-center">
-                        Funcionalidades
-                    </Link>
-                    <Link href="#investimentos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors self-center">
-                        Investimentos
-                    </Link>
-                    <Link href="#depoimentos" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors self-center">
-                        Depoimentos
-                    </Link>
-                    <Link href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors self-center">
-                        Planos
-                    </Link>
+                <div className="hidden lg:flex items-center gap-8">
+                    {[
+                        { name: "Início", href: "#inicio" },
+                        { name: "Recursos", href: "#recursos" },
+                        { name: "Como Funciona", href: "#investimentos" },
+                        { name: "Planos", href: "#pricing" },
+                    ].map((link) => (
+                        <Link
+                            key={link.name}
+                            href={link.href}
+                            className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 hover:text-green-400 transition-colors relative group py-1"
+                        >
+                            {link.name}
+                            <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-green-500 transition-all group-hover:w-full" />
+                        </Link>
+                    ))}
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <ThemeToggle />
-                    <a href="/login" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                    <div className="hidden sm:block scale-90">
+                        <ThemeToggle />
+                    </div>
+
+                    <a href="/login" className="hidden sm:block text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors">
                         Entrar
                     </a>
-                    <Link href="/cadastro" prefetch={false}>
-                        <Button size="sm" className="bg-[#25D366] hover:bg-[#128C7E] text-white rounded-full px-4 sm:px-6 shadow-lg shadow-green-500/20">
-                            <span className="hidden sm:inline">Começar Agora</span>
-                            <span className="sm:hidden">Começar</span>
-                            <MoveRight className="w-4 h-4 ml-2" />
+
+                    <Link href="/cadastro" prefetch={false} className="shrink-0">
+                        <Button size="sm" className="h-9 px-5 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-full text-[10px] font-bold uppercase tracking-widest shadow-lg shadow-green-500/10 active:scale-95 transition-all border-none">
+                            Começar
                         </Button>
                     </Link>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        </header>
     );
 }

@@ -147,12 +147,11 @@ export function DashboardSidebar() {
               ) : settings.show_sidebar_logo && settings.appLogoUrl ? (
                 <img src={settings.appLogoUrl} alt={settings.appName} className="w-10 h-10 rounded-xl object-cover" />
               ) : !settings.show_sidebar_logo && (
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center"
-                  style={{ background: `linear-gradient(135deg, ${settings.primaryColor}, ${settings.primaryColor}dd)` }}
-                >
-                  <span className="text-xl font-bold text-white">{settings.appName.charAt(0)}</span>
-                </div>
+                <img
+                  src="/assistente-julia-avatar.png"
+                  alt="Assistente Julia"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
               )}
               {/* Mostrar nome se habilitado */}
               {settings.show_sidebar_name !== false && (

@@ -143,8 +143,8 @@ export function WhatsAppChatAnimation() {
             <div className="bg-[#008069] p-3 flex items-center justify-between text-white shrink-0 z-10 shadow-sm relative">
                 <div className="flex items-center gap-2">
                     <ChevronLeft className="w-6 h-6 -ml-1" />
-                    <div className="w-9 h-9 rounded-full bg-white flex items-center justify-center text-[#008069] font-bold text-sm shrink-0">
-                        AJ
+                    <div className="w-9 h-9 rounded-full overflow-hidden border border-white/20 shrink-0">
+                        <img src="/img/logo-julia.png" alt="Julia" className="w-full h-full object-cover" />
                     </div>
                     <div className="ml-1">
                         <div className="font-medium text-[16px] leading-none">Assistente Julia</div>

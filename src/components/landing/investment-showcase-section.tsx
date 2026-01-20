@@ -1,245 +1,225 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { MessageCircle, Brain, Wallet, ArrowRight } from "lucide-react";
 import Image from "next/image";
-import { TrendingUp, Wallet, DollarSign, PieChart, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+
+const steps = [
+    {
+        number: "1",
+        icon: MessageCircle,
+        title: "Você fala com a Julia no WhatsApp",
+        description: "Basta enviar uma mensagem simples com seus gastos",
+        gradient: "from-green-400 to-emerald-500"
+    },
+    {
+        number: "2",
+        icon: Brain,
+        title: "Ela entende e registra",
+        description: "Nossa IA categoriza e salva tudo automaticamente",
+        gradient: "from-blue-400 to-cyan-500"
+    },
+    {
+        number: "3",
+        icon: Wallet,
+        title: "Tudo organizado no painel",
+        description: "Acompanhe seus relatórios e gráficos em tempo real",
+        gradient: "from-purple-400 to-pink-500"
+    }
+];
 
 export function InvestmentShowcaseSection() {
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, amount: 0.2 });
+
+    // Create floating particles
+    const particles = Array.from({ length: 20 });
+
     return (
-        <section id="investimentos" className="relative py-24 lg:py-32 overflow-hidden bg-gradient-to-b from-background via-muted/30 to-background dark:from-black dark:via-[#0A0F1C] dark:to-[#1a0b2e]">
-            {/* Background Elements */}
-            <div className="absolute inset-0">
-                <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[150px]" />
-                <div className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[150px]" />
+        <section ref={ref} className="relative py-20 lg:py-28 overflow-hidden">
+            {/* Animated Gradient Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#1e3a4f] to-[#0f172a] dark:from-[#030712] dark:via-[#0f1629] dark:to-[#030712]">
+                {/* Animated gradient overlay */}
+                <motion.div
+                    animate={{
+                        background: [
+                            "radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.15) 0%, transparent 50%)",
+                            "radial-gradient(circle at 80% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%)",
+                            "radial-gradient(circle at 50% 80%, rgba(34, 197, 94, 0.15) 0%, transparent 50%)",
+                            "radial-gradient(circle at 20% 50%, rgba(34, 197, 94, 0.15) 0%, transparent 50%)",
+                        ]
+                    }}
+                    transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "linear"
+                    }}
+                    className="absolute inset-0"
+                />
+
+                {/* Grid Pattern */}
+                <div
+                    className="absolute inset-0 opacity-10"
+                    style={{
+                        backgroundImage: `linear-gradient(rgba(34, 197, 94, 0.2) 1px, transparent 1px),
+                             linear-gradient(90deg, rgba(34, 197, 94, 0.2) 1px, transparent 1px)`,
+                        backgroundSize: '80px 80px'
+                    }}
+                />
+
+                {/* Floating Particles */}
+                {particles.map((_, i) => (
+                    <motion.div
+                        key={i}
+                        initial={{
+                            x: typeof window !== 'undefined' ? Math.random() * window.innerWidth : Math.random() * 1000,
+                            y: typeof window !== 'undefined' ? window.innerHeight + 100 : 1000,
+                            opacity: 0
+                        }}
+                        animate={{
+                            y: -100,
+                            opacity: [0, 1, 1, 0]
+                        }}
+                        transition={{
+                            duration: Math.random() * 10 + 10,
+                            repeat: Infinity,
+                            delay: i * 0.5,
+                            ease: "linear"
+                        }}
+                        className="absolute w-1 h-1 bg-green-400 rounded-full"
+                        style={{
+                            boxShadow: "0 0 10px 2px rgba(34, 197, 94, 0.5)"
+                        }}
+                    />
+                ))}
+
+                {/* Large Glowing Orbs */}
+                <motion.div
+                    animate={{
+                        scale: [1, 1.2, 1],
+                        opacity: [0.1, 0.2, 0.1],
+                    }}
+                    transition={{
+                        duration: 8,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                    className="absolute top-1/4 right-0 w-[600px] h-[600px] bg-green-500/20 rounded-full blur-[150px]"
+                />
+                <motion.div
+                    animate={{
+                        scale: [1.2, 1, 1.2],
+                        opacity: [0.08, 0.15, 0.08],
+                    }}
+                    transition={{
+                        duration: 10,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 2
+                    }}
+                    className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-blue-500/15 rounded-full blur-[150px]"
+                />
             </div>
 
-            <div className="container mx-auto px-4 relative z-10">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.6 }}
-                    className="text-center mb-16"
+                    className="text-center mb-20"
                 >
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 mb-6 backdrop-blur-sm">
-                        <TrendingUp className="w-4 h-4 text-purple-400" />
-                        <span className="text-sm font-semibold text-purple-400">
-                            Gestão de Investimentos
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                        transition={{ delay: 0.2 }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6 backdrop-blur-sm"
+                    >
+                        <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                            Simples e Automático
                         </span>
-                    </div>
+                    </motion.div>
 
-                    <h2 className="text-4xl lg:text-5xl xl:text-6xl font-bold text-foreground mb-6">
-                        Seus Investimentos
-                        <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
-                            em Tempo Real
-                        </span>
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground mb-4">
+                        Veja como é <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500">fácil e rápido</span>
                     </h2>
-
-                    <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-                        Acompanhe ações, FIIs, ETFs, renda fixa, criptomoedas e BDRs com atualização automática de preços
+                    <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
+                        Em 3 passos simples, você terá controle total das suas finanças
                     </p>
                 </motion.div>
 
-                {/* Dashboard Mockup */}
-                <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-                    {/* Left - Image */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="relative"
-                    >
-                        {/* Glow Effect */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl blur-3xl" />
+                {/* Steps Flow */}
+                <div ref={ref} className="max-w-5xl mx-auto">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-4 relative">
+                        {/* Connecting Lines (Desktop) */}
+                        <div className="absolute top-1/3 left-0 w-full h-0.5 border-t-2 border-dashed border-white/10 hidden md:block -z-10" />
 
-                        {/* Dashboard Image */}
-                        <div className="relative">
-                            <motion.div
-                                animate={{
-                                    y: [0, -10, 0],
-                                }}
-                                transition={{
-                                    duration: 6,
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
-                                }}
-                            >
-                                <Image
-                                    src="/dashboard_investments_julia.png"
-                                    alt="Dashboard de Investimentos - Assistente Julia"
-                                    width={700}
-                                    height={600}
-                                    className="rounded-2xl shadow-2xl border border-border/10 dark:border-white/10"
-                                />
-                            </motion.div>
+                        {steps.map((step, index) => (
+                            <div key={index} className="flex flex-col items-center text-center group relative flex-1">
+                                {/* Icon Container */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                                    transition={{ delay: index * 0.2, duration: 0.5 }}
+                                    className="relative mb-8"
+                                >
+                                    <div className={`relative w-24 h-24 md:w-32 md:h-32 rounded-3xl bg-[#111827]/60 backdrop-blur-xl border border-white/10 flex items-center justify-center shadow-2xl transition-all duration-500 group-hover:border-green-500/50 group-hover:shadow-green-500/20 group-hover:-translate-y-2`}>
+                                        <step.icon className={`w-10 h-10 md:w-14 md:h-14 text-white group-hover:scale-110 transition-transform duration-500`} />
 
-                            {/* Floating Stats */}
-                            <motion.div
-                                animate={{
-                                    y: [0, -15, 0],
-                                }}
-                                transition={{
-                                    duration: 4,
-                                    repeat: Infinity,
-                                    ease: "easeInOut",
-                                    delay: 0.5
-                                }}
-                                className="absolute -top-6 -right-6 bg-green-500/10 backdrop-blur-xl border border-green-500/20 rounded-2xl p-4 shadow-xl"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
-                                        <TrendingUp className="w-5 h-5 text-green-400" />
+                                        {/* Glow Effect */}
+                                        <div className={`absolute inset-0 bg-gradient-to-br ${step.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-500 blur-xl rounded-3xl`} />
                                     </div>
-                                    <div>
-                                        <div className="text-xs text-muted-foreground">Lucro Total</div>
-                                        <div className="text-lg font-bold text-green-400">+R$ 17.784,50</div>
+
+                                    {/* Number Badge */}
+                                    <div className={`absolute -top-3 -right-3 w-8 h-8 rounded-full bg-gradient-to-br ${step.gradient} flex items-center justify-center text-white font-bold text-sm shadow-lg`}>
+                                        {step.number}
                                     </div>
-                                </div>
-                            </motion.div>
+                                </motion.div>
 
-                            <motion.div
-                                animate={{
-                                    y: [0, -12, 0],
-                                }}
-                                transition={{
-                                    duration: 5,
-                                    repeat: Infinity,
-                                    ease: "easeInOut",
-                                    delay: 1
-                                }}
-                                className="absolute -bottom-6 -left-6 bg-blue-500/10 backdrop-blur-xl border border-blue-500/20 rounded-2xl p-4 shadow-xl"
-                            >
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                                        <PieChart className="w-5 h-5 text-blue-400" />
+                                {/* Text Content */}
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                                    transition={{ delay: index * 0.2 + 0.3, duration: 0.5 }}
+                                    className="px-4"
+                                >
+                                    <h3 className="text-xl md:text-2xl font-bold text-white mb-3">
+                                        {step.title}
+                                    </h3>
+                                    <p className="text-sm md:text-base text-blue-100/60 max-w-[200px] mx-auto leading-relaxed">
+                                        {step.description}
+                                    </p>
+                                </motion.div>
+
+                                {/* Arrow (Desktop) */}
+                                {index < steps.length - 1 && (
+                                    <div className="hidden md:block absolute top-[60px] -right-4 translate-x-1/2 z-20">
+                                        <motion.div
+                                            animate={{ x: [0, 5, 0] }}
+                                            transition={{ duration: 2, repeat: Infinity }}
+                                        >
+                                            <ArrowRight className="w-8 h-8 text-white/20" />
+                                        </motion.div>
                                     </div>
-                                    <div>
-                                        <div className="text-xs text-muted-foreground">Total de Ativos</div>
-                                        <div className="text-lg font-bold text-foreground">12 ativos</div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </motion.div>
-
-                    {/* Right - Features */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="space-y-8"
-                    >
-                        {/* Feature 1 */}
-                        <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-12 h-12 bg-blue-500/10 rounded-xl flex items-center justify-center">
-                                <Wallet className="w-6 h-6 text-blue-400" />
+                                )}
                             </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-foreground mb-2">
-                                    Portfólio Completo
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    Visualize todos os seus investimentos em um único lugar com valores atualizados em tempo real
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Feature 2 */}
-                        <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-12 h-12 bg-green-500/10 rounded-xl flex items-center justify-center">
-                                <TrendingUp className="w-6 h-6 text-green-400" />
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-foreground mb-2">
-                                    Análise de Rentabilidade
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    Acompanhe lucros, prejuízos e rentabilidade percentual de cada ativo automaticamente
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Feature 3 */}
-                        <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-12 h-12 bg-purple-500/10 rounded-xl flex items-center justify-center">
-                                <DollarSign className="w-6 h-6 text-purple-400" />
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-foreground mb-2">
-                                    Controle de Dividendos
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    Registre e acompanhe todos os dividendos recebidos de FIIs e ações com histórico completo
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Feature 4 */}
-                        <div className="flex gap-4">
-                            <div className="flex-shrink-0 w-12 h-12 bg-pink-500/10 rounded-xl flex items-center justify-center">
-                                <PieChart className="w-6 h-6 text-pink-400" />
-                            </div>
-                            <div>
-                                <h3 className="text-xl font-bold text-foreground mb-2">
-                                    Distribuição de Ativos
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed">
-                                    Veja a distribuição do seu portfólio por tipo de ativo com gráficos interativos e percentuais
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* CTA */}
-                        <div className="pt-4">
-                            <Button
-                                size="lg"
-                                className="h-12 px-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-semibold shadow-xl shadow-purple-500/20 transition-all hover:scale-105 group"
-                                asChild
-                            >
-                                <Link href="/cadastro" prefetch={false}>
-                                    Começar a Investir Melhor
-                                    <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                                </Link>
-                            </Button>
-                        </div>
-                    </motion.div>
+                        ))}
+                    </div>
                 </div>
 
-                {/* Supported Assets */}
+                {/* Bottom Message */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: 0.3 }}
-                    className="mt-20 text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 1.2 }}
+                    className="text-center mt-20"
                 >
-                    <p className="text-zinc-500 text-sm mb-6">Tipos de ativos suportados:</p>
-                    <div className="flex flex-wrap items-center justify-center gap-4">
-                        {[
-                            { name: "Ações", color: "blue" },
-                            { name: "FIIs", color: "green" },
-                            { name: "ETFs", color: "purple" },
-                            { name: "Renda Fixa", color: "yellow" },
-                            { name: "Criptomoedas", color: "orange" },
-                            { name: "BDRs", color: "cyan" },
-                        ].map((asset, index) => (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                whileInView={{ opacity: 1, scale: 1 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className={`px-4 py-2 rounded-full bg-${asset.color}-500/10 border border-${asset.color}-500/20 text-${asset.color}-400 text-sm font-medium`}
-                            >
-                                {asset.name}
-                            </motion.div>
-                        ))}
+                    <div className="inline-flex items-center gap-3 px-6 py-4 rounded-full bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20 backdrop-blur-sm">
+                        <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
+                        <span className="text-lg font-semibold text-foreground">
+                            Tudo acontece em segundos, 24 horas por dia
+                        </span>
                     </div>
                 </motion.div>
             </div>

@@ -3,7 +3,6 @@ import { NewHeroSection } from "@/components/landing/new-hero-section";
 import { FeaturesGridSection } from "@/components/landing/features-grid-section";
 import { InvestmentShowcaseSection } from "@/components/landing/investment-showcase-section";
 import { NewPricingSection } from "@/components/landing/new-pricing-section";
-import { TestimonialsSection } from "@/components/landing/testimonials-section";
 import { FinalCtaSection } from "@/components/landing/final-cta-section";
 import { CtaFooter } from "@/components/landing/cta-footer";
 
@@ -15,8 +14,6 @@ export default function LandingPage() {
       <FeaturesGridSection />
       <InvestmentShowcaseSection />
       <NewPricingSection />
-      <TestimonialsSection />
-      <FinalCtaSection />
       <CtaFooter />
     </main>
   );
