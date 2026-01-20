@@ -7,16 +7,42 @@ import { useLanguage } from "@/contexts/language-context";
 
 // Lista de ícones disponíveis
 const AVAILABLE_ICONS = [
-  // Receitas
+  // Financeiro & Receitas
   'DollarSign', 'TrendingUp', 'Wallet', 'Briefcase', 'Award', 'Gift', 'PiggyBank',
-  'CreditCard', 'Banknote', 'Coins', 'HandCoins', 'Landmark',
-  // Despesas
-  'ShoppingCart', 'ShoppingBag', 'Home', 'Car', 'Fuel', 'Utensils', 'Coffee',
-  'Pizza', 'Smartphone', 'Laptop', 'Tv', 'Shirt', 'Plane', 'Train', 'Bus',
-  'Heart', 'Stethoscope', 'GraduationCap', 'BookOpen', 'Dumbbell', 'Film',
-  'Music', 'Gamepad2', 'Scissors', 'Wrench', 'Zap', 'Droplet', 'Wifi',
-  // Gerais
-  'Tag', 'Star', 'Circle', 'Square', 'Triangle', 'Package', 'Box',
+  'CreditCard', 'Banknote', 'Coins', 'HandCoins', 'Landmark', 'CircleDollarSign',
+  'Receipt', 'Scale', 'Percent', 'Trophy', 'Gem', 'BadgeCheck', 'BaggageClaim',
+
+  // Alimentação & Lazer
+  'Utensils', 'UtensilsCrossed', 'ChefHat', 'Coffee', 'Pizza', 'GlassWater', 'Beer', 'Wine',
+  'IceCream', 'Cake', 'Apple', 'Banana', 'Carrot', 'Egg', 'Fish', 'Popcorn',
+  'Gamepad2', 'Gamepad', 'Tv', 'Tv2', 'Film', 'Clapperboard', 'Music', 'Music2',
+  'Headphones', 'Mic', 'Camera', 'Ticket', 'Ghost', 'Dice5',
+
+  // Moradia & Serviços
+  'Home', 'Building', 'Building2', 'Hotel', 'Warehouse', 'Zap', 'Droplet', 'Wifi',
+  'Plug', 'Power', 'Trash2', 'Recycle', 'Wrench', 'Hammer', 'Construction',
+  'Paintbrush', 'Pencil', 'Lightbulb', 'Key', 'Lock', 'Shield',
+
+  // Transporte & Viagem
+  'Car', 'Bus', 'Train', 'Plane', 'Sailboat', 'Ship', 'Bike', 'Fuel',
+  'Map', 'MapPin', 'Globe', 'Compass', 'Luggage', 'Mountain', 'Palmtree', 'Tent',
+
+  // Saúde & Bem-estar
+  'Heart', 'Stethoscope', 'Activity', 'Syringe', 'Tablets', 'Pill', 'Dna',
+  'Dumbbell', 'Footprints', 'Smile', 'Baby', 'Dog', 'Cat', 'PawPrint', 'Sprout', 'Flower2',
+
+  // Educação & Trabalho
+  'GraduationCap', 'BookOpen', 'Book', 'Library', 'Laptop', 'Smartphone', 'Tablet',
+  'Mouse', 'Keyboard', 'Monitor', 'Printer', 'Mail', 'Inbox', 'Calendar', 'Clock',
+  'Users', 'User', 'MessageSquare', 'Briefcase', 'FileText', 'Clipboard',
+
+  // Vestuário & Compras
+  'Shirt', 'Footprints', 'ShoppingBag', 'ShoppingCart', 'ShoppingBasket', 'Package', 'Box',
+  'Tag', 'Store', 'Watch', 'Glasses', 'Scissors',
+
+  // Diversos & Símbolos
+  'Star', 'Leaf', 'Sun', 'Moon', 'Cloud', 'Snowflake', 'Flame', 'Anchor', 'Rocket', 'Target',
+  'Triangle', 'Square', 'Circle', 'Hexagon', 'HeartHandshake', 'Verified'
 ];
 
 interface IconSelectorProps {
