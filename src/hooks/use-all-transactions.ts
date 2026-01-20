@@ -121,7 +121,10 @@ export function useAllTransactions(
       return fetchAllTransactions(profile.id, accountFilter, period, customRange, userFilter);
     },
     enabled: !!profile?.id,
-    staleTime: 1000 * 60 * 5, // 5 minutos
+    staleTime: 0, // Always consider data stale
+    gcTime: 0, // Minimize cache retention
+    refetchOnMount: 'always', // Verify fresh data on mount
+    refetchOnWindowFocus: true, // Verify fresh data on focus
   });
 
   return {

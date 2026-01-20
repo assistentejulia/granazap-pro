@@ -16,6 +16,8 @@ export function createClient() {
       global: {
         headers: {
           'x-client-info': 'Assistente Julia-web',
+          'Cache-Control': 'no-store',
+          'Pragma': 'no-cache',
         },
       },
     }

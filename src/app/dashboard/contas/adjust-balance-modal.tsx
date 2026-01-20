@@ -147,7 +147,7 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
       <Modal isOpen={isOpen} onClose={onClose} title={feedback.type === 'success' ? t('common.save') : 'Erro'} className="max-w-sm">
         <div className="flex flex-col items-center text-center space-y-4 p-4">
           {feedback.type === 'success' ? <CheckCircle2 className="w-12 h-12 text-green-500" /> : <XCircle className="w-12 h-12 text-red-500" />}
-          <p className="text-white text-lg font-medium">{feedback.message}</p>
+          <p className="text-foreground text-lg font-medium">{feedback.message}</p>
         </div>
       </Modal>
     )
@@ -158,12 +158,12 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
       isOpen={isOpen}
       onClose={onClose}
       title={t('accounts.adjustBalanceTitle')}
-      className="max-w-md w-full p-0 overflow-hidden !bg-[#111827] border border-white/10 text-white"
+      className="max-w-md w-full p-0 overflow-hidden bg-card border border-border text-foreground"
     >
       <div className="p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
         <div className="mb-6 text-center">
-          <p className="text-zinc-400 text-sm">{t('accounts.adjustBalanceDesc')}</p>
-          <p className="text-xl font-bold text-white mt-1">{account?.nome}</p>
+          <p className="text-muted-foreground text-sm">{t('accounts.adjustBalanceDesc')}</p>
+          <p className="text-xl font-bold text-foreground mt-1">{account?.nome}</p>
         </div>
 
         {/* Tipo Selector */}
@@ -174,11 +174,11 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
             className={cn(
               "flex flex-col items-center gap-2 p-3 rounded-xl border transition-all",
               type === 'entrada'
-                ? "bg-green-500/10 border-green-500 text-green-400"
-                : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-700"
+                ? "bg-green-100 dark:bg-green-500/10 border-green-500 text-green-700 dark:text-green-400"
+                : "bg-background border-border text-muted-foreground hover:bg-muted"
             )}
           >
-            <div className={cn("p-2 rounded-full", type === 'entrada' ? "bg-green-500/20" : "bg-zinc-800")}>
+            <div className={cn("p-2 rounded-full", type === 'entrada' ? "bg-green-200 dark:bg-green-500/20" : "bg-muted dark:bg-zinc-800")}>
               <Plus className="w-5 h-5" />
             </div>
             <span className="text-sm font-medium">{t('accounts.willBeAdded')}</span>
@@ -190,11 +190,11 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
             className={cn(
               "flex flex-col items-center gap-2 p-3 rounded-xl border transition-all",
               type === 'saida'
-                ? "bg-red-500/10 border-red-500 text-red-400"
-                : "bg-zinc-900 border-zinc-800 text-zinc-500 hover:border-zinc-700"
+                ? "bg-red-100 dark:bg-red-500/10 border-red-500 text-red-700 dark:text-red-400"
+                : "bg-background border-border text-muted-foreground hover:bg-muted"
             )}
           >
-            <div className={cn("p-2 rounded-full", type === 'saida' ? "bg-red-500/20" : "bg-zinc-800")}>
+            <div className={cn("p-2 rounded-full", type === 'saida' ? "bg-red-200 dark:bg-red-500/20" : "bg-muted dark:bg-zinc-800")}>
               <Minus className="w-5 h-5" />
             </div>
             <span className="text-sm font-medium">{t('accounts.willBeSubtracted')}</span>
@@ -205,28 +205,28 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
         <div className={cn(
           "rounded-lg p-3 border mb-6",
           accountFilter === 'pessoal'
-            ? "bg-blue-500/10 border-blue-500/20"
-            : "bg-purple-500/10 border-purple-500/20"
+            ? "bg-blue-100 dark:bg-blue-500/10 border-blue-200 dark:border-blue-500/20"
+            : "bg-purple-100 dark:bg-purple-500/10 border-purple-200 dark:border-purple-500/20"
         )}>
           <div className="flex items-center gap-3">
             <div className={cn(
               "p-2 rounded-full",
-              accountFilter === 'pessoal' ? "bg-blue-500/20" : "bg-purple-500/20"
+              accountFilter === 'pessoal' ? "bg-blue-200 dark:bg-blue-500/20" : "bg-purple-200 dark:bg-purple-500/20"
             )}>
               {accountFilter === 'pessoal' ? (
-                <CheckCircle2 className="w-4 h-4 text-blue-400" />
+                <CheckCircle2 className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               ) : (
-                <TrendingUp className="w-4 h-4 text-purple-400" />
+                <TrendingUp className="w-4 h-4 text-purple-600 dark:text-purple-400" />
               )}
             </div>
             <div>
               <p className={cn(
                 "text-xs font-medium uppercase tracking-wider",
-                accountFilter === 'pessoal' ? "text-blue-400" : "text-purple-400"
+                accountFilter === 'pessoal' ? "text-blue-600 dark:text-blue-400" : "text-purple-600 dark:text-purple-400"
               )}>
                 {accountFilter === 'pessoal' ? t('sidebar.personal') : t('sidebar.pj')}
               </p>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 O ajuste será vinculado ao seu perfil {accountFilter === 'pessoal' ? 'pessoal' : 'de empresa'}.
               </p>
             </div>
@@ -238,9 +238,9 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
           <div className="grid grid-cols-2 gap-4">
             {/* Data */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('form.date')}</label>
+              <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">{t('form.date')}</label>
               <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                   <Calendar className="w-4 h-4" />
                 </div>
                 <input
@@ -248,16 +248,16 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
                   type="date"
                   value={formData.date}
                   onChange={e => setFormData({ ...formData, date: e.target.value })}
-                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 [color-scheme:dark]"
+                  className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground focus:outline-none focus:border-blue-500 transition-colors"
                 />
               </div>
             </div>
 
             {/* Valor */}
             <div className="space-y-1.5">
-              <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('form.value')}</label>
+              <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">{t('form.value')}</label>
               <div className="relative group">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
+                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                   <DollarSign className="w-4 h-4" />
                 </div>
                 <input
@@ -267,7 +267,7 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
                   placeholder="0,00"
                   value={formData.amount}
                   onChange={e => setFormData({ ...formData, amount: e.target.value })}
-                  className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 transition-colors"
                 />
               </div>
             </div>
@@ -275,29 +275,29 @@ export function AdjustBalanceModal({ isOpen, onClose, account, onSuccess }: Adju
 
           {/* Descrição */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.adjustReason')}</label>
+            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">{t('accounts.adjustReason')}</label>
             <input
               type="text"
               placeholder={type === 'entrada' ? "Ex: Estorno, Bônus..." : "Ex: Taxa bancária, Ajuste..."}
               value={formData.description}
               onChange={e => setFormData({ ...formData, description: e.target.value })}
-              className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg px-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
+              className="w-full bg-background border border-border rounded-lg px-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 transition-colors"
             />
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-white/5 mt-4">
+          <div className="flex gap-3 pt-4 border-t border-border mt-4">
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               onClick={onClose}
-              className="flex-1 text-zinc-300 hover:text-white hover:bg-white/5"
+              className="flex-1 bg-transparent hover:bg-muted text-foreground border-border"
             >
               {t('common.cancel')}
             </Button>
             <Button
               type="submit"
               className={cn(
-                "flex-[2] text-white",
+                "flex-[2] text-white border-none",
                 type === 'entrada' ? "bg-green-600 hover:bg-green-700" : "bg-red-600 hover:bg-red-700"
               )}
               disabled={loading}

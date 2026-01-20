@@ -19,7 +19,11 @@ export function BrandingStyleInjector() {
           (function() {
             try {
               const savedColor = localStorage.getItem('branding_primary_color');
-              if (savedColor) {
+              // Validate color: allow only typical color characters (hex, rgb, hsl, names)
+              // This strictly blocks dangerous characters like ; { } < > " '
+              const colorRegex = /^[a-zA-Z0-9#(),.%\s-]+$/;
+              
+              if (savedColor && colorRegex.test(savedColor)) {
                 // Criar style tag para sobrescrever CSS padrão
                 const style = document.createElement('style');
                 style.id = 'branding-override';

@@ -43,7 +43,7 @@ export function CtaFooter() {
                             <h4 className="text-foreground font-medium mb-4">Produto</h4>
                             <ul className="space-y-2 text-sm text-muted-foreground">
                                 <li><Link href="#" className="hover:text-blue-400">Funcionalidades</Link></li>
-                                <li><Link href="#" className="hover:text-blue-400">Preços</Link></li>
+                                <li><Link href="https://www.assistentejulia.com.br/planos" className="hover:text-blue-400">Preços</Link></li>
                                 <li><Link href="#" className="hover:text-blue-400">Para Empresas</Link></li>
                             </ul>
                         </div>
@@ -51,8 +51,8 @@ export function CtaFooter() {
                         <div>
                             <h4 className="text-foreground font-medium mb-4">Legal</h4>
                             <ul className="space-y-2 text-sm text-muted-foreground">
-                                <li><Link href="/termos" className="hover:text-blue-400">Termos de Uso</Link></li>
-                                <li><Link href="/privacidade" className="hover:text-blue-400">Privacidade</Link></li>
+                                <li><Link href="https://www.assistentejulia.com.br/termos-de-uso" className="hover:text-blue-400">Termos de Uso</Link></li>
+                                <li><Link href="https://www.assistentejulia.com.br/politica-de-privacidade" className="hover:text-blue-400">Privacidade</Link></li>
                             </ul>
                         </div>
                     </div>

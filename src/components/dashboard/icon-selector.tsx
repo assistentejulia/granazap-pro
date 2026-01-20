@@ -40,25 +40,28 @@ export function IconSelector({ selectedIcon, onSelectIcon, accentColor }: IconSe
 
   return (
     <div className="space-y-2">
-      <label className="text-sm font-medium text-white">
-        {t('categories.modal.icon')} <span className="text-zinc-500">({t('categories.modal.optional')})</span>
+      <label className="text-sm font-medium text-foreground">
+        {t('categories.modal.icon')} <span className="text-muted-foreground">({t('categories.modal.optional')})</span>
       </label>
-      
+
       {/* Search */}
       <input
         type="text"
         placeholder={t('categories.modal.searchIcon')}
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
-        className="w-full h-9 px-3 rounded-lg bg-[#0A0F1C] border border-white/10 text-white text-sm placeholder:text-zinc-500 focus:outline-none focus:border-white/20"
+        className="w-full h-9 px-3 rounded-lg bg-background border border-border text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:border-border/80 transition-colors"
+        style={{ borderColor: '' }}
+        onFocus={(e) => e.target.style.borderColor = accentColor}
+        onBlur={(e) => e.target.style.borderColor = ''}
       />
 
       {/* Icon Grid */}
-      <div className="grid grid-cols-8 gap-1.5 max-h-32 overflow-y-auto p-1.5 bg-[#0A0F1C] rounded-lg border border-white/10 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+      <div className="grid grid-cols-8 gap-1.5 max-h-32 overflow-y-auto p-1.5 bg-muted/50 dark:bg-[#0A0F1C] rounded-lg border border-border dark:border-white/10 scrollbar-thin scrollbar-thumb-border scrollbar-track-transparent">
         {filteredIcons.map((iconName) => {
           const IconComponent = getIconComponent(iconName);
           const isSelected = selectedIcon === iconName;
-          
+
           return (
             <button
               key={iconName}
@@ -67,8 +70,8 @@ export function IconSelector({ selectedIcon, onSelectIcon, accentColor }: IconSe
               className={cn(
                 "w-9 h-9 rounded-md flex items-center justify-center transition-all",
                 isSelected
-                  ? "ring-2 ring-offset-1 ring-offset-[#0A0F1C]"
-                  : "hover:bg-white/5"
+                  ? "ring-2 ring-offset-1 ring-offset-background"
+                  : "hover:bg-foreground/5"
               )}
               style={{
                 backgroundColor: isSelected ? `${accentColor}20` : 'transparent',
@@ -76,9 +79,9 @@ export function IconSelector({ selectedIcon, onSelectIcon, accentColor }: IconSe
               }}
               title={iconName}
             >
-              <IconComponent 
-                className="w-4 h-4" 
-                style={{ color: isSelected ? accentColor : '#71717a' }}
+              <IconComponent
+                className="w-4 h-4"
+                style={{ color: isSelected ? accentColor : 'currentColor' }}
               />
             </button>
           );
@@ -86,7 +89,7 @@ export function IconSelector({ selectedIcon, onSelectIcon, accentColor }: IconSe
       </div>
 
       {filteredIcons.length === 0 && (
-        <p className="text-center text-sm text-zinc-500 py-4">
+        <p className="text-center text-sm text-muted-foreground py-4">
           {t('categories.modal.noIconFound')}
         </p>
       )}
@@ -97,7 +100,7 @@ export function IconSelector({ selectedIcon, onSelectIcon, accentColor }: IconSe
 // Função para sugerir ícone baseado na descrição
 export function suggestIcon(description: string, type: 'entrada' | 'saida'): string {
   const desc = description.toLowerCase();
-  
+
   // Mapeamento de palavras-chave para ícones
   const iconMap: Record<string, string> = {
     // Receitas
@@ -110,7 +113,7 @@ export function suggestIcon(description: string, type: 'entrada' | 'saida'): str
     'presente': 'Gift',
     'bônus': 'Award',
     'bonus': 'Award',
-    
+
     // Despesas - Alimentação
     'alimentação': 'Utensils',
     'alimentacao': 'Utensils',
@@ -122,7 +125,7 @@ export function suggestIcon(description: string, type: 'entrada' | 'saida'): str
     'cafe': 'Coffee',
     'pizza': 'Pizza',
     'lanche': 'Coffee',
-    
+
     // Despesas - Moradia
     'aluguel': 'Home',
     'casa': 'Home',
@@ -134,7 +137,7 @@ export function suggestIcon(description: string, type: 'entrada' | 'saida'): str
     'luz': 'Zap',
     'energia': 'Zap',
     'internet': 'Wifi',
-    
+
     // Despesas - Transporte
     'transporte': 'Car',
     'carro': 'Car',
@@ -149,7 +152,7 @@ export function suggestIcon(description: string, type: 'entrada' | 'saida'): str
     'avião': 'Plane',
     'aviao': 'Plane',
     'viagem': 'Plane',
-    
+
     // Despesas - Saúde
     'saúde': 'Heart',
     'saude': 'Heart',
@@ -158,14 +161,14 @@ export function suggestIcon(description: string, type: 'entrada' | 'saida'): str
     'farmácia': 'Heart',
     'farmacia': 'Heart',
     'academia': 'Dumbbell',
-    
+
     // Despesas - Educação
     'educação': 'GraduationCap',
     'educacao': 'GraduationCap',
     'escola': 'GraduationCap',
     'curso': 'BookOpen',
     'livro': 'BookOpen',
-    
+
     // Despesas - Lazer
     'lazer': 'Film',
     'cinema': 'Film',
@@ -174,13 +177,13 @@ export function suggestIcon(description: string, type: 'entrada' | 'saida'): str
     'musica': 'Music',
     'jogo': 'Gamepad2',
     'game': 'Gamepad2',
-    
+
     // Despesas - Vestuário
     'roupa': 'Shirt',
     'vestuário': 'Shirt',
     'vestuario': 'Shirt',
     'shopping': 'ShoppingBag',
-    
+
     // Despesas - Tecnologia
     'celular': 'Smartphone',
     'telefone': 'Smartphone',
@@ -190,14 +193,14 @@ export function suggestIcon(description: string, type: 'entrada' | 'saida'): str
     'eletrônico': 'Laptop',
     'eletronico': 'Laptop',
   };
-  
+
   // Procurar por palavra-chave na descrição
   for (const [keyword, icon] of Object.entries(iconMap)) {
     if (desc.includes(keyword)) {
       return icon;
     }
   }
-  
+
   // Ícone padrão baseado no tipo
   return type === 'entrada' ? 'DollarSign' : 'ShoppingCart';
 }

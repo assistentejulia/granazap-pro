@@ -69,6 +69,10 @@ export function useFutureTransactionsQuery(
     },
     enabled: !!profile, // Só executa se tiver profile
     placeholderData: (previousData) => previousData, // Mantém dados antigos enquanto busca novos
+    staleTime: 0, // Always consider data stale
+    gcTime: 0, // Minimize cache retention
+    refetchOnMount: 'always', // Verify fresh data on mount
+    refetchOnWindowFocus: true, // Verify fresh data on focus
     initialData: () => {
       // Tentar pegar dados do cache
       return queryClient.getQueryData(queryKey);

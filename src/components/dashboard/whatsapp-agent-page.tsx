@@ -167,9 +167,9 @@ export function WhatsAppAgentPage() {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center space-y-3">
-          <MessageCircle className="w-16 h-16 text-zinc-600 mx-auto" />
-          <h3 className="text-lg font-semibold text-zinc-400">Assistente WhatsApp Indisponível</h3>
-          <p className="text-sm text-zinc-500">O assistente não está habilitado no momento.</p>
+          <MessageCircle className="w-16 h-16 text-muted-foreground mx-auto" />
+          <h3 className="text-lg font-semibold text-muted-foreground">Assistente WhatsApp Indisponível</h3>
+          <p className="text-sm text-muted-foreground">O assistente não está habilitado no momento.</p>
         </div>
       </div>
     );
@@ -180,32 +180,32 @@ export function WhatsAppAgentPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-            <div className="p-2 bg-green-500/10 rounded-xl">
-              <MessageCircle className="w-6 h-6 text-green-500" />
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
+            <div className="p-2 bg-green-100 dark:bg-green-500/10 rounded-xl">
+              <MessageCircle className="w-6 h-6 text-green-600 dark:text-green-500" />
             </div>
             Assistente WhatsApp
           </h1>
-          <p className="text-zinc-400 text-sm mt-2">
+          <p className="text-muted-foreground text-sm mt-2">
             Gerencie suas finanças pelo WhatsApp com inteligência artificial
           </p>
         </div>
       </div>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-br from-green-500/10 via-green-500/5 to-transparent border border-green-500/20 rounded-2xl p-8">
+      <div className="bg-gradient-to-br from-green-50 via-white to-transparent dark:from-green-500/10 dark:via-green-500/5 dark:to-transparent border border-green-200 dark:border-green-500/20 rounded-2xl p-8">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-500/10 border border-green-500/20 rounded-full">
-              <Sparkles className="w-4 h-4 text-green-400" />
-              <span className="text-xs font-medium text-green-400">Powered by AI</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-green-100 dark:bg-green-500/10 border border-green-200 dark:border-green-500/20 rounded-full">
+              <Sparkles className="w-4 h-4 text-green-600 dark:text-green-400" />
+              <span className="text-xs font-medium text-green-600 dark:text-green-400">Powered by AI</span>
             </div>
 
-            <h2 className="text-3xl font-bold text-white">
+            <h2 className="text-3xl font-bold text-foreground">
               Olá, {userName}!
             </h2>
 
-            <p className="text-zinc-300 leading-relaxed">
+            <p className="text-muted-foreground leading-relaxed">
               Converse com nosso assistente inteligente e gerencie suas finanças de forma simples e rápida pelo WhatsApp.
             </p>
 
@@ -221,11 +221,11 @@ export function WhatsAppAgentPage() {
 
               <button
                 onClick={handleCopyPhone}
-                className="px-6 py-3 bg-white/5 hover:bg-white/10 text-white rounded-xl font-medium border border-white/10 transition-all flex items-center justify-center gap-2"
+                className="px-6 py-3 bg-secondary hover:bg-secondary/80 text-foreground rounded-xl font-medium border border-border transition-all flex items-center justify-center gap-2"
               >
                 {copiedPhone ? (
                   <>
-                    <Check className="w-4 h-4 text-green-400" />
+                    <Check className="w-4 h-4 text-green-600 dark:text-green-400" />
                     <span>Número Copiado!</span>
                   </>
                 ) : (
@@ -238,42 +238,42 @@ export function WhatsAppAgentPage() {
             </div>
           </div>
 
-          <div className="bg-[#0A0F1C] border border-white/10 rounded-xl p-6 space-y-4">
+          <div className="bg-card/80 dark:bg-[#0A0F1C] border border-border/50 dark:border-white/10 rounded-xl p-6 space-y-4 shadow-sm">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-500/10 rounded-lg">
-                <Info className="w-5 h-5 text-green-400" />
+              <div className="p-2 bg-green-100 dark:bg-green-500/10 rounded-lg">
+                <Info className="w-5 h-5 text-green-600 dark:text-green-400" />
               </div>
-              <h3 className="font-semibold text-white">Informações de Contato</h3>
+              <h3 className="font-semibold text-foreground">Informações de Contato</h3>
             </div>
 
             <div className="space-y-3">
               <div>
-                <p className="text-xs text-zinc-500 mb-1">Número do Assistente</p>
+                <p className="text-xs text-muted-foreground mb-1">Número do Assistente</p>
                 {agentPhone ? (
-                  <p className="text-lg font-mono font-bold text-green-400">{agentPhone}</p>
+                  <p className="text-lg font-mono font-bold text-green-600 dark:text-green-400">{agentPhone}</p>
                 ) : whatsappConfig?.whatsapp_contact_url ? (
                   <div>
                     <p className="text-sm text-zinc-400 mb-1">Configurado via URL</p>
                     <p className="text-xs text-zinc-500 break-all">{whatsappConfig.whatsapp_contact_url}</p>
                   </div>
                 ) : (
-                  <p className="text-sm text-yellow-400">Não configurado no painel admin</p>
+                  <p className="text-sm text-yellow-500 dark:text-yellow-400">Não configurado no painel admin</p>
                 )}
               </div>
 
-              <div className="h-px bg-white/5" />
+              <div className="h-px bg-border" />
 
               <div>
-                <p className="text-xs text-zinc-500 mb-1">Seu Número Cadastrado</p>
+                <p className="text-xs text-muted-foreground mb-1">Seu Número Cadastrado</p>
                 {userPhone ? (
-                  <p className="text-sm font-medium text-white">{userPhone}</p>
+                  <p className="text-sm font-medium text-foreground">{userPhone}</p>
                 ) : (
-                  <p className="text-sm text-zinc-500 italic">Cadastre seu telefone no perfil</p>
+                  <p className="text-sm text-muted-foreground italic">Cadastre seu telefone no perfil</p>
                 )}
               </div>
 
-              <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 mt-4">
-                <p className="text-xs text-blue-300 leading-relaxed">
+              <div className="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 rounded-lg p-3 mt-4">
+                <p className="text-xs text-blue-600 dark:text-blue-300 leading-relaxed">
                   💡 <strong>Dica:</strong> Salve o número do assistente como "{appName}" na sua agenda para não perder as mensagens!
                 </p>
               </div>
@@ -283,17 +283,17 @@ export function WhatsAppAgentPage() {
       </div>
 
       {/* Important Info about Personal/PJ */}
-      <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-5">
+      <div className="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 rounded-xl p-5">
         <div className="flex items-start gap-3">
-          <Info className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+          <Info className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <h3 className="font-semibold text-blue-400 mb-2">Entenda como funciona Pessoal vs PJ</h3>
-            <div className="space-y-2 text-sm text-zinc-300">
+            <h3 className="font-semibold text-blue-700 dark:text-blue-400 mb-2">Entenda como funciona Pessoal vs PJ</h3>
+            <div className="space-y-2 text-sm text-muted-foreground dark:text-zinc-300">
               <p>
-                <strong className="text-white">Padrão (Pessoal):</strong> Quando você não especificar, todas as transações vão para a conta <strong>Pessoal</strong>.
+                <strong className="text-foreground dark:text-white">Padrão (Pessoal):</strong> Quando você não especificar, todas as transações vão para a conta <strong>Pessoal</strong>.
               </p>
               <p>
-                <strong className="text-white">PJ/Empresa:</strong> Use palavras como <span className="text-blue-300 font-medium">"empresa"</span>, <span className="text-blue-300 font-medium">"PJ"</span>, <span className="text-blue-300 font-medium">"negócio"</span>, <span className="text-blue-300 font-medium">"empresarial"</span> para lançar na conta PJ.
+                <strong className="text-foreground dark:text-white">PJ/Empresa:</strong> Use palavras como <span className="text-blue-600 dark:text-blue-300 font-medium">"empresa"</span>, <span className="text-blue-600 dark:text-blue-300 font-medium">"PJ"</span>, <span className="text-blue-600 dark:text-blue-300 font-medium">"negócio"</span>, <span className="text-blue-600 dark:text-blue-300 font-medium">"empresarial"</span> para lançar na conta PJ.
               </p>
             </div>
           </div>
@@ -304,27 +304,27 @@ export function WhatsAppAgentPage() {
       <div>
         <div className="flex items-center gap-3 mb-4">
           <Zap className="w-5 h-5 text-yellow-500" />
-          <h2 className="text-xl font-bold text-white">O que você pode fazer</h2>
+          <h2 className="text-xl font-bold text-foreground">O que você pode fazer</h2>
         </div>
 
         <div className="grid md:grid-cols-2 gap-4">
           {features.map((feature, idx) => (
             <div
               key={idx}
-              className="bg-[#111827] border border-white/5 rounded-xl p-5 hover:border-white/10 transition-all group"
+              className="bg-card border border-border rounded-xl p-5 hover:border-border/80 transition-all group shadow-sm"
             >
-              <h3 className="font-semibold text-white mb-2 group-hover:text-green-400 transition-colors">
+              <h3 className="font-semibold text-card-foreground mb-2 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
                 {feature.title}
               </h3>
-              <p className="text-sm text-zinc-400 mb-4">{feature.description}</p>
+              <p className="text-sm text-muted-foreground mb-4">{feature.description}</p>
 
               <div className="space-y-2">
                 {feature.examples.map((example, i) => (
                   <div
                     key={i}
-                    className="flex items-start gap-2 text-xs text-zinc-500 bg-[#0A0F1C] rounded-lg px-3 py-2 border border-white/5"
+                    className="flex items-start gap-2 text-xs text-zinc-700 dark:text-zinc-400 bg-muted dark:bg-[#0A0F1C] rounded-lg px-3 py-2 border border-border/50"
                   >
-                    <Send className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />
+                    <Send className="w-3 h-3 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
                     <span>"{example}"</span>
                   </div>
                 ))}
@@ -335,39 +335,39 @@ export function WhatsAppAgentPage() {
       </div>
 
       {/* How it Works */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
+      <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
           <BookOpen className="w-5 h-5 text-blue-500" />
-          <h2 className="text-xl font-bold text-white">Como Funciona</h2>
+          <h2 className="text-xl font-bold text-foreground">Como Funciona</h2>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
           <div className="text-center space-y-3">
-            <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center mx-auto">
-              <span className="text-xl font-bold text-green-400">1</span>
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-500/10 rounded-full flex items-center justify-center mx-auto">
+              <span className="text-xl font-bold text-green-600 dark:text-green-400">1</span>
             </div>
-            <h3 className="font-semibold text-white">Salve o Contato</h3>
-            <p className="text-sm text-zinc-400">
+            <h3 className="font-semibold text-foreground">Salve o Contato</h3>
+            <p className="text-sm text-muted-foreground">
               Adicione o número do assistente na sua agenda do celular
             </p>
           </div>
 
           <div className="text-center space-y-3">
-            <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
-              <span className="text-xl font-bold text-blue-400">2</span>
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-500/10 rounded-full flex items-center justify-center mx-auto">
+              <span className="text-xl font-bold text-blue-600 dark:text-blue-400">2</span>
             </div>
-            <h3 className="font-semibold text-white">Inicie a Conversa</h3>
-            <p className="text-sm text-zinc-400">
+            <h3 className="font-semibold text-foreground">Inicie a Conversa</h3>
+            <p className="text-sm text-muted-foreground">
               Clique no botão acima ou envie uma mensagem diretamente
             </p>
           </div>
 
           <div className="text-center space-y-3">
-            <div className="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto">
-              <span className="text-xl font-bold text-purple-400">3</span>
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-500/10 rounded-full flex items-center justify-center mx-auto">
+              <span className="text-xl font-bold text-purple-600 dark:text-purple-400">3</span>
             </div>
-            <h3 className="font-semibold text-white">Converse Naturalmente</h3>
-            <p className="text-sm text-zinc-400">
+            <h3 className="font-semibold text-foreground">Converse Naturalmente</h3>
+            <p className="text-sm text-muted-foreground">
               Fale como se estivesse conversando com um amigo
             </p>
           </div>
@@ -378,69 +378,69 @@ export function WhatsAppAgentPage() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <Sparkles className="w-5 h-5 text-yellow-500" />
-          <h2 className="text-xl font-bold text-white">💡 Dicas Importantes</h2>
+          <h2 className="text-xl font-bold text-foreground">💡 Dicas Importantes</h2>
         </div>
 
         {/* Transaction Types */}
-        <div className="bg-gradient-to-br from-green-500/10 via-green-500/5 to-transparent border border-green-500/20 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-gradient-to-br from-green-50 via-white to-transparent dark:from-green-500/10 dark:via-green-500/5 dark:to-transparent border border-green-200 dark:border-green-500/20 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <span className="text-2xl">🔹</span>
             Entenda a Diferença: Gastei vs Paguei vs Tenho que Pagar
           </h3>
 
           <div className="space-y-4">
-            <div className="bg-[#0A0F1C] rounded-lg p-4 border border-white/5">
-              <h4 className="font-semibold text-green-400 mb-2">✅ "GASTEI" - Transação Imediata (Já Aconteceu)</h4>
-              <p className="text-sm text-zinc-400 mb-3">Use quando você acabou de fazer uma compra AGORA:</p>
+            <div className="bg-white/80 dark:bg-[#0A0F1C] rounded-lg p-4 border border-green-100 dark:border-white/5 shadow-sm">
+              <h4 className="font-semibold text-green-700 dark:text-green-400 mb-2">✅ "GASTEI" - Transação Imediata (Já Aconteceu)</h4>
+              <p className="text-sm text-muted-foreground mb-3">Use quando você acabou de fazer uma compra AGORA:</p>
               <div className="space-y-2">
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
                   <span>"Gastei 50 no mercado"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
                   <span>"Comprei 150 na farmácia"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
                   <span>"Recebi 3000 de salário"</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-[#0A0F1C] rounded-lg p-4 border border-white/5">
-              <h4 className="font-semibold text-blue-400 mb-2">📅 "TENHO QUE PAGAR" - Agendamento Futuro</h4>
-              <p className="text-sm text-zinc-400 mb-3">Use para pagamentos que vão acontecer no futuro:</p>
+            <div className="bg-white/80 dark:bg-[#0A0F1C] rounded-lg p-4 border border-blue-100 dark:border-white/5 shadow-sm">
+              <h4 className="font-semibold text-blue-700 dark:text-blue-400 mb-2">📅 "TENHO QUE PAGAR" - Agendamento Futuro</h4>
+              <p className="text-sm text-muted-foreground mb-3">Use para pagamentos que vão acontecer no futuro:</p>
               <div className="space-y-2">
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-blue-600 dark:text-blue-500 flex-shrink-0 mt-0.5" />
                   <span>"Tenho que pagar 1500 de aluguel dia 10"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-blue-600 dark:text-blue-500 flex-shrink-0 mt-0.5" />
                   <span>"Agendar conta de luz de 200 para dia 15"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-blue-600 dark:text-blue-500 flex-shrink-0 mt-0.5" />
                   <span>"Preciso pagar 500 de dentista semana que vem"</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-[#0A0F1C] rounded-lg p-4 border border-white/5">
-              <h4 className="font-semibold text-purple-400 mb-2">✔️ "PAGUEI" - Confirmar Pagamento Agendado</h4>
-              <p className="text-sm text-zinc-400 mb-3">Use para confirmar algo que estava agendado:</p>
+            <div className="bg-white/80 dark:bg-[#0A0F1C] rounded-lg p-4 border border-purple-100 dark:border-white/5 shadow-sm">
+              <h4 className="font-semibold text-purple-700 dark:text-purple-400 mb-2">✔️ "PAGUEI" - Confirmar Pagamento Agendado</h4>
+              <p className="text-sm text-muted-foreground mb-3">Use para confirmar algo que estava agendado:</p>
               <div className="space-y-2">
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-purple-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-purple-600 dark:text-purple-500 flex-shrink-0 mt-0.5" />
                   <span>"Paguei o aluguel hoje"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-purple-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-purple-600 dark:text-purple-500 flex-shrink-0 mt-0.5" />
                   <span>"Quitei a parcela 2 do IPTU"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-purple-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-purple-600 dark:text-purple-500 flex-shrink-0 mt-0.5" />
                   <span>"Efetuei o pagamento da internet"</span>
                 </div>
               </div>
@@ -449,38 +449,38 @@ export function WhatsAppAgentPage() {
         </div>
 
         {/* Credit vs Debit */}
-        <div className="bg-gradient-to-br from-blue-500/10 via-blue-500/5 to-transparent border border-blue-500/20 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-gradient-to-br from-blue-50 via-white to-transparent dark:from-blue-500/10 dark:via-blue-500/5 dark:to-transparent border border-blue-200 dark:border-blue-500/20 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <span className="text-2xl">💳</span>
             Cartão de Débito vs Crédito
           </h3>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="bg-[#0A0F1C] rounded-lg p-4 border border-white/5">
-              <h4 className="font-semibold text-green-400 mb-2">Débito - Desconta Agora</h4>
-              <p className="text-xs text-zinc-400 mb-3">Registra imediatamente e desconta do saldo:</p>
+            <div className="bg-white/80 dark:bg-[#0A0F1C] rounded-lg p-4 border border-blue-100 dark:border-white/5 shadow-sm">
+              <h4 className="font-semibold text-green-700 dark:text-green-400 mb-2">Débito - Desconta Agora</h4>
+              <p className="text-xs text-muted-foreground mb-3">Registra imediatamente e desconta do saldo:</p>
               <div className="space-y-2">
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
                   <span>"Gastei 80 no supermercado com cartão de débito Nubank"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
                   <span>"Comprei 45 na farmácia débito Itaú"</span>
                 </div>
               </div>
             </div>
 
-            <div className="bg-[#0A0F1C] rounded-lg p-4 border border-white/5">
-              <h4 className="font-semibold text-orange-400 mb-2">Crédito - Fica em Aberto</h4>
-              <p className="text-xs text-zinc-400 mb-3">Fica em aberto até pagar a fatura:</p>
+            <div className="bg-white/80 dark:bg-[#0A0F1C] rounded-lg p-4 border border-blue-100 dark:border-white/5 shadow-sm">
+              <h4 className="font-semibold text-orange-700 dark:text-orange-400 mb-2">Crédito - Fica em Aberto</h4>
+              <p className="text-xs text-muted-foreground mb-3">Fica em aberto até pagar a fatura:</p>
               <div className="space-y-2">
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-orange-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-orange-600 dark:text-orange-500 flex-shrink-0 mt-0.5" />
                   <span>"Comprei 250 de roupas no crédito Nubank"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#111827] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-orange-500 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white dark:bg-[#111827] rounded px-3 py-2 border border-zinc-100 dark:border-white/5">
+                  <Send className="w-3 h-3 text-orange-600 dark:text-orange-500 flex-shrink-0 mt-0.5" />
                   <span>"Gastei 180 no restaurante com cartão de crédito Itaú"</span>
                 </div>
               </div>
@@ -489,136 +489,136 @@ export function WhatsAppAgentPage() {
         </div>
 
         {/* Installments */}
-        <div className="bg-gradient-to-br from-purple-500/10 via-purple-500/5 to-transparent border border-purple-500/20 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-gradient-to-br from-purple-50 via-white to-transparent dark:from-purple-500/10 dark:via-purple-500/5 dark:to-transparent border border-purple-200 dark:border-purple-500/20 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <span className="text-2xl">📊</span>
             Parcelamento em Cartão de Crédito
           </h3>
 
           <div className="space-y-2">
-            <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
-              <Send className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-sm text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded-lg px-4 py-3 border border-purple-100 dark:border-white/5 shadow-sm">
+              <Send className="w-4 h-4 text-purple-600 dark:text-purple-500 flex-shrink-0 mt-0.5" />
               <span>"Comprei notebook de 3000 em 12 parcelas no crédito Nubank"</span>
             </div>
-            <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
-              <Send className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-sm text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded-lg px-4 py-3 border border-purple-100 dark:border-white/5 shadow-sm">
+              <Send className="w-4 h-4 text-purple-600 dark:text-purple-500 flex-shrink-0 mt-0.5" />
               <span>"Parcelei 600 em 6x no cartão de crédito Itaú"</span>
             </div>
-            <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
-              <Send className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-sm text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded-lg px-4 py-3 border border-purple-100 dark:border-white/5 shadow-sm">
+              <Send className="w-4 h-4 text-purple-600 dark:text-purple-500 flex-shrink-0 mt-0.5" />
               <span>"Compra de 1200 dividida em 10 parcelas crédito Inter"</span>
             </div>
           </div>
         </div>
 
         {/* Bank Account Specific */}
-        <div className="bg-gradient-to-br from-cyan-500/10 via-cyan-500/5 to-transparent border border-cyan-500/20 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-gradient-to-br from-cyan-50 via-white to-transparent dark:from-cyan-500/10 dark:via-cyan-500/5 dark:to-transparent border border-cyan-200 dark:border-cyan-500/20 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <span className="text-2xl">🏦</span>
             Transações em Conta Bancária Específica
           </h3>
 
-          <p className="text-sm text-zinc-400 mb-3">Mencione a conta para vincular a transação:</p>
+          <p className="text-sm text-muted-foreground mb-3">Mencione a conta para vincular a transação:</p>
           <div className="space-y-2">
-            <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
-              <Send className="w-4 h-4 text-cyan-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-sm text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded-lg px-4 py-3 border border-cyan-100 dark:border-white/5 shadow-sm">
+              <Send className="w-4 h-4 text-cyan-600 dark:text-cyan-500 flex-shrink-0 mt-0.5" />
               <span>"Recebi 5000 de salário na conta Nubank"</span>
             </div>
-            <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
-              <Send className="w-4 h-4 text-cyan-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-sm text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded-lg px-4 py-3 border border-cyan-100 dark:border-white/5 shadow-sm">
+              <Send className="w-4 h-4 text-cyan-600 dark:text-cyan-500 flex-shrink-0 mt-0.5" />
               <span>"Gastei 800 de aluguel pela conta Itaú"</span>
             </div>
-            <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
-              <Send className="w-4 h-4 text-cyan-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-sm text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded-lg px-4 py-3 border border-cyan-100 dark:border-white/5 shadow-sm">
+              <Send className="w-4 h-4 text-cyan-600 dark:text-cyan-500 flex-shrink-0 mt-0.5" />
               <span>"Agendar 1500 na conta Bradesco PJ para dia 10"</span>
             </div>
           </div>
         </div>
 
         {/* Recurring Payments */}
-        <div className="bg-gradient-to-br from-pink-500/10 via-pink-500/5 to-transparent border border-pink-500/20 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-gradient-to-br from-pink-50 via-white to-transparent dark:from-pink-500/10 dark:via-pink-500/5 dark:to-transparent border border-pink-200 dark:border-pink-500/20 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <span className="text-2xl">🔄</span>
             Lançamentos Recorrentes
           </h3>
 
-          <p className="text-sm text-zinc-400 mb-3">Configure pagamentos que se repetem todo mês:</p>
+          <p className="text-sm text-muted-foreground mb-3">Configure pagamentos que se repetem todo mês:</p>
           <div className="space-y-2">
-            <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
-              <Send className="w-4 h-4 text-pink-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-sm text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded-lg px-4 py-3 border border-pink-100 dark:border-white/5 shadow-sm">
+              <Send className="w-4 h-4 text-pink-600 dark:text-pink-500 flex-shrink-0 mt-0.5" />
               <span>"Aluguel de 1500 todo dia 10 até 31/12/2025"</span>
             </div>
-            <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
-              <Send className="w-4 h-4 text-pink-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-sm text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded-lg px-4 py-3 border border-pink-100 dark:border-white/5 shadow-sm">
+              <Send className="w-4 h-4 text-pink-600 dark:text-pink-500 flex-shrink-0 mt-0.5" />
               <span>"Salário de 5000 recorrente até dezembro de 2025"</span>
             </div>
-            <div className="flex items-start gap-2 text-sm text-zinc-300 bg-[#0A0F1C] rounded-lg px-4 py-3 border border-white/5">
-              <Send className="w-4 h-4 text-pink-500 flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-2 text-sm text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded-lg px-4 py-3 border border-pink-100 dark:border-white/5 shadow-sm">
+              <Send className="w-4 h-4 text-pink-600 dark:text-pink-500 flex-shrink-0 mt-0.5" />
               <span>"Internet empresa 800 mensal de janeiro a junho"</span>
             </div>
           </div>
         </div>
 
         {/* Queries and Reports */}
-        <div className="bg-gradient-to-br from-yellow-500/10 via-orange-500/5 to-transparent border border-yellow-500/20 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+        <div className="bg-gradient-to-br from-yellow-50 via-white to-transparent dark:from-yellow-500/10 dark:via-orange-500/5 dark:to-transparent border border-yellow-200 dark:border-yellow-500/20 rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
             <span className="text-2xl">📈</span>
             Consultas e Relatórios Avançados
           </h3>
 
           <div className="grid md:grid-cols-2 gap-4">
             <div className="space-y-3">
-              <h4 className="font-semibold text-yellow-400 text-sm">Saldo de Contas:</h4>
+              <h4 className="font-semibold text-yellow-700 dark:text-yellow-400 text-sm">Saldo de Contas:</h4>
               <div className="space-y-2">
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#0A0F1C] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-yellow-500 flex-shrink-0 mt-0.5" />
-                  <span>"Qual o saldo da conta Nubank?"</span>
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded px-3 py-2 border border-yellow-100 dark:border-white/5 shadow-sm">
+                  <Send className="w-3 h-3 text-yellow-600 dark:text-yellow-500 flex-shrink-0 mt-0.5" />
+                  <span className="font-medium">"Qual o saldo da conta Nubank?"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#0A0F1C] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-yellow-500 flex-shrink-0 mt-0.5" />
-                  <span>"Saldo de todas as contas"</span>
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded px-3 py-2 border border-yellow-100 dark:border-white/5 shadow-sm">
+                  <Send className="w-3 h-3 text-yellow-600 dark:text-yellow-500 flex-shrink-0 mt-0.5" />
+                  <span className="font-medium">"Saldo de todas as contas"</span>
                 </div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <h4 className="font-semibold text-orange-400 text-sm">Fatura de Cartão:</h4>
+              <h4 className="font-semibold text-orange-700 dark:text-orange-400 text-sm">Fatura de Cartão:</h4>
               <div className="space-y-2">
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#0A0F1C] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-orange-500 flex-shrink-0 mt-0.5" />
-                  <span>"Qual a fatura do Nubank?"</span>
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded px-3 py-2 border border-orange-100 dark:border-white/5 shadow-sm">
+                  <Send className="w-3 h-3 text-orange-600 dark:text-orange-500 flex-shrink-0 mt-0.5" />
+                  <span className="font-medium">"Qual a fatura do Nubank?"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#0A0F1C] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-orange-500 flex-shrink-0 mt-0.5" />
-                  <span>"Valor da fatura de dezembro"</span>
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded px-3 py-2 border border-orange-100 dark:border-white/5 shadow-sm">
+                  <Send className="w-3 h-3 text-orange-600 dark:text-orange-500 flex-shrink-0 mt-0.5" />
+                  <span className="font-medium">"Valor da fatura de dezembro"</span>
                 </div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <h4 className="font-semibold text-green-400 text-sm">Por Categoria:</h4>
+              <h4 className="font-semibold text-green-700 dark:text-green-400 text-sm">Por Categoria:</h4>
               <div className="space-y-2">
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#0A0F1C] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span>"Quanto gastei com alimentação este mês?"</span>
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded px-3 py-2 border border-green-100 dark:border-white/5 shadow-sm">
+                  <Send className="w-3 h-3 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="font-medium">"Quanto gastei com alimentação este mês?"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#0A0F1C] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span>"Gastos com transporte em novembro"</span>
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded px-3 py-2 border border-green-100 dark:border-white/5 shadow-sm">
+                  <Send className="w-3 h-3 text-green-600 dark:text-green-500 flex-shrink-0 mt-0.5" />
+                  <span className="font-medium">"Gastos com transporte em novembro"</span>
                 </div>
               </div>
             </div>
 
             <div className="space-y-3">
-              <h4 className="font-semibold text-blue-400 text-sm">Projeções Futuras:</h4>
+              <h4 className="font-semibold text-blue-700 dark:text-blue-400 text-sm">Projeções Futuras:</h4>
               <div className="space-y-2">
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#0A0F1C] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" />
-                  <span>"Previsão de fluxo de caixa para os próximos 15 dias"</span>
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded px-3 py-2 border border-blue-100 dark:border-white/5 shadow-sm">
+                  <Send className="w-3 h-3 text-blue-600 dark:text-blue-500 flex-shrink-0 mt-0.5" />
+                  <span className="font-medium">"Previsão de fluxo de caixa para os próximos 15 dias"</span>
                 </div>
-                <div className="flex items-start gap-2 text-xs text-zinc-300 bg-[#0A0F1C] rounded px-3 py-2">
-                  <Send className="w-3 h-3 text-blue-500 flex-shrink-0 mt-0.5" />
-                  <span>"Quais parcelas faltam do notebook?"</span>
+                <div className="flex items-start gap-2 text-xs text-zinc-800 dark:text-zinc-300 bg-white/80 dark:bg-[#0A0F1C] rounded px-3 py-2 border border-blue-100 dark:border-white/5 shadow-sm">
+                  <Send className="w-3 h-3 text-blue-600 dark:text-blue-500 flex-shrink-0 mt-0.5" />
+                  <span className="font-medium">"Quais parcelas faltam do notebook?"</span>
                 </div>
               </div>
             </div>
@@ -628,28 +628,28 @@ export function WhatsAppAgentPage() {
 
       {/* Resources Available */}
       <div className="grid md:grid-cols-3 gap-4">
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-5 text-center">
-          <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
-            <Sparkles className="w-6 h-6 text-green-400" />
+        <div className="bg-card border border-border rounded-xl p-5 text-center shadow-sm">
+          <div className="w-12 h-12 bg-green-100 dark:bg-green-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Sparkles className="w-6 h-6 text-green-600 dark:text-green-400" />
           </div>
-          <h4 className="font-semibold text-white mb-2">IA Inteligente</h4>
-          <p className="text-xs text-zinc-400">Reconhecimento automático de categorias e valores</p>
+          <h4 className="font-semibold text-foreground mb-2">IA Inteligente</h4>
+          <p className="text-xs text-muted-foreground">Reconhecimento automático de categorias e valores</p>
         </div>
 
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-5 text-center">
-          <div className="w-12 h-12 bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
-            <Zap className="w-6 h-6 text-blue-400" />
+        <div className="bg-card border border-border rounded-xl p-5 text-center shadow-sm">
+          <div className="w-12 h-12 bg-blue-100 dark:bg-blue-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
+            <Zap className="w-6 h-6 text-blue-600 dark:text-blue-400" />
           </div>
-          <h4 className="font-semibold text-white mb-2">Respostas Rápidas</h4>
-          <p className="text-xs text-zinc-400">Atendimento instantâneo 24 horas por dia</p>
+          <h4 className="font-semibold text-foreground mb-2">Respostas Rápidas</h4>
+          <p className="text-xs text-muted-foreground">Atendimento instantâneo 24 horas por dia</p>
         </div>
 
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-5 text-center">
-          <div className="w-12 h-12 bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
-            <BookOpen className="w-6 h-6 text-purple-400" />
+        <div className="bg-card border border-border rounded-xl p-5 text-center shadow-sm">
+          <div className="w-12 h-12 bg-purple-100 dark:bg-purple-500/10 rounded-full flex items-center justify-center mx-auto mb-3">
+            <BookOpen className="w-6 h-6 text-purple-600 dark:text-purple-400" />
           </div>
-          <h4 className="font-semibold text-white mb-2">Multi-Conta</h4>
-          <p className="text-xs text-zinc-400">Suporte para contas Pessoal e PJ separadas</p>
+          <h4 className="font-semibold text-foreground mb-2">Multi-Conta</h4>
+          <p className="text-xs text-muted-foreground">Suporte para contas Pessoal e PJ separadas</p>
         </div>
       </div>
     </div>

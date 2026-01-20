@@ -72,8 +72,8 @@ export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCur
 
   return (
     <div className={cn(
-      "bg-[#111827] border rounded-xl overflow-hidden hover:border-white/10 transition-all group",
-      card.ativo ? "border-white/5" : "border-red-500/30 opacity-75"
+      "bg-card border rounded-xl overflow-hidden hover:border-muted-foreground/30 transition-all group shadow-sm",
+      card.ativo ? "border-border" : "border-red-500/30 opacity-75"
     )}>
       {/* Card Visual */}
       <div
@@ -91,7 +91,7 @@ export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCur
               <p className="text-white/80 text-xs font-medium mb-1">{card.bandeira}</p>
               <p className="text-white text-lg font-bold">{card.nome}</p>
               {!card.ativo && (
-                <span className="inline-block mt-2 px-2 py-1 bg-red-500/20 border border-red-500/30 rounded text-xs text-red-400 font-semibold">
+                <span className="inline-block mt-2 px-2 py-1 bg-red-500/20 border border-red-500/30 rounded text-xs text-red-100 font-semibold">
                   INATIVO
                 </span>
               )}
@@ -113,12 +113,12 @@ export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCur
         {/* Limite */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs text-zinc-400">{t('cards.limitUsed')}</span>
-            <span className="text-xs text-zinc-400">
+            <span className="text-xs text-muted-foreground">{t('cards.limitUsed')}</span>
+            <span className="text-xs text-muted-foreground">
               {loading ? '...' : `${percentualUsado.toFixed(1)}%`}
             </span>
           </div>
-          <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted/40 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-purple-500 to-purple-600 transition-all"
               style={{ width: `${percentualUsado}%` }}
@@ -129,34 +129,34 @@ export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCur
         {/* Valores */}
         <div className="grid grid-cols-3 gap-2 text-center">
           <div>
-            <p className="text-xs text-zinc-400 mb-1">{t('cards.used')}</p>
-            <p className="text-sm font-semibold text-red-400">
+            <p className="text-xs text-muted-foreground mb-1">{t('cards.used')}</p>
+            <p className="text-sm font-semibold text-red-500 dark:text-red-400">
               {loading ? '...' : formatCurrency(limiteUsado)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-zinc-400 mb-1">{t('cards.available')}</p>
-            <p className="text-sm font-semibold text-green-400">
+            <p className="text-xs text-muted-foreground mb-1">{t('cards.available')}</p>
+            <p className="text-sm font-semibold text-green-600 dark:text-green-400">
               {loading ? '...' : formatCurrency(limiteDisponivel)}
             </p>
           </div>
           <div>
-            <p className="text-xs text-zinc-400 mb-1">{t('cards.total')}</p>
-            <p className="text-sm font-semibold text-white">
+            <p className="text-xs text-muted-foreground mb-1">{t('cards.total')}</p>
+            <p className="text-sm font-semibold text-foreground">
               {formatCurrency(card.limite_total)}
             </p>
           </div>
         </div>
 
         {/* Datas */}
-        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-white/5">
+        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-border">
           <div>
-            <p className="text-xs text-zinc-400 mb-1">📅 {t('cards.closingDate')}</p>
-            <p className="text-sm text-white font-medium">{t('cards.everyDay')} {card.dia_fechamento}</p>
+            <p className="text-xs text-muted-foreground mb-1">📅 {t('cards.closingDate')}</p>
+            <p className="text-sm text-foreground font-medium">{t('cards.everyDay')} {card.dia_fechamento}</p>
           </div>
           <div>
-            <p className="text-xs text-zinc-400 mb-1">📅 {t('cards.dueDate')}</p>
-            <p className="text-sm text-white font-medium">{t('cards.everyDay')} {card.dia_vencimento}</p>
+            <p className="text-xs text-muted-foreground mb-1">📅 {t('cards.dueDate')}</p>
+            <p className="text-sm text-foreground font-medium">{t('cards.everyDay')} {card.dia_vencimento}</p>
           </div>
         </div>
 
@@ -175,14 +175,14 @@ export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCur
                 <>
                   <button
                     onClick={() => onEdit(card)}
-                    className="p-2 hover:bg-white/5 text-zinc-400 hover:text-white rounded-lg transition-colors"
+                    className="p-2 hover:bg-muted text-muted-foreground hover:text-foreground rounded-lg transition-colors"
                     title={t('cards.editCard')}
                   >
                     <Pencil className="w-4 h-4" />
                   </button>
                   <button
                     onClick={() => onDelete(card)}
-                    className="p-2 hover:bg-red-500/10 text-zinc-400 hover:text-red-400 rounded-lg transition-colors"
+                    className="p-2 hover:bg-red-500/10 text-muted-foreground hover:text-red-500 rounded-lg transition-colors"
                     title="Excluir ou Inativar"
                   >
                     <Trash2 className="w-4 h-4" />
@@ -202,7 +202,7 @@ export function CreditCardItem({ card, onEdit, onDelete, onReactivate, formatCur
                 </button>
                 <button
                   onClick={() => onDelete(card)}
-                  className="p-2 hover:bg-red-500/10 text-zinc-400 hover:text-red-400 rounded-lg transition-colors"
+                  className="p-2 hover:bg-red-500/10 text-muted-foreground hover:text-red-500 rounded-lg transition-colors"
                   title="Excluir"
                 >
                   <Trash2 className="w-4 h-4" />

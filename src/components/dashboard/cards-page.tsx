@@ -100,17 +100,17 @@ export function CardsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 md:gap-3">
-            <h1 className="text-xl md:text-2xl font-bold text-white">{t('cards.title')}</h1>
+            <h1 className="text-xl md:text-2xl font-bold text-foreground">{t('cards.title')}</h1>
             <span className={cn(
               "px-2 md:px-3 py-1 rounded-full text-xs font-semibold",
               accountFilter === 'pessoal'
-                ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
-                : "bg-purple-500/10 text-purple-400 border border-purple-500/20"
+                ? "bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/20"
+                : "bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/20"
             )}>
               {accountFilter === 'pessoal' ? `👤 ${t('sidebar.personal')}` : `🏢 ${t('sidebar.pj')}`}
             </span>
           </div>
-          <p className="text-zinc-400 text-xs md:text-sm mt-1">
+          <p className="text-muted-foreground text-xs md:text-sm mt-1">
             {t('cards.description')}
           </p>
         </div>
@@ -121,8 +121,8 @@ export function CardsPage() {
             className={cn(
               "flex items-center gap-2 px-3 py-2 min-h-[44px] rounded-lg transition-all font-medium text-sm border",
               showInactive
-                ? "bg-zinc-700 border-zinc-600 text-white"
-                : "bg-white/5 border-white/10 text-zinc-400 hover:bg-white/10"
+                ? "bg-muted-foreground/10 border-muted-foreground/20 text-foreground"
+                : "bg-background border-border text-muted-foreground hover:bg-muted dark:hover:bg-white/10"
             )}
             title={showInactive ? "Ocultar inativos" : "Mostrar inativos"}
           >
@@ -135,7 +135,7 @@ export function CardsPage() {
           {permissions.pode_gerenciar_cartoes && (
             <button
               onClick={handleAddNew}
-              className="flex items-center gap-2 px-4 py-2 min-h-[44px] bg-purple-500 hover:bg-purple-600 active:scale-95 text-white rounded-lg transition-all font-medium text-sm"
+              className="flex items-center gap-2 px-4 py-2 min-h-[44px] bg-purple-600 hover:bg-purple-700 active:scale-95 text-white rounded-lg transition-all font-medium text-sm"
             >
               <Plus className="w-4 h-4" />
               <span className="hidden sm:inline">{t('cards.newCard')}</span>
@@ -150,7 +150,7 @@ export function CardsPage() {
         !mounted || loading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="animate-pulse bg-[#111827] border border-white/5 rounded-xl h-80" />
+              <div key={i} className="animate-pulse bg-muted dark:bg-[#111827] border border-border rounded-xl h-80" />
             ))}
           </div>
         ) : cards.length === 0 ? (

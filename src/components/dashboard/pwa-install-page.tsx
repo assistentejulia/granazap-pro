@@ -41,9 +41,9 @@ export function PWAInstallPage() {
       title: "Adicione à tela inicial",
       description: (
         <>
-          <strong className="text-white">iPhone:</strong> Toque em "Compartilhar" → "Adicionar à Tela de Início"
+          <strong className="text-foreground dark:text-white">iPhone:</strong> Toque em "Compartilhar" → "Adicionar à Tela de Início"
           <br />
-          <strong className="text-white">Android:</strong> Toque nos 3 pontinhos → "Adicionar à tela inicial"
+          <strong className="text-foreground dark:text-white">Android:</strong> Toque nos 3 pontinhos → "Adicionar à tela inicial"
         </>
       ),
       icon: Download
@@ -83,28 +83,28 @@ export function PWAInstallPage() {
     <div className="space-y-6 pb-8">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-3">
-          <div className="p-2 bg-orange-500/10 rounded-xl">
-            <Download className="w-6 h-6 text-orange-500" />
+        <h1 className="text-2xl font-bold text-foreground flex items-center gap-3">
+          <div className="p-2 bg-orange-100 dark:bg-orange-500/10 rounded-xl">
+            <Download className="w-6 h-6 text-orange-600 dark:text-orange-500" />
           </div>
           Instalação
         </h1>
-        <p className="text-zinc-400 text-sm mt-2">
+        <p className="text-muted-foreground text-sm mt-2">
           Aprenda a instalar o {appName} no seu celular
         </p>
       </div>
 
       {/* Video Tutorial Section */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
+      <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-red-500/10 rounded-lg">
-            <Play className="w-5 h-5 text-red-500" />
+          <div className="p-2 bg-red-100 dark:bg-red-500/10 rounded-lg">
+            <Play className="w-5 h-5 text-red-600 dark:text-red-500" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-foreground">
               🎬 Como Instalar o {appName}
             </h2>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-muted-foreground">
               Assista o vídeo tutorial completo para instalar o app no seu celular
             </p>
           </div>
@@ -134,8 +134,8 @@ export function PWAInstallPage() {
             </div>
           </div>
         ) : (
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-8 text-center">
-            <p className="text-zinc-400">
+          <div className="bg-muted dark:bg-zinc-900 border border-border dark:border-zinc-800 rounded-xl p-8 text-center">
+            <p className="text-muted-foreground dark:text-zinc-400">
               Vídeo de instalação não configurado. Configure a URL do vídeo no painel admin.
             </p>
           </div>
@@ -143,16 +143,16 @@ export function PWAInstallPage() {
       </div>
 
       {/* Steps Section */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
+      <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-blue-500/10 rounded-lg">
-            <Smartphone className="w-5 h-5 text-blue-500" />
+          <div className="p-2 bg-blue-100 dark:bg-blue-500/10 rounded-lg">
+            <Smartphone className="w-5 h-5 text-blue-600 dark:text-blue-500" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-white">
+            <h2 className="text-lg font-semibold text-foreground">
               📋 Passos para Instalação
             </h2>
-            <p className="text-sm text-zinc-400">
+            <p className="text-sm text-muted-foreground">
               Resumo rápido dos passos mostrados no vídeo
             </p>
           </div>
@@ -162,23 +162,23 @@ export function PWAInstallPage() {
           {steps.map((step, idx) => (
             <div
               key={idx}
-              className="bg-[#0A0F1C] border border-white/5 rounded-xl p-5 hover:border-white/10 transition-all"
+              className="bg-muted/50 dark:bg-[#0A0F1C] border border-border/50 dark:border-white/5 rounded-xl p-5 hover:border-border dark:hover:border-white/10 transition-all"
             >
               <div className="flex items-start gap-4">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 bg-orange-500/10 rounded-full flex items-center justify-center">
-                    <span className="text-lg font-bold text-orange-500">{step.number}</span>
+                  <div className="w-10 h-10 bg-orange-100 dark:bg-orange-500/10 rounded-full flex items-center justify-center">
+                    <span className="text-lg font-bold text-orange-600 dark:text-orange-500">{step.number}</span>
                   </div>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-white mb-2">{step.title}</h3>
-                  <p className="text-sm text-zinc-400 leading-relaxed">
+                  <h3 className="font-semibold text-foreground dark:text-white mb-2">{step.title}</h3>
+                  <p className="text-sm text-zinc-700 dark:text-zinc-400 leading-relaxed font-medium dark:font-normal">
                     {step.description}
                   </p>
                 </div>
                 <div className="flex-shrink-0">
-                  <div className="p-2 bg-white/5 rounded-lg">
-                    <step.icon className="w-5 h-5 text-zinc-400" />
+                  <div className="p-2 bg-card dark:bg-white/5 border border-border/50 dark:border-transparent rounded-lg">
+                    <step.icon className="w-5 h-5 text-zinc-500 dark:text-zinc-400" />
                   </div>
                 </div>
               </div>
@@ -188,13 +188,13 @@ export function PWAInstallPage() {
       </div>
 
       {/* Benefits Section */}
-      <div className="bg-gradient-to-br from-orange-500/10 via-orange-500/5 to-transparent border border-orange-500/20 rounded-xl p-6">
+      <div className="bg-gradient-to-br from-orange-50 via-white to-transparent dark:from-orange-500/10 dark:via-orange-500/5 dark:to-transparent border border-orange-200 dark:border-orange-500/20 rounded-xl p-6">
         <div className="flex items-start gap-3 mb-6">
-          <div className="p-2 bg-orange-500/10 rounded-lg">
-            <Lightbulb className="w-5 h-5 text-orange-400" />
+          <div className="p-2 bg-orange-100 dark:bg-orange-500/10 rounded-lg">
+            <Lightbulb className="w-5 h-5 text-orange-600 dark:text-orange-400" />
           </div>
           <div>
-            <h2 className="text-lg font-semibold text-white mb-1">
+            <h2 className="text-lg font-semibold text-foreground dark:text-white mb-1">
               💡 Benefícios de Instalar o App
             </h2>
           </div>
@@ -204,14 +204,14 @@ export function PWAInstallPage() {
           {benefits.map((benefit, idx) => (
             <div
               key={idx}
-              className="flex items-start gap-3 bg-[#0A0F1C] border border-orange-500/10 rounded-lg p-4"
+              className="flex items-start gap-3 bg-white/80 dark:bg-[#0A0F1C] border border-orange-100 dark:border-orange-500/10 rounded-lg p-4 shadow-sm"
             >
-              <div className="p-2 bg-orange-500/10 rounded-lg flex-shrink-0">
-                <benefit.icon className="w-4 h-4 text-orange-400" />
+              <div className="p-2 bg-orange-100 dark:bg-orange-500/10 rounded-lg flex-shrink-0">
+                <benefit.icon className="w-4 h-4 text-orange-600 dark:text-orange-400" />
               </div>
               <div>
-                <h4 className="font-semibold text-white text-sm mb-1">{benefit.title}</h4>
-                <p className="text-xs text-zinc-400">{benefit.description}</p>
+                <h4 className="font-semibold text-foreground dark:text-white text-sm mb-1">{benefit.title}</h4>
+                <p className="text-xs text-zinc-700 dark:text-zinc-400 font-medium dark:font-normal">{benefit.description}</p>
               </div>
             </div>
           ))}
@@ -219,12 +219,12 @@ export function PWAInstallPage() {
       </div>
 
       {/* Additional Info */}
-      <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-5">
+      <div className="bg-blue-50 dark:bg-blue-500/10 border border-blue-100 dark:border-blue-500/20 rounded-xl p-5">
         <div className="flex items-start gap-3">
-          <CheckCircle2 className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
+          <CheckCircle2 className="w-5 h-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <h3 className="font-semibold text-blue-400 mb-2">Dica Importante</h3>
-            <p className="text-sm text-zinc-300 leading-relaxed">
+            <h3 className="font-semibold text-blue-700 dark:text-blue-400 mb-2">Dica Importante</h3>
+            <p className="text-sm text-zinc-700 dark:text-zinc-300 leading-relaxed font-medium dark:font-normal">
               Após instalar, você pode usar o {appName} como um aplicativo normal, mesmo sem conexão com a internet para visualizar dados já carregados.
               A instalação não ocupa espaço significativo no seu celular!
             </p>

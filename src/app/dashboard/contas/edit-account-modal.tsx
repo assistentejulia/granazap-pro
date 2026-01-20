@@ -117,7 +117,7 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
       isOpen={isOpen}
       onClose={onClose}
       title={t('accounts.editAccount')}
-      className="max-w-md w-full p-0 overflow-hidden !bg-[#111827] border border-white/10 text-white"
+      className="max-w-md w-full p-0 overflow-hidden bg-card border border-border text-foreground"
     >
       <div className="p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
 
@@ -125,9 +125,9 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
 
           {/* Nome */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.accountName')}</label>
+            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">{t('accounts.accountName')}</label>
             <div className="relative group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-blue-500 transition-colors">
                 <Wallet className="w-4 h-4" />
               </div>
               <input
@@ -136,16 +136,16 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
                 placeholder="Ex: Nubank, Itaú Principal..."
                 value={formData.nome}
                 onChange={e => setFormData({ ...formData, nome: e.target.value })}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
               />
             </div>
           </div>
 
           {/* Banco */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-300 ml-1 uppercase tracking-wide">{t('accounts.bankOptional')}</label>
+            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">{t('accounts.bankOptional')}</label>
             <div className="relative group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-500 transition-colors">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-blue-500 transition-colors">
                 <Landmark className="w-4 h-4" />
               </div>
               <input
@@ -153,14 +153,14 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
                 placeholder="Ex: Nu Pagamentos S.A."
                 value={formData.banco}
                 onChange={e => setFormData({ ...formData, banco: e.target.value })}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
               />
             </div>
           </div>
 
-          <div className="bg-yellow-500/5 border border-yellow-500/10 rounded-lg p-3 flex items-start gap-3">
-            <AlertCircle className="w-4 h-4 text-yellow-500 shrink-0 mt-0.5" />
-            <p className="text-xs text-yellow-200/80">
+          <div className="bg-yellow-500/5 dark:bg-yellow-500/10 border border-yellow-500/10 rounded-lg p-3 flex items-start gap-3">
+            <AlertCircle className="w-4 h-4 text-yellow-600 dark:text-yellow-500 shrink-0 mt-0.5" />
+            <p className="text-xs text-yellow-700/80 dark:text-yellow-200/80">
               O saldo não pode ser editado diretamente por aqui. Para ajustar o saldo, realize um ajuste manual ou adicione transações.
             </p>
           </div>
@@ -176,19 +176,19 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
                 onChange={(e) => setFormData({ ...formData, is_default: e.target.checked })}
                 className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300 checked:right-0 right-5"
               />
-              <label htmlFor="toggle_edit" className={`toggle-label block overflow-hidden h-5 rounded-full cursor-pointer transition-colors duration-300 ${formData.is_default ? 'bg-blue-600' : 'bg-zinc-700'}`}></label>
+              <label htmlFor="toggle_edit" className={`toggle-label block overflow-hidden h-5 rounded-full cursor-pointer transition-colors duration-300 ${formData.is_default ? 'bg-blue-600' : 'bg-zinc-300 dark:bg-zinc-700'}`}></label>
             </div>
-            <label htmlFor="toggle_edit" className="text-sm text-zinc-300 cursor-pointer select-none">
+            <label htmlFor="toggle_edit" className="text-sm text-foreground cursor-pointer select-none">
               {t('accounts.setAsDefault')}
             </label>
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-white/5 mt-4">
+          <div className="flex gap-3 pt-4 border-t border-border mt-4">
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               onClick={onClose}
-              className="flex-1 text-zinc-300 hover:text-white hover:bg-white/5 h-10 rounded-lg transition-colors text-sm"
+              className="flex-1 bg-transparent hover:bg-muted text-foreground border-border h-10 rounded-lg transition-colors text-sm"
             >
               {t('common.cancel')}
             </Button>
@@ -211,7 +211,10 @@ export function EditAccountModal({ isOpen, onClose, onSuccess, account }: EditAc
         }
         .toggle-checkbox {
           right: 20px;
-          border-color: #3f3f46;
+          border-color: #e4e4e7; /* zinc-200 */
+        }
+        :global(.dark) .toggle-checkbox {
+           border-color: #3f3f46; /* zinc-700 */
         }
       `}</style>
     </Modal>

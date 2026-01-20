@@ -2,12 +2,25 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { z } from "zod";
+
+const memberSchema = z.object({
+  nome: z.string().trim().min(2, "Nome deve ter pelo menos 2 caracteres"),
+  email: z.string().trim().email("E-mail inválido"),
+  telefone: z.string().trim().min(10, "Telefone inválido"),
+});
 
 export async function inviteMember(formData: {
   nome: string;
   email: string;
   telefone: string;
 }) {
+  const validation = memberSchema.safeParse(formData);
+
+  if (!validation.success) {
+    return { success: false, error: validation.error.issues[0].message };
+  }
+
   const supabase = await createClient();
 
   // 1. Verificar Usuário Atual
@@ -109,8 +122,8 @@ export async function inviteMember(formData: {
 
 export async function updateMemberPermissions(memberId: number, permissoes: any) {
   const supabase = await createClient();
-  
-  
+
+
   // Atualizar permissões do membro
   const { data, error } = await supabase
     .from("usuarios_dependentes")
@@ -127,9 +140,15 @@ export async function updateMemberPermissions(memberId: number, permissoes: any)
 }
 
 export async function updateMemberInfo(memberId: number, data: { nome: string; email: string; telefone: string }) {
+  const validation = memberSchema.safeParse(data);
+
+  if (!validation.success) {
+    return { success: false, error: validation.error.issues[0].message };
+  }
+
   const supabase = await createClient();
-  
-  
+
+
   const { error } = await supabase
     .from("usuarios_dependentes")
     .update({
@@ -149,9 +168,9 @@ export async function updateMemberInfo(memberId: number, data: { nome: string; e
 
 export async function toggleMemberStatus(memberId: number, currentStatus: string) {
   const supabase = await createClient();
-  
+
   const newStatus = currentStatus === 'ativo' ? 'inativo' : 'ativo';
-  
+
   const { error } = await supabase
     .from("usuarios_dependentes")
     .update({ status: newStatus })
@@ -167,7 +186,7 @@ export async function toggleMemberStatus(memberId: number, currentStatus: string
 
 export async function removeMember(memberId: number) {
   const supabase = await createClient();
-  
+
   // Verificação básica de segurança (RLS deve garantir o resto)
   const { error } = await supabase
     .from("usuarios_dependentes")

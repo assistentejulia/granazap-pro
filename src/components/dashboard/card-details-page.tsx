@@ -31,10 +31,10 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
-  
+
   // Controle de mês selecionado
   const [selectedMonth, setSelectedMonth] = useState(new Date().toISOString().slice(0, 7));
-  
+
   // Controle de pagamento parcial (NOVO - não afeta funcionalidade existente)
   const [paymentMode, setPaymentMode] = useState<'total' | 'partial'>('total');
   const [selectedItemIds, setSelectedItemIds] = useState<number[]>([]);
@@ -103,8 +103,8 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
 
   // Funções para pagamento parcial (NOVO)
   const handleToggleItemSelection = (itemId: number) => {
-    setSelectedItemIds(prev => 
-      prev.includes(itemId) 
+    setSelectedItemIds(prev =>
+      prev.includes(itemId)
         ? prev.filter(id => id !== itemId)
         : [...prev, itemId]
     );
@@ -140,7 +140,7 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
     // Importação dinâmica do jsPDF
     const jsPDF = (await import('jspdf')).default;
     const doc = new jsPDF();
-    
+
     // Cores
     const primaryColor: [number, number, number] = [34, 197, 94];
     const darkBg: [number, number, number] = [17, 24, 39];
@@ -149,16 +149,16 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
     // Cabeçalho
     doc.setFillColor(...darkBg);
     doc.rect(0, 0, 210, 50, 'F');
-    
+
     doc.setTextColor(...primaryColor);
     doc.setFontSize(24);
     doc.setFont('helvetica', 'bold');
     doc.text('FATURA DO CARTÃO', 105, 20, { align: 'center' });
-    
+
     doc.setTextColor(...textColor);
     doc.setFontSize(16);
     doc.text(card.nome, 105, 30, { align: 'center' });
-    
+
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
     doc.text(getMonthName(selectedMonth).toUpperCase(), 105, 40, { align: 'center' });
@@ -167,17 +167,17 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(10);
     let yPos = 60;
-    
+
     doc.setFont('helvetica', 'bold');
     doc.text('Fechamento:', 20, yPos);
     doc.setFont('helvetica', 'normal');
     doc.text(`Dia ${card.dia_fechamento}`, 60, yPos);
-    
+
     doc.setFont('helvetica', 'bold');
     doc.text('Vencimento:', 110, yPos);
     doc.setFont('helvetica', 'normal');
     doc.text(`Dia ${card.dia_vencimento}`, 150, yPos);
-    
+
     yPos += 10;
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
@@ -191,7 +191,7 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
     doc.setTextColor(0, 0, 0);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    
+
     // Cabeçalho da tabela
     doc.setFillColor(...primaryColor);
     doc.rect(20, yPos - 5, 170, 8, 'F');
@@ -201,34 +201,34 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
     doc.text('Parcela', 120, yPos);
     doc.text('Valor', 145, yPos);
     doc.text('Status', 170, yPos);
-    
+
     // Itens
     yPos += 8;
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
     doc.setTextColor(0, 0, 0);
-    
+
     invoice.items.forEach((item, index) => {
       // Alternar cor de fundo
       if (index % 2 === 0) {
         doc.setFillColor(245, 245, 245);
         doc.rect(20, yPos - 4, 170, 7, 'F');
       }
-      
+
       doc.text(formatDate(item.data_prevista), 25, yPos);
-      
+
       // Truncar descrição se muito longa
       const desc = item.descricao.length > 25 ? item.descricao.substring(0, 22) + '...' : item.descricao;
       doc.text(desc, 50, yPos);
-      
+
       const parcela = item.parcela_info ? `${item.parcela_info.numero}/${item.parcela_info.total}` : '-';
       doc.text(parcela, 120, yPos);
-      
+
       doc.text(formatCurrency(Number(item.valor)), 145, yPos);
       doc.text(item.status === 'pago' ? 'Pago' : 'Pendente', 170, yPos);
-      
+
       yPos += 7;
-      
+
       // Nova página se necessário
       if (yPos > 270) {
         doc.addPage();
@@ -242,19 +242,19 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
       doc.addPage();
       yPos = 20;
     }
-    
+
     doc.setFillColor(245, 245, 245);
     doc.rect(20, yPos, 170, 25, 'F');
-    
+
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(11);
     doc.text('Resumo:', 25, yPos + 8);
-    
+
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
     doc.text(`Total de itens: ${invoice.items.length}`, 25, yPos + 15);
     doc.text(`Itens pagos: ${invoice.items.filter(i => i.status === 'pago').length}`, 25, yPos + 21);
-    
+
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
     doc.text('TOTAL:', 130, yPos + 15);
@@ -269,23 +269,23 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
 
   const isInvoiceClosed = () => {
     if (!card) return false;
-    
+
     const today = new Date();
     const currentDay = today.getDate();
     const [year, month] = selectedMonth.split('-').map(Number);
     const invoiceDate = new Date(year, month - 1, 1);
     const currentYearMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-    
+
     // Se for mês futuro, fatura ainda não fechou
     if (invoiceDate > currentYearMonth) {
       return false;
     }
-    
+
     // Se for mês atual, verifica se já passou o dia de fechamento
     if (invoiceDate.getTime() === currentYearMonth.getTime()) {
       return currentDay > card.dia_fechamento;
     }
-    
+
     // Se for mês passado, já fechou
     return true;
   };
@@ -306,13 +306,13 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
       <div className="flex items-center gap-4">
         <button
           onClick={() => router.push('/dashboard/cartoes')}
-          className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+          className="p-2 hover:bg-muted dark:hover:bg-white/5 rounded-lg transition-colors text-foreground"
         >
           <ArrowLeft className="w-5 h-5" />
         </button>
         <div>
-          <h1 className="text-2xl font-bold text-white">{card.nome}</h1>
-          <p className="text-zinc-400 text-sm">
+          <h1 className="text-2xl font-bold text-foreground">{card.nome}</h1>
+          <p className="text-muted-foreground text-sm">
             {card.bandeira} {card.ultimos_digitos && `•••• ${card.ultimos_digitos}`}
           </p>
         </div>
@@ -347,24 +347,24 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
         </div>
 
         {/* Limite Info */}
-        <div className="bg-[#111827] border border-white/5 rounded-xl p-6">
-          <h3 className="text-lg font-semibold text-white mb-4">{t('cardDetails.limit')}</h3>
-          
+        <div className="bg-card border border-border rounded-xl p-6">
+          <h3 className="text-lg font-semibold text-foreground mb-4">{t('cardDetails.limit')}</h3>
+
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-sm text-zinc-400">{t('cardDetails.limitUsed')}</span>
-              <span className="text-sm font-medium text-white">
+              <span className="text-sm text-muted-foreground">{t('cardDetails.limitUsed')}</span>
+              <span className="text-sm font-medium text-foreground">
                 {limiteUsadoPercent.toFixed(1)}%
               </span>
             </div>
-            
-            <div className="h-3 bg-white/5 rounded-full overflow-hidden">
+
+            <div className="h-3 bg-muted dark:bg-white/5 rounded-full overflow-hidden">
               <div
                 className={cn(
                   "h-full transition-all",
                   limiteUsadoPercent > 80 ? "bg-red-500" :
-                  limiteUsadoPercent > 50 ? "bg-yellow-500" :
-                  "bg-green-500"
+                    limiteUsadoPercent > 50 ? "bg-yellow-500" :
+                      "bg-green-500"
                 )}
                 style={{ width: `${Math.min(limiteUsadoPercent, 100)}%` }}
               />
@@ -372,20 +372,20 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
 
             <div className="grid grid-cols-3 gap-4 pt-2">
               <div>
-                <p className="text-xs text-zinc-400 mb-1">{t('cardDetails.limitUsed')}</p>
-                <p className="text-lg font-bold text-red-400">
+                <p className="text-xs text-muted-foreground mb-1">{t('cardDetails.limitUsed')}</p>
+                <p className="text-lg font-bold text-red-500 dark:text-red-400">
                   {formatCurrency(invoice?.limite_usado || 0)}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-zinc-400 mb-1">{t('cardDetails.limitAvailable')}</p>
-                <p className="text-lg font-bold text-green-400">
+                <p className="text-xs text-muted-foreground mb-1">{t('cardDetails.limitAvailable')}</p>
+                <p className="text-lg font-bold text-green-500 dark:text-green-400">
                   {formatCurrency(invoice?.limite_disponivel || card.limite_total)}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-zinc-400 mb-1">{t('cardDetails.limitTotal')}</p>
-                <p className="text-lg font-bold text-white">
+                <p className="text-xs text-muted-foreground mb-1">{t('cardDetails.limitTotal')}</p>
+                <p className="text-lg font-bold text-foreground">
                   {formatCurrency(card.limite_total)}
                 </p>
               </div>
@@ -395,36 +395,36 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
       </div>
 
       {/* Fatura Atual */}
-      <div className="bg-[#111827] border border-white/5 rounded-xl overflow-hidden">
-        <div className="px-6 py-4 border-b border-white/5">
+      <div className="bg-card border border-border rounded-xl overflow-hidden shadow-sm">
+        <div className="px-6 py-4 border-b border-border">
           {/* Navegação de Mês */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <button
                 onClick={handlePreviousMonth}
-                className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+                className="p-2 hover:bg-muted dark:hover:bg-white/5 rounded-lg transition-colors"
                 title={t('cardDetails.previousMonth')}
               >
-                <ChevronLeft className="w-5 h-5 text-zinc-400" />
+                <ChevronLeft className="w-5 h-5 text-muted-foreground" />
               </button>
-              
+
               <div className="text-center min-w-[200px]">
-                <h2 className="text-lg font-semibold text-white capitalize">
+                <h2 className="text-lg font-semibold text-foreground capitalize">
                   {t('cardDetails.invoice')} {getMonthName(selectedMonth)}
                 </h2>
                 {isCurrentMonth() && (
-                  <span className="inline-block px-2 py-0.5 bg-green-500/10 text-green-400 text-xs rounded-full mt-1">
+                  <span className="inline-block px-2 py-0.5 bg-green-500/10 text-green-600 dark:text-green-400 text-xs rounded-full mt-1">
                     {t('cardDetails.currentMonth')}
                   </span>
                 )}
               </div>
-              
+
               <button
                 onClick={handleNextMonth}
-                className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+                className="p-2 hover:bg-muted dark:hover:bg-white/5 rounded-lg transition-colors"
                 title={t('cardDetails.nextMonth')}
               >
-                <ChevronRight className="w-5 h-5 text-zinc-400" />
+                <ChevronRight className="w-5 h-5 text-muted-foreground" />
               </button>
             </div>
 
@@ -432,7 +432,7 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
               <button
                 onClick={handleExportInvoice}
                 disabled={!invoice || invoice.items.length === 0}
-                className="flex items-center gap-2 px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 title="Exportar fatura em PDF"
               >
                 <Download className="w-4 h-4" />
@@ -440,7 +440,7 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
               </button>
               <button
                 onClick={() => setIsExpenseModalOpen(true)}
-                className="flex items-center gap-2 px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors text-sm font-medium"
+                className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm font-medium"
               >
                 <Plus className="w-4 h-4" />
                 {t('cardDetails.newExpense')}
@@ -448,7 +448,7 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
             </div>
           </div>
 
-          <p className="text-xs text-zinc-400 text-center">
+          <p className="text-xs text-muted-foreground text-center">
             {t('cardDetails.closes')} {card.dia_fechamento} • {t('cardDetails.due')} {card.dia_vencimento}
           </p>
         </div>
@@ -456,32 +456,32 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
         <div className="p-6">
           {/* Resumo da Fatura */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-[#0A0F1C] border border-white/5 rounded-lg p-4">
+            <div className="bg-muted/40 dark:bg-[#0A0F1C] border border-border rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
-                <DollarSign className="w-4 h-4 text-purple-400" />
-                <span className="text-xs text-zinc-400">{t('cardDetails.invoiceValue')}</span>
+                <DollarSign className="w-4 h-4 text-purple-500 dark:text-purple-400" />
+                <span className="text-xs text-muted-foreground">{t('cardDetails.invoiceValue')}</span>
               </div>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-2xl font-bold text-foreground">
                 {formatCurrency(invoice?.total || 0)}
               </p>
             </div>
 
-            <div className="bg-[#0A0F1C] border border-white/5 rounded-lg p-4">
+            <div className="bg-muted/40 dark:bg-[#0A0F1C] border border-border rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Calendar className="w-4 h-4 text-blue-400" />
-                <span className="text-xs text-zinc-400">{t('cardDetails.closing')}</span>
+                <Calendar className="w-4 h-4 text-blue-500 dark:text-blue-400" />
+                <span className="text-xs text-muted-foreground">{t('cardDetails.closing')}</span>
               </div>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-2xl font-bold text-foreground">
                 Dia {card.dia_fechamento}
               </p>
             </div>
 
-            <div className="bg-[#0A0F1C] border border-white/5 rounded-lg p-4">
+            <div className="bg-muted/40 dark:bg-[#0A0F1C] border border-border rounded-lg p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Calendar className="w-4 h-4 text-red-400" />
-                <span className="text-xs text-zinc-400">{t('cardDetails.dueDate')}</span>
+                <Calendar className="w-4 h-4 text-red-500 dark:text-red-400" />
+                <span className="text-xs text-muted-foreground">{t('cardDetails.dueDate')}</span>
               </div>
-              <p className="text-2xl font-bold text-white">
+              <p className="text-2xl font-bold text-foreground">
                 Dia {card.dia_vencimento}
               </p>
             </div>
@@ -490,45 +490,43 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
           {/* Lista de Despesas */}
           <div>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-white">{t('cardDetails.expenses')}</h3>
-              
+              <h3 className="text-sm font-semibold text-foreground">{t('cardDetails.expenses')}</h3>
+
               {/* Toggle de Modo de Pagamento (NOVO) */}
               {invoice && invoice.pendingCount > 0 && (
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setPaymentMode('total')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                      paymentMode === 'total'
-                        ? 'bg-blue-500 text-white'
-                        : 'bg-white/5 text-zinc-400 hover:bg-white/10'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${paymentMode === 'total'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-muted dark:bg-white/5 text-muted-foreground hover:bg-muted/80'
+                      }`}
                   >
                     Pagar Tudo
                   </button>
                   <button
                     onClick={() => setPaymentMode('partial')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                      paymentMode === 'partial'
-                        ? 'bg-purple-500 text-white'
-                        : 'bg-white/5 text-zinc-400 hover:bg-white/10'
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${paymentMode === 'partial'
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-muted dark:bg-white/5 text-muted-foreground hover:bg-muted/80'
+                      }`}
                   >
                     Pagamento Parcial
                   </button>
                 </div>
               )}
             </div>
-            
+
             {/* Contador e ações de seleção (NOVO - apenas modo parcial) */}
             {paymentMode === 'partial' && invoice && invoice.pendingCount > 0 && (
               <div className="mb-3 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-purple-300">
+                    <span className="text-sm text-purple-600 dark:text-purple-300">
                       {selectedItemIds.length} de {invoice.pendingCount} selecionado(s)
                     </span>
                     {selectedItemIds.length > 0 && (
-                      <span className="text-sm font-bold text-purple-400">
+                      <span className="text-sm font-bold text-purple-700 dark:text-purple-400">
                         • {formatCurrency(calculateSelectedTotal())}
                       </span>
                     )}
@@ -536,14 +534,14 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={handleSelectAll}
-                      className="text-xs text-purple-400 hover:text-purple-300 transition-colors"
+                      className="text-xs text-purple-600 hover:text-purple-500 dark:text-purple-400 dark:hover:text-purple-300 transition-colors"
                     >
                       Selecionar Todos
                     </button>
                     {selectedItemIds.length > 0 && (
                       <button
                         onClick={handleDeselectAll}
-                        className="text-xs text-zinc-400 hover:text-zinc-300 transition-colors"
+                        className="text-xs text-muted-foreground hover:text-foreground transition-colors"
                       >
                         Limpar
                       </button>
@@ -552,18 +550,18 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                 </div>
               </div>
             )}
-            
+
             {invoiceLoading ? (
               <div className="space-y-3">
                 {[...Array(3)].map((_, i) => (
-                  <div key={i} className="animate-pulse bg-white/5 rounded-lg h-16" />
+                  <div key={i} className="animate-pulse bg-muted dark:bg-white/5 rounded-lg h-16" />
                 ))}
               </div>
             ) : !invoice || invoice.items.length === 0 ? (
               <div className="text-center py-12">
-                <CreditCardIcon className="w-12 h-12 text-zinc-600 mx-auto mb-3" />
-                <p className="text-zinc-500 text-sm">{t('cardDetails.noExpenses')}</p>
-                <p className="text-zinc-600 text-xs mt-1">
+                <CreditCardIcon className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground text-sm">{t('cardDetails.noExpenses')}</p>
+                <p className="text-muted-foreground text-xs mt-1">
                   {t('cardDetails.addExpenses')}
                 </p>
               </div>
@@ -572,13 +570,12 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                 {invoice.items.map((item) => (
                   <div
                     key={item.id}
-                    className={`bg-[#0A0F1C] border rounded-lg p-4 transition-colors ${
-                      item.status === 'pago' 
-                        ? 'border-green-500/20 opacity-60' 
+                    className={`bg-card dark:bg-[#0A0F1C] border rounded-lg p-4 transition-colors ${item.status === 'pago'
+                        ? 'border-green-500/20 opacity-60'
                         : selectedItemIds.includes(item.id)
-                        ? 'border-purple-500/50 bg-purple-500/5'
-                        : 'border-white/5 hover:border-white/10'
-                    }`}
+                          ? 'border-purple-500/50 bg-purple-500/5'
+                          : 'border-border hover:border-muted-foreground/30'
+                      }`}
                   >
                     <div className="flex items-center justify-between">
                       {/* Checkbox de seleção (NOVO - apenas modo parcial e pendentes) */}
@@ -588,31 +585,31 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                             type="checkbox"
                             checked={selectedItemIds.includes(item.id)}
                             onChange={() => handleToggleItemSelection(item.id)}
-                            className="w-4 h-4 rounded border-white/20 bg-white/5 text-purple-500 focus:ring-purple-500 focus:ring-offset-0 cursor-pointer"
+                            className="w-4 h-4 rounded border-input dark:border-white/20 bg-background dark:bg-white/5 text-purple-600 focus:ring-purple-500 focus:ring-offset-0 cursor-pointer"
                           />
                         </div>
                       )}
-                      
+
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="text-white font-medium">{item.descricao}</p>
+                          <p className="text-foreground font-medium">{item.descricao}</p>
                           {item.status === 'pago' && (
-                            <span className="px-2 py-0.5 bg-green-500/10 border border-green-500/20 rounded text-xs text-green-400 font-medium">
+                            <span className="px-2 py-0.5 bg-green-500/10 border border-green-500/20 rounded text-xs text-green-600 dark:text-green-400 font-medium">
                               {t('cardDetails.paid')}
                             </span>
                           )}
                         </div>
                         <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs text-zinc-500">
+                          <span className="text-xs text-muted-foreground">
                             {formatDate(item.data_prevista)}
                           </span>
                           {item.parcela_info && (
-                            <span className="text-xs text-zinc-500">
+                            <span className="text-xs text-muted-foreground">
                               • {item.parcela_info.numero}/{item.parcela_info.total}
                             </span>
                           )}
                           {item.status === 'pago' && item.data_efetivacao && (
-                            <span className="text-xs text-green-500">
+                            <span className="text-xs text-green-600 dark:text-green-500">
                               • {t('cardDetails.paidOn')} {new Date(item.data_efetivacao).toLocaleDateString('pt-BR')}
                             </span>
                           )}
@@ -620,11 +617,11 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                       </div>
                       <div className="flex items-center gap-3">
                         <div className="text-right">
-                          <p className={`text-lg font-bold ${item.status === 'pago' ? 'text-green-400' : 'text-white'}`}>
+                          <p className={`text-lg font-bold ${item.status === 'pago' ? 'text-green-600 dark:text-green-400' : 'text-foreground'}`}>
                             {formatCurrency(Number(item.valor))}
                           </p>
                           {item.parcela_info && (
-                            <p className="text-xs text-zinc-500">
+                            <p className="text-xs text-muted-foreground">
                               {t('cardDetails.total')}: {formatCurrency(item.parcela_info.valor_original)}
                             </p>
                           )}
@@ -636,7 +633,7 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                                 setSelectedTransaction(item);
                                 setIsEditModalOpen(true);
                               }}
-                              className="p-2 hover:bg-blue-500/10 text-blue-400 rounded-lg transition-colors"
+                              className="p-2 hover:bg-blue-500/10 text-blue-500 dark:text-blue-400 rounded-lg transition-colors"
                               title="Editar"
                             >
                               <Pencil className="w-4 h-4" />
@@ -646,7 +643,7 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                                 setSelectedTransaction(item);
                                 setIsDeleteModalOpen(true);
                               }}
-                              className="p-2 hover:bg-red-500/10 text-red-400 rounded-lg transition-colors"
+                              className="p-2 hover:bg-red-500/10 text-red-500 dark:text-red-400 rounded-lg transition-colors"
                               title="Excluir"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -663,32 +660,32 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
 
           {/* Botões de Ação */}
           {invoice && (
-            <div className="mt-6 pt-6 border-t border-white/5">
+            <div className="mt-6 pt-6 border-t border-border">
               {invoice.isPaid ? (
                 // Fatura Paga - Mostrar informações e opção de reverter
                 <div className="space-y-3">
                   <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center">
-                        <svg className="w-4 h-4 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                         </svg>
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-green-400">{t('cardDetails.invoicePaid')}</p>
-                        <p className="text-xs text-green-500">
+                        <p className="text-sm font-semibold text-green-600 dark:text-green-400">{t('cardDetails.invoicePaid')}</p>
+                        <p className="text-xs text-green-600 dark:text-green-500">
                           Pago em {invoice.dataPagamento ? new Date(invoice.dataPagamento).toLocaleDateString('pt-BR') : '-'}
                         </p>
                       </div>
                     </div>
-                    <p className="text-xs text-green-400/80">
+                    <p className="text-xs text-green-600/80 dark:text-green-400/80">
                       {t('cardDetails.totalPaid')}: {formatCurrency(invoice.totalPaid)} • {invoice.paidCount} despesa(s)
                     </p>
                   </div>
-                  
+
                   <button
                     onClick={() => setIsReverseModalOpen(true)}
-                    className="w-full px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-400 rounded-lg transition-colors font-medium text-sm flex items-center justify-center gap-2"
+                    className="w-full px-4 py-2.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 text-red-600 dark:text-red-400 rounded-lg transition-colors font-medium text-sm flex items-center justify-center gap-2"
                   >
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" />
@@ -701,11 +698,10 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
                 <button
                   onClick={() => setIsPayModalOpen(true)}
                   disabled={paymentMode === 'partial' && selectedItemIds.length === 0}
-                  className={`w-full px-6 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 ${
-                    paymentMode === 'partial'
-                      ? 'bg-purple-500 hover:bg-purple-600 text-white disabled:opacity-50 disabled:cursor-not-allowed'
-                      : 'bg-green-500 hover:bg-green-600 text-white'
-                  }`}
+                  className={`w-full px-6 py-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2 ${paymentMode === 'partial'
+                      ? 'bg-purple-600 hover:bg-purple-700 text-white disabled:opacity-50 disabled:cursor-not-allowed'
+                      : 'bg-green-600 hover:bg-green-700 text-white'
+                    }`}
                 >
                   {paymentMode === 'partial' ? (
                     <>
@@ -803,12 +799,20 @@ export function CardDetailsPage({ cardId }: CardDetailsPageProps) {
             setIsDeleteModalOpen(false);
             setSelectedTransaction(null);
           }}
-          onSuccess={() => {
+          onConfirm={async () => {
+            const supabase = createClient();
+            await supabase
+              .from('lancamentos_futuros')
+              .delete()
+              .eq('id', selectedTransaction.id);
+
             setIsDeleteModalOpen(false);
             setSelectedTransaction(null);
             refetchInvoice();
           }}
-          transaction={selectedTransaction}
+          transactionTitle={selectedTransaction.descricao}
+          transactionValue={selectedTransaction.valor}
+          isRecurring={false}
         />
       )}
     </div>

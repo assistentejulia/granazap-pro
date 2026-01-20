@@ -214,7 +214,7 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
       <Modal isOpen={isOpen} onClose={onClose} title={feedback.type === 'success' ? 'Sucesso' : 'Erro'} className="max-w-sm">
         <div className="flex flex-col items-center text-center space-y-4 p-4">
           {feedback.type === 'success' ? <CheckCircle2 className="w-12 h-12 text-green-500" /> : <XCircle className="w-12 h-12 text-red-500" />}
-          <p className="text-white text-lg font-medium">{feedback.message}</p>
+          <p className="text-foreground text-lg font-medium">{feedback.message}</p>
         </div>
       </Modal>
     )
@@ -225,7 +225,7 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
       isOpen={isOpen}
       onClose={onClose}
       title="💼 Pró-labore (PJ → Pessoal)"
-      className="max-w-md w-full p-0 overflow-hidden bg-[#111827] border border-white/10"
+      className="max-w-md w-full p-0 overflow-hidden bg-card border border-border text-foreground"
     >
       <div className="p-5 max-h-[85vh] overflow-y-auto custom-scrollbar">
 
@@ -233,18 +233,19 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
 
           {/* Conta Origem (PJ) */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">
+            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">
               Conta PJ (Origem)
             </label>
             <div className="relative group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-500">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-purple-600 dark:text-purple-400">
                 <Briefcase className="w-4 h-4" />
               </div>
               <select
                 required
                 value={formData.sourceAccountId}
                 onChange={e => setFormData({ ...formData, sourceAccountId: e.target.value })}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-purple-500 appearance-none"
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground focus:outline-none focus:border-purple-500 appearance-none transition-colors"
+                style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
               >
                 <option value="">Selecione a conta PJ</option>
                 {accountsPJ.map(acc => (
@@ -255,7 +256,7 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
               </select>
             </div>
             {accountsPJ.length === 0 && (
-              <p className="text-xs text-yellow-500 ml-1">
+              <p className="text-xs text-yellow-600 dark:text-yellow-500 ml-1 mt-1">
                 ⚠️ Nenhuma conta PJ encontrada. Crie uma conta PJ primeiro.
               </p>
             )}
@@ -263,18 +264,19 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
 
           {/* Conta Destino (Pessoal) */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">
+            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">
               Conta Pessoal (Destino)
             </label>
             <div className="relative group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-500">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-blue-600 dark:text-blue-400">
                 <Wallet className="w-4 h-4" />
               </div>
               <select
                 required
                 value={formData.destinationAccountId}
                 onChange={e => setFormData({ ...formData, destinationAccountId: e.target.value })}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 appearance-none"
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground focus:outline-none focus:border-blue-500 appearance-none transition-colors"
+                style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
               >
                 <option value="">Selecione a conta pessoal</option>
                 {accountsPessoal.map(acc => (
@@ -285,7 +287,7 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
               </select>
             </div>
             {accountsPessoal.length === 0 && (
-              <p className="text-xs text-yellow-500 ml-1">
+              <p className="text-xs text-yellow-600 dark:text-yellow-500 ml-1 mt-1">
                 ⚠️ Nenhuma conta pessoal encontrada. Crie uma conta pessoal primeiro.
               </p>
             )}
@@ -293,11 +295,11 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
 
           {/* Data */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">
+            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">
               Data do Pró-labore
             </label>
             <div className="relative group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                 <Calendar className="w-4 h-4" />
               </div>
               <input
@@ -305,18 +307,18 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
                 type="date"
                 value={formData.date}
                 onChange={e => setFormData({ ...formData, date: e.target.value })}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white focus:outline-none focus:border-blue-500 [color-scheme:dark]"
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
 
           {/* Valor */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">
+            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">
               Valor do Pró-labore
             </label>
             <div className="relative group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                 <DollarSign className="w-4 h-4" />
               </div>
               <input
@@ -326,18 +328,18 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
                 placeholder="0,00"
                 value={formData.amount}
                 onChange={e => setFormData({ ...formData, amount: e.target.value })}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
 
           {/* Descrição */}
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-zinc-400 ml-1 uppercase tracking-wide">
+            <label className="text-xs font-medium text-muted-foreground ml-1 uppercase tracking-wide">
               Descrição (Opcional)
             </label>
             <div className="relative group">
-              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500">
+              <div className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
                 <FileText className="w-4 h-4" />
               </div>
               <input
@@ -345,31 +347,31 @@ export function ProLaboreModal({ isOpen, onClose, onSuccess }: ProLaboreModalPro
                 placeholder="Ex: Pró-labore Janeiro"
                 value={formData.description}
                 onChange={e => setFormData({ ...formData, description: e.target.value })}
-                className="w-full bg-[#0A0F1C] border border-white/10 rounded-lg pl-9 pr-3 h-10 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-blue-500"
+                className="w-full bg-background border border-border rounded-lg pl-9 pr-3 h-10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-blue-500 transition-colors"
               />
             </div>
           </div>
 
           {/* Aviso */}
-          <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
-            <p className="text-xs text-purple-300">
+          <div className="p-3 bg-purple-100 dark:bg-purple-500/10 border border-purple-200 dark:border-purple-500/20 rounded-lg">
+            <p className="text-xs text-purple-700 dark:text-purple-300">
               💡 <strong>Pró-labore:</strong> Transferência da conta PJ para sua conta pessoal.
               Será criada uma saída na PJ e uma entrada na conta pessoal.
             </p>
           </div>
 
-          <div className="flex gap-3 pt-4 border-t border-white/5 mt-4">
+          <div className="flex gap-3 pt-4 border-t border-border mt-4">
             <Button
               type="button"
-              variant="ghost"
+              variant="outline"
               onClick={onClose}
-              className="flex-1 text-zinc-400 hover:text-white hover:bg-white/5"
+              className="flex-1 bg-transparent hover:bg-muted text-foreground border-border"
             >
               Cancelar
             </Button>
             <Button
               type="submit"
-              className="flex-[2] bg-purple-600 hover:bg-purple-700 text-white"
+              className="flex-[2] bg-purple-600 hover:bg-purple-700 text-white border-none"
               disabled={loading || accountsPJ.length === 0 || accountsPessoal.length === 0}
             >
               {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}

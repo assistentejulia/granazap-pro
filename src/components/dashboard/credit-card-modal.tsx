@@ -141,15 +141,15 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
       isOpen={isOpen}
       onClose={onClose}
       title={cardToEdit ? t('cards.modal.editTitle') : t('cards.modal.newTitle')}
-      className="max-w-md"
+      className="max-w-md w-full !bg-card border-border text-foreground"
     >
       {/* Aviso de Contexto */}
       <div className="flex flex-col items-center gap-2 pb-4 border-b border-border">
         <span className={cn(
           "px-3 py-1.5 rounded-full text-xs font-semibold",
           accountFilter === 'pessoal'
-            ? "bg-blue-500/10 text-blue-400 border border-blue-500/30"
-            : "bg-purple-500/10 text-purple-400 border border-purple-500/30"
+            ? "bg-blue-100 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-500/30"
+            : "bg-purple-100 dark:bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-200 dark:border-purple-500/30"
         )}>
           {accountFilter === 'pessoal' ? `👤 ${t('cards.modal.contextPersonal')}` : `🏢 ${t('cards.modal.contextPJ')}`}
         </span>
@@ -161,7 +161,7 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-4 pt-4">
+      <form onSubmit={handleSubmit} className="space-y-4 pt-4 custom-scrollbar overflow-y-auto max-h-[70vh] px-1">
         {/* Nome do Cartão */}
         <div>
           <label className="block text-sm font-medium text-muted-foreground mb-2">
@@ -173,7 +173,7 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
             onChange={(e) => setNome(e.target.value)}
             placeholder={t('cards.modal.placeholderName')}
             required
-            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-colors"
           />
         </div>
 
@@ -185,10 +185,10 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
           <select
             value={bandeira}
             onChange={(e) => setBandeira(e.target.value)}
-            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-colors"
           >
             {BANDEIRAS.map((b) => (
-              <option key={b.value} value={b.value} className="bg-popover text-foreground">{b.label}</option>
+              <option key={b.value} value={b.value} className="bg-background text-foreground">{b.label}</option>
             ))}
           </select>
         </div>
@@ -204,7 +204,7 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
             onChange={(e) => setUltimosDigitos(e.target.value.replace(/\D/g, '').slice(0, 4))}
             placeholder="1234"
             maxLength={4}
-            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-colors"
           />
         </div>
 
@@ -220,7 +220,7 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
             onChange={(e) => setLimiteTotal(e.target.value)}
             placeholder="5000.00"
             required
-            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-colors"
           />
         </div>
 
@@ -237,7 +237,7 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
             onChange={(e) => setDiaFechamento(e.target.value)}
             placeholder="10"
             required
-            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-colors"
           />
           <p className="text-xs text-muted-foreground mt-1">{t('cards.modal.closingDayHint')}</p>
         </div>
@@ -255,7 +255,7 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
             onChange={(e) => setDiaVencimento(e.target.value)}
             placeholder="17"
             required
-            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-colors"
           />
           <p className="text-xs text-muted-foreground mt-1">{t('cards.modal.dueDayHint')}</p>
         </div>
@@ -268,11 +268,11 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
           <select
             value={contaVinculadaId}
             onChange={(e) => setContaVinculadaId(e.target.value)}
-            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50"
+            className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-colors"
           >
-            <option value="" className="bg-idk">{t('cards.modal.selectLater')}</option>
+            <option value="" className="bg-background text-foreground">{t('cards.modal.selectLater')}</option>
             {accounts.map((account) => (
-              <option key={account.id} value={account.id} className="bg-popover text-foreground">
+              <option key={account.id} value={account.id} className="bg-background text-foreground">
                 {account.nome} - {formatCurrency(account.saldo_atual)}
               </option>
             ))}
@@ -310,14 +310,14 @@ export function CreditCardModal({ isOpen, onClose, onSuccess, cardToEdit }: Cred
             type="button"
             variant="outline"
             onClick={onClose}
-            className="flex-1"
+            className="flex-1 bg-transparent hover:bg-muted text-foreground border-border"
           >
             {t('common.cancel')}
           </Button>
           <Button
             type="submit"
             disabled={loading}
-            className="flex-1 bg-purple-500 hover:bg-purple-600 text-white font-medium disabled:opacity-50"
+            className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-medium disabled:opacity-50"
           >
             {loading ? t('cards.modal.saving') : cardToEdit ? t('cards.modal.update') : t('cards.modal.save')}
           </Button>
