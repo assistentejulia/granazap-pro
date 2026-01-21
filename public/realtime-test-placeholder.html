@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supabase Realtime Debugger</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #111; color: #fff; }
+        .status { padding: 10px; border-radius: 5px; margin-bottom: 20px; font-weight: bold; }
+        .success { background: #22c55e; color: white; }
+        .error { background: #ef4444; color: white; }
+        .log { background: #222; padding: 10px; border-radius: 5px; font-family: monospace; height: 300px; overflow-y: auto; white-space: pre-wrap; }
+    </style>
+</head>
+<body>
+    <h1>🕵️ Realtime Connection Test</h1>
+    <div id="status" class="status" style="background: #3b82f6;">Initializing...</div>
+    <div id="logs" class="log"></div>
+
+    <script>
+        // REPLACE THESE WITH YOUR EXACT KEYS FROM YOUR PROJECT
+        // I am injecting the ones found in your environment context if possible, 
+        // otherwise we will print them to console to verify they are loaded.
+        
+        // We need to fetch the env vars from the Next.js app or hardcode them here for the test.
+        // Since this is a static file, we can't access process.env.
+        // I will attempt to read them from the user's previously viewed files if available, 
+        // or asking the user to verify them. 
+        // For now, I will assume the user has to copy-paste them OR I can try to fetch them from a helper API.
+        
+        // Actually, to make this seamless, I will create a temporary API route to serve the env vars? 
+        // No, that's too complex. 
+        // I'll make this file use a prompt or just hardcode the keys if I have them.
+        // I DO NOT have the keys in the chat context explicitly visible in the last turn. 
+        // I will rely on the Supabase client file I read earlier.
+        
+        // Wait, I can't read variables from a static HTML file served by Next.js public folder without manual insertion.
+        // I will mistakenly hardcode PLACEHOLDERS and ask the user to fill them? 
+        // No, that's bad UX.
+        
+        // BETTER APPROACH: 
+        // I'll create a new PAGE in the Next.js app `src/app/debug-realtime/page.tsx`.
+        // This page will have access to `process.env` and can render the simple test logic.
+        // This is much better than a static HTML file.
+    </script>
+</body>
+</html>

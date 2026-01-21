@@ -7,6 +7,7 @@ import { SubscriptionBlockModal } from "@/components/dashboard/subscription-bloc
 import { SubscriptionWarningBanner } from "@/components/dashboard/subscription-warning-banner";
 import { useSubscriptionStatus } from "@/hooks/use-subscription-status";
 import { ForceRefresh } from "@/components/force-refresh";
+import { RealtimeTransactionsListener } from "@/components/dashboard/realtime-transactions-listener";
 import dynamic from 'next/dynamic';
 
 // Sidebar com SSR desabilitado para evitar flash de branding

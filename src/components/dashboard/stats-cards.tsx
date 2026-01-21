@@ -8,7 +8,9 @@ import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
 import { usePeriodFilter } from "@/hooks/use-period-filter";
 import { useDashboardFilter } from "@/contexts/dashboard-filter-context";
-import { useMemo } from "react";
+import { useUserFilter } from "@/hooks/use-user-filter";
+import { useQueryClient } from "@tanstack/react-query";
+import { useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkline } from "@/components/dashboard/ui/sparkline";
 import { generateSparklineData } from "@/lib/dashboard-utils";
@@ -29,8 +31,22 @@ export function StatsCards() {
   const { t } = useLanguage();
   const { formatCurrency } = useCurrency();
   const { period } = usePeriodFilter();
-  const { accountId, startDate, endDate } = useDashboardFilter();
+  const {
+    accountId,
+    startDate,
+    endDate,
+    setStartDate,
+    setEndDate
+  } = useDashboardFilter();
+  const { filter: userFilter } = useUserFilter();
+  const queryClient = useQueryClient();
 
+  // Force Refresh on Mount
+  useEffect(() => {
+    console.log("🔄 Force Refreshing Dashboard Stats...");
+    queryClient.invalidateQueries({ queryKey: ['transactions'] });
+    queryClient.invalidateQueries({ queryKey: ['dashboard-stats'] });
+  }, [queryClient]);
   const effectivePeriod = (startDate && endDate) ? 'custom' : period;
   const customRange = (startDate && endDate) ? { start: startDate, end: endDate } : null;
 

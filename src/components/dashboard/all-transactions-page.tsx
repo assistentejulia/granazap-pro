@@ -5,6 +5,7 @@ import { Search, Calendar, Wallet, X, Upload } from "lucide-react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAllTransactions } from "@/hooks/use-all-transactions";
 import { useAccountFilter } from "@/hooks/use-account-filter";
+import { useQueryClient } from "@tanstack/react-query";
 import { useAccounts } from "@/hooks/use-accounts";
 import { useTransactionsExport } from "@/hooks/use-transactions-export";
 import { cn } from "@/lib/utils";
@@ -43,6 +44,13 @@ export function AllTransactionsPage() {
       setAccountId(contaIdParam);
     }
   }, [contaIdParam]);
+
+  // Force Refresh on Mount (Simulate "Activation")
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    console.log("🔄 Force Refreshing All Transactions...");
+    queryClient.invalidateQueries({ queryKey: ['all-transactions'] });
+  }, [queryClient]);
 
   // Data fetching
   // Force 'custom' period when using start/end date logic

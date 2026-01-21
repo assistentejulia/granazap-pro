@@ -12,7 +12,7 @@ export function Navbar() {
             <nav className="pointer-events-auto h-16 max-w-5xl w-full bg-[#030712]/60 backdrop-blur-2xl border border-white/10 rounded-full px-6 flex items-center justify-between shadow-2xl shadow-black/50">
                 <Link href="#inicio" className="flex items-center gap-2 group shrink-0">
                     <LandingLogo className="w-8 h-8 sm:w-9 sm:h-9" />
-                    <span className="text-lg sm:text-xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    <span className="hidden sm:block text-lg sm:text-xl font-bold bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent opacity-90 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         Assistente Julia
                     </span>
                 </Link>
@@ -40,7 +40,7 @@ export function Navbar() {
                         <ThemeToggle />
                     </div>
 
-                    <a href="/login" className="hidden sm:block text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors">
+                    <a href="/login" className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/50 hover:text-white transition-colors">
                         Entrar
                     </a>
 

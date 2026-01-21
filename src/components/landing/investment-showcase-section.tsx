@@ -151,9 +151,9 @@ export function InvestmentShowcaseSection() {
 
                 {/* Steps Flow */}
                 <div ref={ref} className="max-w-5xl mx-auto">
-                    <div className="flex flex-col md:flex-row items-center justify-between gap-12 md:gap-4 relative">
+                    <div className="flex flex-col md:flex-row items-start justify-between gap-12 md:gap-4 relative">
                         {/* Connecting Lines (Desktop) */}
-                        <div className="absolute top-1/3 left-0 w-full h-0.5 border-t-2 border-dashed border-white/10 hidden md:block -z-10" />
+                        <div className="absolute top-[64px] left-0 w-full h-0.5 border-t-2 border-dashed border-white/10 hidden md:block -z-10" />
 
                         {steps.map((step, index) => (
                             <div key={index} className="flex flex-col items-center text-center group relative flex-1">
@@ -194,7 +194,7 @@ export function InvestmentShowcaseSection() {
 
                                 {/* Arrow (Desktop) */}
                                 {index < steps.length - 1 && (
-                                    <div className="hidden md:block absolute top-[60px] -right-4 translate-x-1/2 z-20">
+                                    <div className="hidden md:block absolute top-[48px] -right-4 translate-x-1/2 z-20">
                                         <motion.div
                                             animate={{ x: [0, 5, 0] }}
                                             transition={{ duration: 2, repeat: Infinity }}

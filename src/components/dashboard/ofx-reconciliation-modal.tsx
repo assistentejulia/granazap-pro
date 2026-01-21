@@ -376,21 +376,35 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                                     </div>
                                     <div className="space-y-2 max-h-[60vh] overflow-y-auto">
                                         {groupedResults.suggestions.map((match) => (
-                                            <div key={match.ofxTransaction.id} className="flex items-center gap-3 p-3 bg-yellow-500/5 border border-yellow-500/20 rounded-lg">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedMatches.has(match.ofxTransaction.id)}
-                                                    onChange={() => toggleMatch(match.ofxTransaction.id)}
-                                                    className="w-4 h-4"
-                                                />
-                                                <div className="flex-1">
-                                                    <p className="font-medium">{match.ofxTransaction.description}</p>
-                                                    <p className="text-sm text-muted-foreground">
-                                                        {match.ofxTransaction.date} • {match.confidence}% similar
-                                                    </p>
-                                                </div>
-                                                <p className="font-mono font-semibold">{formatCurrency(match.ofxTransaction.amount)}</p>
-                                            </div>
+                                            <TransactionRow
+                                                key={match.ofxTransaction.id}
+                                                match={match}
+                                                isSelected={selectedMatches.has(match.ofxTransaction.id)}
+                                                onToggle={() => toggleMatch(match.ofxTransaction.id)}
+                                                isEditing={editingId === match.ofxTransaction.id}
+                                                onEditStart={() => setEditingId(match.ofxTransaction.id)}
+                                                onEditEnd={() => setEditingId(null)}
+                                                displayDescription={getDisplayDescription(match.ofxTransaction.id, match.ofxTransaction.description)}
+                                                onUpdateDescription={(val) => updateDescription(match.ofxTransaction.id, val)}
+                                                selectedCategoryId={getDisplayCategory(match.ofxTransaction.id)}
+                                                onUpdateCategory={(val) => updateCategory(match.ofxTransaction.id, val)}
+                                                isCreating={creatingCategoryForTxId === match.ofxTransaction.id}
+                                                newCategoryName={newCategoryName}
+                                                onNewCategoryNameChange={setNewCategoryName}
+                                                onCreateCategory={(tipo) => handleCreateCategory(match.ofxTransaction.id, tipo)}
+                                                onStartCreatingCategory={() => {
+                                                    setCreatingCategoryForTxId(match.ofxTransaction.id);
+                                                    setNewCategoryName("");
+                                                }}
+                                                onCancelCreatingCategory={() => {
+                                                    setCreatingCategoryForTxId(null);
+                                                    setNewCategoryName("");
+                                                }}
+                                                isCreatingCategory={isCreatingCategory}
+                                                formatCurrency={formatCurrency}
+                                                categories={categories}
+                                                showConfidence={true}
+                                            />
                                         ))}
                                     </div>
                                 </div>
@@ -414,152 +428,37 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                                         </div>
                                     </div>
                                     <div className="space-y-2 max-h-[60vh] overflow-y-auto">
-                                        {groupedResults.new.map((match) => {
-                                            const txId = match.ofxTransaction.id;
-                                            const isEditing = editingId === txId;
-                                            const isCreating = creatingCategoryForTxId === txId;
-                                            const displayDescription = getDisplayDescription(txId, match.ofxTransaction.description);
-                                            const selectedCategoryId = getDisplayCategory(txId);
-
-                                            // Visual distinction
-                                            const isCredit = match.ofxTransaction.type === 'CREDIT';
-                                            const amountColor = isCredit ? 'text-green-600' : 'text-red-600';
-                                            const AmountIcon = isCredit ? ArrowUpRight : ArrowDownRight;
-                                            const boxBorder = isCredit ? 'border-green-500/20' : 'border-red-500/20'; // Optional: distinct borders
-
-                                            // Filter categories based on transaction type
-                                            const allowedType = isCredit ? 'entrada' : 'saida';
-                                            const filteredCategories = categories.filter(c => c.tipo === 'ambos' || c.tipo === allowedType);
-
-                                            return (
-                                                <div key={txId} className={`p-3 bg-card border ${boxBorder} rounded-lg space-y-2`}>
-                                                    {/* First row: Checkbox, Description, Amount */}
-                                                    <div className="flex items-start gap-3">
-                                                        <input
-                                                            type="checkbox"
-                                                            checked={selectedMatches.has(txId)}
-                                                            onChange={() => toggleMatch(txId)}
-                                                            className="w-4 h-4 mt-1"
-                                                        />
-                                                        <div className="flex-1 space-y-1">
-                                                            {/* Description - Editable */}
-                                                            {isEditing ? (
-                                                                <div className="flex items-center gap-2">
-                                                                    <input
-                                                                        type="text"
-                                                                        value={displayDescription}
-                                                                        onChange={(e) => updateDescription(txId, e.target.value)}
-                                                                        className="flex-1 px-2 py-1 text-sm bg-background border border-primary/40 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
-                                                                        autoFocus
-                                                                    />
-                                                                    <button
-                                                                        onClick={() => setEditingId(null)}
-                                                                        className="px-2 py-1 text-xs bg-primary/20 text-primary rounded hover:bg-primary/30"
-                                                                    >
-                                                                        Salvar
-                                                                    </button>
-                                                                </div>
-                                                            ) : (
-                                                                <div className="flex items-center gap-2">
-                                                                    <p className="font-medium flex-1 truncate">{displayDescription}</p>
-                                                                    <button
-                                                                        onClick={() => setEditingId(txId)}
-                                                                        className="p-1 text-muted-foreground hover:text-foreground rounded transition-colors"
-                                                                        title="Editar descrição"
-                                                                    >
-                                                                        <Edit2 className="w-4 h-4" />
-                                                                    </button>
-                                                                </div>
-                                                            )}
-                                                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                                <span>{match.ofxTransaction.date}</span>
-                                                                {isCredit ? (
-                                                                    <span className="flex items-center text-green-500 text-xs bg-green-500/10 px-1.5 py-0.5 rounded">
-                                                                        <ArrowUpRight className="w-3 h-3 mr-1" /> Receita
-                                                                    </span>
-                                                                ) : (
-                                                                    <span className="flex items-center text-red-500 text-xs bg-red-500/10 px-1.5 py-0.5 rounded">
-                                                                        <ArrowDownRight className="w-3 h-3 mr-1" /> Despesa
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                        <div className={`font-mono font-semibold flex items-center ${amountColor}`}>
-                                                            <AmountIcon className="w-4 h-4 mr-1" />
-                                                            {formatCurrency(match.ofxTransaction.amount)}
-                                                        </div>
-                                                    </div>
-
-                                                    {/* Second row: Category selector */}
-                                                    <div className="flex items-center gap-2 pl-7">
-                                                        <Tag className="w-4 h-4 text-muted-foreground" />
-
-                                                        {isCreating ? (
-                                                            <div className="flex items-center gap-2 flex-1 animate-in fade-in slide-in-from-left-2">
-                                                                <input
-                                                                    type="text"
-                                                                    value={newCategoryName}
-                                                                    onChange={(e) => setNewCategoryName(e.target.value)}
-                                                                    placeholder="Nome da nova categoria..."
-                                                                    className="flex-1 px-2 py-1 text-sm bg-background border border-primary/40 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 h-8"
-                                                                    autoFocus
-                                                                    onKeyDown={(e) => {
-                                                                        if (e.key === 'Enter') handleCreateCategory(txId, allowedType);
-                                                                        if (e.key === 'Escape') {
-                                                                            setCreatingCategoryForTxId(null);
-                                                                            setNewCategoryName("");
-                                                                        }
-                                                                    }}
-                                                                />
-                                                                <button
-                                                                    onClick={() => handleCreateCategory(txId, allowedType)}
-                                                                    disabled={!newCategoryName.trim() || isCreatingCategory}
-                                                                    className="p-1.5 bg-green-500/20 text-green-500 rounded hover:bg-green-500/30 disabled:opacity-50"
-                                                                    title="Salvar Categoria"
-                                                                >
-                                                                    {isCreatingCategory ? <span className="animate-spin">⌛</span> : <Check className="w-4 h-4" />}
-                                                                </button>
-                                                                <button
-                                                                    onClick={() => {
-                                                                        setCreatingCategoryForTxId(null);
-                                                                        setNewCategoryName("");
-                                                                    }}
-                                                                    className="p-1.5 bg-red-500/20 text-red-500 rounded hover:bg-red-500/30"
-                                                                    title="Cancelar"
-                                                                >
-                                                                    <X className="w-4 h-4" />
-                                                                </button>
-                                                            </div>
-                                                        ) : (
-                                                            <select
-                                                                value={selectedCategoryId}
-                                                                onChange={(e) => {
-                                                                    if (e.target.value === 'NEW') {
-                                                                        setCreatingCategoryForTxId(txId);
-                                                                        setNewCategoryName("");
-                                                                    } else {
-                                                                        updateCategory(txId, e.target.value);
-                                                                    }
-                                                                }}
-                                                                className="flex-1 px-2 py-1 text-sm bg-background/50 border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary/50 h-8"
-                                                            >
-                                                                <option value="">Sem categoria (usar padrão)</option>
-                                                                <option value="NEW" className="font-semibold text-primary">
-                                                                    + Criar Nova Categoria
-                                                                </option>
-                                                                <optgroup label="Minhas Categorias">
-                                                                    {filteredCategories.map((cat) => (
-                                                                        <option key={cat.id} value={cat.id.toString()}>
-                                                                            {cat.descricao}
-                                                                        </option>
-                                                                    ))}
-                                                                </optgroup>
-                                                            </select>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            );
-                                        })}
+                                        {groupedResults.new.map((match) => (
+                                            <TransactionRow
+                                                key={match.ofxTransaction.id}
+                                                match={match}
+                                                isSelected={selectedMatches.has(match.ofxTransaction.id)}
+                                                onToggle={() => toggleMatch(match.ofxTransaction.id)}
+                                                isEditing={editingId === match.ofxTransaction.id}
+                                                onEditStart={() => setEditingId(match.ofxTransaction.id)}
+                                                onEditEnd={() => setEditingId(null)}
+                                                displayDescription={getDisplayDescription(match.ofxTransaction.id, match.ofxTransaction.description)}
+                                                onUpdateDescription={(val) => updateDescription(match.ofxTransaction.id, val)}
+                                                selectedCategoryId={getDisplayCategory(match.ofxTransaction.id)}
+                                                onUpdateCategory={(val) => updateCategory(match.ofxTransaction.id, val)}
+                                                isCreating={creatingCategoryForTxId === match.ofxTransaction.id}
+                                                newCategoryName={newCategoryName}
+                                                onNewCategoryNameChange={setNewCategoryName}
+                                                onCreateCategory={(tipo) => handleCreateCategory(match.ofxTransaction.id, tipo)}
+                                                onStartCreatingCategory={() => {
+                                                    setCreatingCategoryForTxId(match.ofxTransaction.id);
+                                                    setNewCategoryName("");
+                                                }}
+                                                onCancelCreatingCategory={() => {
+                                                    setCreatingCategoryForTxId(null);
+                                                    setNewCategoryName("");
+                                                }}
+                                                isCreatingCategory={isCreatingCategory}
+                                                formatCurrency={formatCurrency}
+                                                categories={categories}
+                                                showConfidence={false}
+                                            />
+                                        ))}
                                     </div>
                                 </div>
                             )}
@@ -610,6 +509,194 @@ export function OFXReconciliationModal({ isOpen, onClose, onSuccess }: OFXReconc
                         </button>
                     )}
                 </div>
+            </div>
+        </div>
+    );
+}
+
+// Transaction Row Component for consistent rendering
+interface TransactionRowProps {
+    match: MatchResult;
+    isSelected: boolean;
+    onToggle: () => void;
+    isEditing: boolean;
+    onEditStart: () => void;
+    onEditEnd: () => void;
+    displayDescription: string;
+    onUpdateDescription: (val: string) => void;
+    selectedCategoryId: string;
+    onUpdateCategory: (val: string) => void;
+    isCreating: boolean;
+    newCategoryName: string;
+    onNewCategoryNameChange: (val: string) => void;
+    onCreateCategory: (tipo: 'entrada' | 'saida') => void;
+    onStartCreatingCategory: () => void;
+    onCancelCreatingCategory: () => void;
+    isCreatingCategory: boolean;
+    formatCurrency: (val: number) => string;
+    categories: any[];
+    showConfidence?: boolean;
+}
+
+function TransactionRow({
+    match,
+    isSelected,
+    onToggle,
+    isEditing,
+    onEditStart,
+    onEditEnd,
+    displayDescription,
+    onUpdateDescription,
+    selectedCategoryId,
+    onUpdateCategory,
+    isCreating,
+    newCategoryName,
+    onNewCategoryNameChange,
+    onCreateCategory,
+    onStartCreatingCategory,
+    onCancelCreatingCategory,
+    isCreatingCategory,
+    formatCurrency,
+    categories,
+    showConfidence
+}: TransactionRowProps) {
+    // Visual distinction
+    const isCredit = match.ofxTransaction.type === 'CREDIT';
+    const amountColor = isCredit ? 'text-green-600' : 'text-red-600';
+    const AmountIcon = isCredit ? ArrowUpRight : ArrowDownRight;
+    // For suggestions (potential duplicates), use yellow border to indicate warning, otherwise use green/red based on type
+    const boxBorder = showConfidence ? 'border-yellow-500/20' : (isCredit ? 'border-green-500/20' : 'border-red-500/20');
+    const bgClass = showConfidence ? 'bg-yellow-500/5' : 'bg-card';
+
+    // Filter categories based on transaction type and remove "Saldo Inicial"
+    const allowedType = isCredit ? 'entrada' : 'saida';
+    const filteredCategories = categories.filter(c =>
+        (c.tipo === 'ambos' || c.tipo === allowedType) &&
+        c.descricao !== 'Saldo Inicial'
+    );
+
+    return (
+        <div className={`p-3 border ${boxBorder} ${bgClass} rounded-lg space-y-2`}>
+            {/* First row: Checkbox, Description, Amount */}
+            <div className="flex items-start gap-3">
+                <input
+                    type="checkbox"
+                    checked={isSelected}
+                    onChange={onToggle}
+                    className="w-4 h-4 mt-1"
+                />
+                <div className="flex-1 space-y-1">
+                    {/* Description - Editable */}
+                    {isEditing ? (
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="text"
+                                value={displayDescription}
+                                onChange={(e) => onUpdateDescription(e.target.value)}
+                                className="flex-1 px-2 py-1 text-sm bg-background border border-primary/40 rounded focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                autoFocus
+                            />
+                            <button
+                                onClick={onEditEnd}
+                                className="px-2 py-1 text-xs bg-primary/20 text-primary rounded hover:bg-primary/30"
+                            >
+                                Salvar
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            {/* REMOVED truncate to allow text wrapping */}
+                            <p className="font-medium flex-1 break-words">{displayDescription}</p>
+                            <button
+                                onClick={onEditStart}
+                                className="p-1 text-muted-foreground hover:text-foreground rounded transition-colors"
+                                title="Editar descrição"
+                            >
+                                <Edit2 className="w-4 h-4" />
+                            </button>
+                        </div>
+                    )}
+                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                        <span>{match.ofxTransaction.date}</span>
+                        {showConfidence && (
+                            <span className="text-yellow-600 font-medium">• {match.confidence}% similar</span>
+                        )}
+                        {isCredit ? (
+                            <span className="flex items-center text-green-500 text-xs bg-green-500/10 px-1.5 py-0.5 rounded">
+                                <ArrowUpRight className="w-3 h-3 mr-1" /> Receita
+                            </span>
+                        ) : (
+                            <span className="flex items-center text-red-500 text-xs bg-red-500/10 px-1.5 py-0.5 rounded">
+                                <ArrowDownRight className="w-3 h-3 mr-1" /> Despesa
+                            </span>
+                        )}
+                    </div>
+                </div>
+                <div className={`font-mono font-semibold flex items-center ${amountColor}`}>
+                    <AmountIcon className="w-4 h-4 mr-1" />
+                    {formatCurrency(match.ofxTransaction.amount)}
+                </div>
+            </div>
+
+            {/* Second row: Category selector */}
+            <div className="flex items-center gap-2 pl-7">
+                <Tag className="w-4 h-4 text-muted-foreground" />
+
+                {isCreating ? (
+                    <div className="flex items-center gap-2 flex-1 animate-in fade-in slide-in-from-left-2">
+                        <input
+                            type="text"
+                            value={newCategoryName}
+                            onChange={(e) => onNewCategoryNameChange(e.target.value)}
+                            placeholder="Nome da nova categoria..."
+                            className="flex-1 px-2 py-1 text-sm bg-background border border-primary/40 rounded focus:outline-none focus:ring-2 focus:ring-primary/50 h-8"
+                            autoFocus
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter') onCreateCategory(allowedType);
+                                if (e.key === 'Escape') onCancelCreatingCategory();
+                            }}
+                        />
+                        <button
+                            onClick={() => onCreateCategory(allowedType)}
+                            disabled={!newCategoryName.trim() || isCreatingCategory}
+                            className="p-1.5 bg-green-500/20 text-green-500 rounded hover:bg-green-500/30 disabled:opacity-50"
+                            title="Salvar Categoria"
+                        >
+                            {isCreatingCategory ? <span className="animate-spin">⌛</span> : <Check className="w-4 h-4" />}
+                        </button>
+                        <button
+                            onClick={onCancelCreatingCategory}
+                            className="p-1.5 bg-red-500/20 text-red-500 rounded hover:bg-red-500/30"
+                            title="Cancelar"
+                        >
+                            <X className="w-4 h-4" />
+                        </button>
+                    </div>
+                ) : (
+                    <select
+                        value={selectedCategoryId}
+                        onChange={(e) => {
+                            if (e.target.value === 'NEW') {
+                                onStartCreatingCategory();
+                            } else {
+                                onUpdateCategory(e.target.value);
+                            }
+                        }}
+                        className="flex-1 px-2 py-1 text-sm bg-background/50 border border-border rounded focus:outline-none focus:ring-2 focus:ring-primary/50 h-8"
+                    >
+                        <option value="">Sem categoria (usar padrão)</option>
+                        <option value="NEW" className="font-semibold text-primary">
+                            + Criar Nova Categoria
+                        </option>
+                        <optgroup label="Minhas Categorias">
+                            {filteredCategories.map((cat) => (
+                                <option key={cat.id} value={cat.id.toString()}>
+                                    {cat.descricao}
+                                </option>
+                            ))}
+                        </optgroup>
+                    </select>
+                )}
             </div>
         </div>
     );

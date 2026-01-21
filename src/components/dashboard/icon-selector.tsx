@@ -41,9 +41,84 @@ const AVAILABLE_ICONS = [
   'Tag', 'Store', 'Watch', 'Glasses', 'Scissors',
 
   // Diversos & Símbolos
-  'Star', 'Leaf', 'Sun', 'Moon', 'Cloud', 'Snowflake', 'Flame', 'Anchor', 'Rocket', 'Target',
   'Triangle', 'Square', 'Circle', 'Hexagon', 'HeartHandshake', 'Verified'
 ];
+
+// Deduplicate icons ensuring uniqueness
+const UNIQUE_ICONS = Array.from(new Set(AVAILABLE_ICONS));
+
+// Mapeamento de palavras-chave para busca em português
+const ICON_KEYWORDS: Record<string, string[]> = {
+  // Financeiro
+  DollarSign: ['dinheiro', 'dolar', 'pagamento', 'financas', 'receita'],
+  TrendingUp: ['investimento', 'grafico', 'lucro', 'alta', 'rendimento'],
+  Wallet: ['carteira', 'saldo', 'dinheiro'],
+  Briefcase: ['trabalho', 'emprego', 'job', 'negocios', 'pasta', 'escritorio'],
+  Award: ['premio', 'recompensa', 'conquista', 'bonus'],
+  Gift: ['presente', 'doacao', 'aniversario'],
+  PiggyBank: ['cofrinho', 'poupanca', 'economia', 'guardar'],
+  CreditCard: ['cartao', 'credito', 'debito', 'compra'],
+  Banknote: ['dinheiro', 'nota', 'cedula', 'papel'],
+  Landmark: ['banco', 'predio', 'instituicao', 'financiamento'],
+  Receipt: ['recibo', 'cupom', 'nota fiscal', 'fatura', 'boleto'],
+
+  // Alimentação
+  Utensils: ['restaurante', 'comida', 'almoco', 'jantar', 'talheres', 'prato'],
+  ChefHat: ['cozinha', 'cozinhar', 'chef', 'preparo'],
+  Coffee: ['cafe', 'lanche', 'padaria', 'matinal'],
+  Pizza: ['pizza', 'pizzaria', 'delivery', 'ifood'],
+  Beer: ['cerveja', 'bar', 'happy hour', 'bebida'],
+  Wine: ['vinho', 'adega', 'bebida'],
+  IceCream: ['sorvete', 'sobremesa', 'doce'],
+  Apple: ['fruta', 'saudavel', 'feira', 'mercado'],
+  ShoppingCart: ['mercado', 'supermercado', 'compras', 'carrinho'],
+
+  // Lazer
+  Gamepad2: ['jogos', 'games', 'videogame', 'lazer'],
+  Tv: ['televisao', 'filme', 'serie', 'streaming', 'netflix'],
+  Film: ['cinema', 'filme', 'pipoca'],
+  Music: ['musica', 'show', 'concerto', 'spotify'],
+  Ticket: ['ingresso', 'cinema', 'evento', 'ticket'],
+  Plane: ['aviao', 'viagem', 'passagem', 'ferias', 'turismo'],
+
+  // Casa & Serviços
+  Home: ['casa', 'moradia', 'aluguel', 'lar'],
+  Building: ['apartamento', 'condominio', 'predio'],
+  Zap: ['luz', 'energia', 'eletricidade', 'conta'],
+  Droplet: ['agua', 'saneamento', 'conta'],
+  Wifi: ['internet', 'conexao', 'rede'],
+  Trash2: ['lixo', 'limpeza', 'servico'],
+  Wrench: ['manutencao', 'reparo', 'conserto', 'obra'],
+  Hammer: ['construcao', 'obra', 'reforma'],
+
+  // Transporte
+  Car: ['carro', 'automovel', 'uber', 'taxi', 'veiculo'],
+  Bus: ['onibus', 'transporte publico', 'passagem'],
+  Fuel: ['combustivel', 'gasolina', 'posto', 'abastecer'],
+  Map: ['mapa', 'viagem', 'localizacao'],
+
+  // Saúde
+  Heart: ['saude', 'medico', 'hospital', 'vida'],
+  Stethoscope: ['medico', 'consulta', 'exame', 'doutor'],
+  Pill: ['remedio', 'farmacia', 'medicamento', 'drogaria'],
+  Dumbbell: ['academia', 'esporte', 'treino', 'fitness'],
+
+  // Educação
+  GraduationCap: ['educacao', 'faculdade', 'escola', 'curso', 'estudo'],
+  Book: ['livro', 'leitura', 'estudo', 'biblioteca'],
+  Laptop: ['computador', 'tecnologia', 'notebook', 'trabalho'],
+
+  // Vestuário & Pessoal
+  Shirt: ['roupa', 'vestuario', 'moda', 'camisa'],
+  ShoppingBag: ['compras', 'loja', 'shopping', 'sacola'],
+  Tag: ['etiqueta', 'preco', 'promocao', 'categoria'],
+  Scissors: ['salao', 'corte', 'cabelo', 'barbearia'],
+
+  // Outros
+  User: ['pessoal', 'usuario', 'mim'],
+  Star: ['favorito', 'destaque', 'importante'],
+  Calendar: ['data', 'prazo', 'agendamento']
+};
 
 interface IconSelectorProps {
   selectedIcon: string;
@@ -55,9 +130,17 @@ export function IconSelector({ selectedIcon, onSelectIcon, accentColor }: IconSe
   const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState("");
 
-  const filteredIcons = AVAILABLE_ICONS.filter(icon =>
-    icon.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredIcons = UNIQUE_ICONS.filter(icon => {
+    const searchLower = searchTerm.toLowerCase();
+    // Search by icon name
+    if (icon.toLowerCase().includes(searchLower)) return true;
+
+    // Search by keywords (Portuguese)
+    const keywords = ICON_KEYWORDS[icon];
+    if (keywords && keywords.some(k => k.toLowerCase().includes(searchLower))) return true;
+
+    return false;
+  });
 
   const getIconComponent = (iconName: string) => {
     const IconComponent = (Icons as any)[iconName];
