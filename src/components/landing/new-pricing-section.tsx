@@ -70,7 +70,7 @@ export function NewPricingSection() {
                 </motion.div>
 
                 {/* Standard Plans Grid */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto mb-24">
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-full mx-auto mb-24">
                     {standardPlans.map((plan, index) => {
                         const recursos = typeof plan.recursos === 'string'
                             ? JSON.parse(plan.recursos)
@@ -86,7 +86,7 @@ export function NewPricingSection() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className={`relative ${isPopular ? 'lg:scale-105' : ''}`}
+                                className={`relative h-full ${isPopular ? 'lg:scale-105' : ''}`}
                             >
                                 {/* Popular Badge */}
                                 {isPopular && (
@@ -223,7 +223,7 @@ export function NewPricingSection() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="relative"
+                                className="relative h-full"
                             >
                                 <div
                                     className="relative h-full flex flex-col bg-card/50 dark:bg-white/5 backdrop-blur-xl border border-border/50 dark:border-white/10 rounded-2xl p-8 transition-all duration-300 hover:shadow-xl hover:border-purple-500/50 hover:shadow-purple-500/20"
@@ -277,11 +277,13 @@ export function NewPricingSection() {
                                         <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                                     </Button>
 
-                                    {plan.nome.toLowerCase().includes('anual') && (
-                                        <p className="text-xs text-center text-purple-400 mt-4 font-medium">
-                                            3 Meses Grátis
-                                        </p>
-                                    )}
+                                    <div className="mt-4 h-5 flex items-center justify-center">
+                                        {plan.nome.toLowerCase().includes('anual') && (
+                                            <p className="text-xs text-center text-purple-400 font-medium">
+                                                3 Meses Grátis
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
                             </motion.div>
                         );
