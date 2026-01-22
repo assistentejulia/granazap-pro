@@ -37,7 +37,7 @@ export function SharedManagement() {
   const maxDependentes = profile?.max_usuarios_dependentes || 0;
   const permiteCompartilhamento = profile?.permite_compartilhamento || false;
   const userLimit = maxDependentes;
-  const currentUsers = 1 + (members?.length || 0);
+  const currentUsers = members?.length || 0;
 
   const handleAddUser = () => {
     if (!permiteCompartilhamento || maxDependentes === 0) {
