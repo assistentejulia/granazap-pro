@@ -129,7 +129,11 @@ async function fetchTransactions(
 
   // Aplicar filtro de categoria
   if (categoryId && categoryId !== 'all') {
-    query = query.eq('categoria_id', categoryId);
+    if (categoryId === 'uncategorized') {
+      query = query.is('categoria_id', null);
+    } else {
+      query = query.eq('categoria_id', categoryId);
+    }
   }
 
   const { data, error } = await query

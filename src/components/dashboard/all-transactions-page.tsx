@@ -86,7 +86,12 @@ export function AllTransactionsPage() {
       const matchesAccount = accountId === 'all' ? true : t.conta_id === accountId;
 
       // 3. Category Filter
-      const matchesCategory = categoryId === 'all' ? true : t.categoria_id.toString() === categoryId;
+      let matchesCategory = true;
+      if (categoryId === 'uncategorized') {
+        matchesCategory = !t.categoria_id;
+      } else if (categoryId !== 'all') {
+        matchesCategory = t.categoria_id.toString() === categoryId;
+      }
 
       // 4. Transaction Type Filter
       let matchesType = true;

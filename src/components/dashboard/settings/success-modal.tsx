@@ -56,11 +56,11 @@ export function SuccessModal({
           <div className="flex items-start gap-3 text-left">
             <Mail className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
             <div className="space-y-1 flex-1">
-              <p className="text-sm font-medium text-foreground">
-                Próximo Passo
+              <p className="text-base font-bold text-blue-600 uppercase tracking-tight">
+                Necessário Criar Conta
               </p>
-              <p className="text-sm text-muted-foreground">
-                Peça para <span className="text-foreground font-medium">{memberName}</span> criar uma conta no {appName} usando o e-mail:
+              <p className="text-sm text-foreground leading-relaxed">
+                Para ativar o acesso, <span className="font-bold text-foreground">{memberName}</span> precisa obrigatoriamente criar uma conta no {appName} usando este e-mail:
               </p>
             </div>
           </div>

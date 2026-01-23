@@ -116,6 +116,14 @@ export async function signupUser(data: SignupData): Promise<SignupResult> {
         };
       }
 
+      // Tratamento de limite de taxa (Rate Limit)
+      if (authError.message.includes('security purposes') || authError.message.includes('seconds')) {
+        return {
+          success: false,
+          error: 'Limite de tentativas atingido. Se você já iniciou o cadastro, verifique seu e-mail para confirmar a conta ou aguarde alguns segundos.'
+        };
+      }
+
       return {
         success: false,
         error: authError.message
