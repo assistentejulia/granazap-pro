@@ -18,7 +18,7 @@ export function EmailPendingModal({ isOpen, onClose, email }: EmailPendingModalP
 
   const handleResendEmail = async () => {
     if (!email) return;
-    
+
     setIsResending(true);
     try {
       const supabase = createClient();
@@ -69,7 +69,7 @@ export function EmailPendingModal({ isOpen, onClose, email }: EmailPendingModalP
                 >
                   <X className="w-5 h-5 text-zinc-400" />
                 </button>
-                
+
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-full bg-[#F59E0B]/10 flex items-center justify-center">
                     <Mail className="w-6 h-6 text-[#F59E0B]" />
@@ -79,7 +79,7 @@ export function EmailPendingModal({ isOpen, onClose, email }: EmailPendingModalP
                       Confirme seu email
                     </h3>
                     <p className="text-sm text-zinc-400 mt-1">
-                      localhost:3000 diz
+                      Falta pouco para ativar sua conta
                     </p>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ export function EmailPendingModal({ isOpen, onClose, email }: EmailPendingModalP
               {/* Content */}
               <div className="p-6">
                 <p className="text-zinc-300 leading-relaxed">
-                  Por favor, confirme seu email antes de fazer login
+                  Enviamos um link de confirmação para o seu email. Você precisa clicar nele antes de fazer login.
                 </p>
 
                 {email && (
@@ -99,9 +99,9 @@ export function EmailPendingModal({ isOpen, onClose, email }: EmailPendingModalP
                 )}
 
                 <div className="mt-4 space-y-2 text-sm text-zinc-400">
-                  <p>• Verifique sua caixa de entrada</p>
-                  <p>• Clique no link de confirmação</p>
-                  <p>• Não esqueça de verificar a pasta de spam</p>
+                  <p>• Verifique sua caixa de entrada e Spam</p>
+                  <p>• Clique no link para ativar sua conta</p>
+                  <p>• O link expira em algumas horas</p>
                 </div>
               </div>
 

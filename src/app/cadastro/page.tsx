@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Suspense } from "react";
 import { TrendingUp, Users, Shield, Lock } from "lucide-react";
 import { SignupForm } from "@/components/auth/signup-form";
 import { AuthLayout } from "@/components/auth/auth-layout";
@@ -52,7 +53,13 @@ export default function SignupPage() {
 
       {/* Signup Form */}
       <div className="space-y-6">
-        <SignupForm />
+        <Suspense fallback={
+          <div className="w-full h-[400px] flex items-center justify-center">
+            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
+          </div>
+        }>
+          <SignupForm />
+        </Suspense>
 
         {/* Sign In Link */}
         <div className="mt-6 text-center text-sm text-muted-foreground">

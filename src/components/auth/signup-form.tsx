@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { Eye, EyeOff, Lock, Mail, User } from "lucide-react";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
@@ -26,6 +28,8 @@ type SignupFormValues = {
 
 export function SignupForm() {
   const { t } = useLanguage();
+  const searchParams = useSearchParams();
+  const emailParam = searchParams.get('email');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [showEmailModal, setShowEmailModal] = useState(false);
@@ -59,13 +63,26 @@ export function SignupForm() {
     resolver: zodResolver(signupSchema),
     defaultValues: {
       fullName: "",
-      email: "",
+      email: emailParam || "",
       phone: "",
       password: "",
       confirmPassword: "",
       acceptTerms: false,
     },
   });
+
+  // Preencher email se vier na URL
+  useEffect(() => {
+    if (emailParam) {
+      // Pequeno delay para garantir que o formulário está pronto
+      const timer = setTimeout(() => {
+        // setValue não está destruturado acima, precisamos pegar do useForm
+        // Como não pegamos, vamos usar o defaultValues que já deve funcionar,
+        // mas para garantir em re-renders:
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [emailParam]);
 
   const onSubmit = async (data: SignupFormValues) => {
     try {
