@@ -72,7 +72,7 @@ export function WhatsAppAgentPage() {
 
   const handleOpenWhatsApp = () => {
     if (!whatsappConfig?.whatsapp_contact_url) return;
-    const message = encodeURIComponent(`Olá! Sou ${userName} e gostaria de usar o assistente do ${appName}.`);
+    const message = encodeURIComponent(`Olá! Sou ${userName} e gostaria de usar o ${appName}.`);
     const url = whatsappConfig.whatsapp_contact_url.includes('?')
       ? `${whatsappConfig.whatsapp_contact_url}&text=${message}`
       : `${whatsappConfig.whatsapp_contact_url}?text=${message}`;
