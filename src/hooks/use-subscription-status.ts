@@ -49,7 +49,7 @@ export function useSubscriptionStatus() {
           setStatus(prev => ({ ...prev, loading: false }));
           return;
         }
-        
+
         // FALLBACK: Se RPC não retornar dataFinalPlano, usar do profile
         const dataFinalPlano = accessInfo?.dataFinalPlano || profile.data_fim_plano || null;
 
@@ -101,15 +101,9 @@ export function useSubscriptionStatus() {
         let canAccess = true;
 
         if (isExpired) {
-          if (daysExpired >= 14) {
-            // Bloqueio total após 14 dias
-            blockingLevel = 'hard-block';
-            canAccess = false;
-          } else if (daysExpired >= 1) {
-            // Bloqueio suave (0-13 dias)
-            blockingLevel = 'soft-block';
-            canAccess = true; // Permite visualizar mas com modal
-          }
+          // Bloqueio total imediato se expirado
+          blockingLevel = 'hard-block';
+          canAccess = false;
         } else if (daysUntilExpiration >= 0 && daysUntilExpiration <= 3) {
           // Aviso 3 dias antes
           blockingLevel = 'warning';

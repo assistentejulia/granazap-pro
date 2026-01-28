@@ -4,7 +4,7 @@ import { createServerClient } from '@supabase/ssr'
 export async function middleware(request: NextRequest) {
   const isDashboardRoute = request.nextUrl.pathname.startsWith('/dashboard')
   const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
-  
+
   // Rotas públicas que não precisam de auth ou verificação de plano
   // /planos agora é pública!
   if (!isDashboardRoute && !isAdminRoute) {
@@ -103,7 +103,7 @@ export async function middleware(request: NextRequest) {
         const now = new Date();
         const diffTime = now.getTime() - expirationDate.getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
+
         if (diffDays > 0) {
           daysExpired = diffDays;
         }
@@ -114,7 +114,7 @@ export async function middleware(request: NextRequest) {
         // Redirecionar para página de bloqueio
         return NextResponse.redirect(new URL('/blocked', request.url))
       }
-      
+
       // BLOQUEIO SUAVE: 1-13 dias expirado
       if (daysExpired >= 1 && daysExpired < 14) {
         response.cookies.set('subscription_status', 'soft-blocked')
