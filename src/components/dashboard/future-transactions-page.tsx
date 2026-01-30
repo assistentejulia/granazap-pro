@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useDeferredValue, useEffect } from "react";
-import { Plus, Search, Filter, Calendar, TrendingUp, TrendingDown, Loader2, Clock, CheckCircle2, XCircle, Repeat, CreditCard, Edit, Trash2, Settings } from "lucide-react";
+import { Plus, Search, Filter, Calendar, TrendingUp, TrendingDown, Loader2, Clock, CheckCircle2, XCircle, Repeat, CreditCard, Edit, Trash2, Settings, Calendar as CalendarIcon, X } from "lucide-react";
 import * as Icons from "lucide-react";
 import { useFutureTransactionsQuery, useFutureTransactionMutations } from "@/hooks/use-future-transactions-query";
 import { useAccountFilter } from "@/hooks/use-account-filter";
@@ -19,6 +19,18 @@ import { InfoCard } from "@/components/ui/info-card";
 import { EmptyStateEducational } from "@/components/ui/empty-state-educational";
 import { useTransactionsExport } from "@/hooks/use-transactions-export";
 import { ExportDropdown } from "@/components/dashboard/export-dropdown";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 // Dynamic imports para reduzir bundle inicial
 const FutureTransactionModal = dynamic(() => import("./future-transaction-modal").then(mod => mod.FutureTransactionModal));
@@ -47,17 +59,46 @@ export function FutureTransactionsPage() {
   const [filterType, setFilterType] = useState<FilterType>('todos');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('todos');
   const [filterRecurrence, setFilterRecurrence] = useState<FilterRecurrence>('todos');
-  const [showFilters, setShowFilters] = useState(false);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const currentYear = new Date().getFullYear();
+  const [startDate, setStartDate] = useState(`${currentYear}-01-01`);
+  const [endDate, setEndDate] = useState(`${currentYear}-12-31`);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [mounted, setMounted] = useState(false);
+
+  // New Date Filter Popover State
+  const [isDatePopoverOpen, setIsDatePopoverOpen] = useState(false);
+  const [tempStartDate, setTempStartDate] = useState("");
+  const [tempEndDate, setTempEndDate] = useState("");
 
   // Prevent hydration mismatch by only showing loading skeleton on client
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Sync temp state when opening popover
+  useEffect(() => {
+    if (isDatePopoverOpen) {
+      setTempStartDate(startDate);
+      setTempEndDate(endDate);
+    }
+  }, [isDatePopoverOpen, startDate, endDate]);
+
+  const handleApplyDateFilter = () => {
+    setStartDate(tempStartDate);
+    setEndDate(tempEndDate);
+    setIsDatePopoverOpen(false);
+  };
+
+  const handleClearDateFilter = () => {
+    setStartDate("");
+    setEndDate("");
+    setTempStartDate("");
+    setTempEndDate("");
+    setIsDatePopoverOpen(false);
+  };
+
+  const hasActiveDateFilter = !!startDate && !!endDate;
 
   // Modal states
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -324,222 +365,163 @@ export function FutureTransactionsPage() {
 
   return (
     <div className="space-y-3 md:space-y-6 pb-20 md:pb-0">
-      {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1">
-          <h1 className="text-xl md:text-2xl font-bold text-foreground">{t('future.title')}</h1>
-          <p className="text-muted-foreground text-xs md:text-sm mt-1">
-            {t('future.subtitle')}
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          {isRefetching && (
-            <div className="flex items-center gap-2 text-xs text-zinc-500">
-              <Loader2 className="w-3 h-3 animate-spin" />
-              <span className="hidden sm:inline">{t('common.updating')}</span>
-            </div>
-          )}
-          <div className="flex items-center gap-2">
-            <ExportDropdown
-              onExportPDF={handleExportPDF}
-              onExportExcel={handleExportExcel}
-              isExporting={isExporting}
-              className="hidden sm:flex"
-            />
-            <button
-              onClick={() => {
-                setSelectedTransaction(null);
-                setModalType('entrada');
-                setIsCreateModalOpen(true);
-              }}
-              className="flex items-center gap-2 px-3 sm:px-4 h-10 bg-[#22C55E] hover:bg-[#16A34A] text-white rounded-lg font-medium transition-colors shadow-lg shadow-[#22C55E]/20"
-            >
-              <TrendingUp className="w-4 h-4" />
-              <span className="hidden sm:inline">{t('common.income')}</span>
-            </button>
-            <button
-              onClick={() => {
-                setSelectedTransaction(null);
-                setModalType('saida');
-                setIsCreateModalOpen(true);
-              }}
-              className="flex items-center gap-2 px-3 sm:px-4 h-10 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition-colors shadow-lg shadow-red-500/20"
-            >
-              <TrendingDown className="w-4 h-4" />
-              <span className="hidden sm:inline">{t('common.expense')}</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      {/* ... Header and Stats Cards ... */}
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-4">
-        <div className="bg-card border border-border rounded-xl p-2.5 md:p-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-yellow-500/10 flex items-center justify-center flex-shrink-0">
-              <Clock className="w-4 h-4 md:w-5 md:h-5 text-yellow-500" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] md:text-xs text-muted-foreground truncate">Pendentes</p>
-              <p className="text-base md:text-xl font-bold text-foreground">{stats.totalPending}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-2.5 md:p-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-[#22C55E]/10 flex items-center justify-center flex-shrink-0">
-              <TrendingUp className="w-4 h-4 md:w-5 md:h-5 text-[#22C55E]" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] md:text-xs text-muted-foreground truncate">A Receber</p>
-              <p className="text-xs md:text-lg font-bold text-[#22C55E] truncate">{formatCurrency(stats.totalIncome)}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-2.5 md:p-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
-              <TrendingDown className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] md:text-xs text-muted-foreground truncate">A Pagar</p>
-              <p className="text-xs md:text-lg font-bold text-red-500 truncate">{formatCurrency(stats.totalExpense)}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-2.5 md:p-4">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
-              <XCircle className="w-4 h-4 md:w-5 md:h-5 text-red-500" />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-muted-foreground">{t('future.overdue')}</p>
-              <p className="text-xl font-bold text-foreground">{stats.totalOverdue}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="bg-card border border-border rounded-xl p-4">
+      {/* Filters Section */}
+      <div className="bg-card border border-border rounded-xl p-4 space-y-4">
+        {/* Row 1: Dropdown Filters & Date */}
         <div className="flex flex-col md:flex-row gap-4">
-          {/* Search */}
-          <div className="flex-1 relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          {/* Tipo */}
+          <div className="flex-1 min-w-[200px]">
+            <label className="text-xs text-muted-foreground font-medium mb-1.5 block">
+              {t('common.type')}
+            </label>
+            <Select value={filterType} onValueChange={(v) => setFilterType(v as FilterType)}>
+              <SelectTrigger>
+                <SelectValue placeholder={t('future.all')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">{t('future.all')}</SelectItem>
+                <SelectItem value="entrada">{t('common.income')}</SelectItem>
+                <SelectItem value="saida">{t('common.expense')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Status */}
+          <div className="flex-1 min-w-[200px]">
+            <label className="text-xs text-muted-foreground font-medium mb-1.5 block">
+              {t('common.status')}
+            </label>
+            <Select value={filterStatus} onValueChange={(v) => setFilterStatus(v as FilterStatus)}>
+              <SelectTrigger>
+                <SelectValue placeholder={t('future.all')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">{t('future.all')}</SelectItem>
+                <SelectItem value="pendente">{t('future.pending')}</SelectItem>
+                <SelectItem value="pago">{t('future.paid')}</SelectItem>
+                <SelectItem value="cancelado">{t('future.cancelled')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Recorrência */}
+          <div className="flex-1 min-w-[200px]">
+            <label className="text-xs text-muted-foreground font-medium mb-1.5 block">
+              {t('future.recurrence')}
+            </label>
+            <Select value={filterRecurrence} onValueChange={(v) => setFilterRecurrence(v as FilterRecurrence)}>
+              <SelectTrigger>
+                <SelectValue placeholder={t('future.all')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="todos">{t('future.all')}</SelectItem>
+                <SelectItem value="unico">{t('future.unique')}</SelectItem>
+                <SelectItem value="recorrente">{t('future.recurrent')}</SelectItem>
+                <SelectItem value="parcelado">{t('future.installments')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Data */}
+          <div className="flex-1 min-w-[200px]">
+            <label className="text-xs text-muted-foreground font-medium mb-1.5 block">
+              {t('future.tableDueDate')}
+            </label>
+            <Popover open={isDatePopoverOpen} onOpenChange={setIsDatePopoverOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={hasActiveDateFilter ? "default" : "outline"}
+                  className={cn(
+                    "w-full justify-start text-left font-normal bg-background border-input hover:bg-muted/50",
+                    !hasActiveDateFilter && "text-muted-foreground",
+                    hasActiveDateFilter && "bg-primary text-primary-foreground hover:bg-primary/90"
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {hasActiveDateFilter ? (
+                    <>
+                      {format(new Date(startDate + 'T12:00:00'), "dd/MM/yyyy")} -{" "}
+                      {format(new Date(endDate + 'T12:00:00'), "dd/MM/yyyy")}
+                    </>
+                  ) : (
+                    t('action.filterByDate') || "Filtrar por data"
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-4" align="start">
+                <div className="space-y-4 min-w-[300px]">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium leading-none">{t('filters.advanced')}</h4>
+                    {hasActiveDateFilter && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-auto p-0 text-muted-foreground hover:text-foreground"
+                        onClick={handleClearDateFilter}
+                      >
+                        <X className="h-4 w-4 mr-1" />
+                        {t('filters.clear')}
+                      </Button>
+                    )}
+                  </div>
+                  <div className="grid gap-2">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <span className="text-xs text-muted-foreground font-medium">{t('filters.startDate')}</span>
+                        <input
+                          type="date"
+                          value={tempStartDate}
+                          onChange={(e) => setTempStartDate(e.target.value)}
+                          className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <span className="text-xs text-muted-foreground font-medium">{t('filters.endDate')}</span>
+                        <input
+                          type="date"
+                          value={tempEndDate}
+                          onChange={(e) => setTempEndDate(e.target.value)}
+                          className="w-full h-9 rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-end pt-2">
+                    <Button size="sm" onClick={handleApplyDateFilter} disabled={!tempStartDate || !tempEndDate}>
+                      {t('filters.apply')}
+                    </Button>
+                  </div>
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+        </div>
+
+        {/* Row 2: Search */}
+        <div className="flex flex-col md:flex-row gap-4 items-center">
+          <div className="relative flex-1 w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
             <input
               type="text"
               placeholder={t('future.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full h-10 pl-10 pr-4 bg-background border border-input rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary"
+              className="w-full h-10 pl-10 pr-4 bg-background border border-input rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary transition-all"
             />
           </div>
-
-          {/* Filter Button */}
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className={cn(
-              "flex items-center gap-2 px-4 h-10 rounded-lg border transition-colors",
-              showFilters
-                ? "bg-primary/10 border-primary text-primary"
-                : "bg-background border-input text-muted-foreground hover:text-foreground hover:border-sidebar-primary"
-            )}
+          <Button
+            onClick={() => {
+              setModalType('saida');
+              setIsCreateModalOpen(true);
+            }}
+            className="w-full md:w-auto bg-primary text-primary-foreground hover:bg-primary/90"
           >
-            <Filter className="w-4 h-4" />
-            {t('future.filters')}
-          </button>
+            <Plus className="w-4 h-4 mr-2" />
+            {t('future.newTransaction')}
+          </Button>
         </div>
-
-        {/* Advanced Filters */}
-        {showFilters && (
-          <div className="space-y-4 mt-4 pt-4 border-t border-border">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label className="text-xs text-muted-foreground mb-2 block">{t('common.type')}</label>
-                <select
-                  value={filterType}
-                  onChange={(e) => setFilterType(e.target.value as FilterType)}
-                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-foreground text-sm focus:outline-none focus:border-primary"
-                >
-                  <option value="todos">{t('future.all')}</option>
-                  <option value="entrada">{t('common.income')}</option>
-                  <option value="saida">{t('common.expense')}</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs text-muted-foreground mb-2 block">{t('common.status')}</label>
-                <select
-                  value={filterStatus}
-                  onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
-                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-foreground text-sm focus:outline-none focus:border-primary"
-                >
-                  <option value="todos">{t('future.all')}</option>
-                  <option value="pendente">{t('future.pending')}</option>
-                  <option value="pago">{t('future.paid')}</option>
-                  <option value="cancelado">{t('future.cancelled')}</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="text-xs text-muted-foreground mb-2 block">{t('future.recurrence')}</label>
-                <select
-                  value={filterRecurrence}
-                  onChange={(e) => setFilterRecurrence(e.target.value as FilterRecurrence)}
-                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-foreground text-sm focus:outline-none focus:border-primary"
-                >
-                  <option value="todos">{t('future.all')}</option>
-                  <option value="unico">{t('future.unique')}</option>
-                  <option value="recorrente">{t('future.recurrent')}</option>
-                  <option value="parcelado">{t('future.installments')}</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Date Range Filter */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs text-muted-foreground mb-2 block">{t('future.startDate')}</label>
-                <input
-                  type="date"
-                  value={startDate}
-                  onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-foreground text-sm focus:outline-none focus:border-primary"
-                />
-              </div>
-              <div>
-                <label className="text-xs text-muted-foreground mb-2 block">{t('future.endDate')}</label>
-                <input
-                  type="date"
-                  value={endDate}
-                  onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full h-9 px-3 bg-background border border-input rounded-lg text-sm text-foreground focus:outline-none focus:border-primary"
-                />
-              </div>
-            </div>
-
-            {/* Clear Filters Button */}
-            {(startDate || endDate || filterType !== 'todos' || filterStatus !== 'todos' || filterRecurrence !== 'todos') && (
-              <div className="flex justify-end">
-                <button
-                  onClick={() => {
-                    setStartDate("");
-                    setEndDate("");
-                    setFilterType('todos');
-                    setFilterStatus('todos');
-                    setFilterRecurrence('todos');
-                  }}
-                  className="text-xs text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {t('future.clearFilters')}
-                </button>
-              </div>
-            )}
-          </div>
-        )}
       </div>
 
       {/* Info Card - Onboarding sobre Agendamentos */}

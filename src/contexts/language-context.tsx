@@ -404,6 +404,14 @@ const translations = {
     'header.quickAddExpense': 'Adicionar despesa rapidamente',
     'header.quickAddIncome': 'Adicionar receita rapidamente',
 
+    // Tooltips
+    'dashboard.tooltips.balance': 'Somatório do saldo atual de todas as contas ativas.',
+    'dashboard.tooltips.income': 'Total de receitas efetivadas no período selecionado.',
+    'dashboard.tooltips.expenses': 'Total de despesas efetivadas no período selecionado.',
+    'dashboard.tooltips.toReceive': 'Previsão de receitas pendentes para o período selecionado.',
+    'dashboard.tooltips.toPay': 'Previsão de contas a pagar pendentes para o período selecionado.',
+    'dashboard.tooltips.savings': 'Diferença entre Receitas e Despesas no período.',
+
     // Common
     'common.cancel': 'Cancelar',
     'common.updating': 'Atualizando...',
@@ -476,6 +484,7 @@ const translations = {
     // Filters
     'filters.advanced': 'Filtros Avançados',
     'filters.clear': 'Limpar filtros',
+    'filters.custom': 'Personalizado',
     'filters.startDate': 'Data Inicial',
     'filters.endDate': 'Data Final',
     'filters.apply': 'Aplicar Filtros',
@@ -568,6 +577,7 @@ const translations = {
     'action.cancelPayment': 'Cancelar pagamento',
     'action.edit': 'Editar',
     'action.delete': 'Excluir',
+    'action.filterByDate': 'Filtrar por data',
 
     // Categories
     'categories.title': 'Categorias',
@@ -1658,6 +1668,14 @@ const translations = {
     'sidebar.personal': 'Personal',
     'sidebar.pj': 'Empresa',
     'sidebar.dashboard': 'Panel',
+
+    // Tooltips
+    'dashboard.tooltips.balance': 'Suma del saldo actual de todas las cuentas activas.',
+    'dashboard.tooltips.income': 'Total de ingresos recibidos en el período seleccionado.',
+    'dashboard.tooltips.expenses': 'Total de gastos pagados en el período seleccionado.',
+    'dashboard.tooltips.toReceive': 'Previsión de ingresos pendientes para el período seleccionado.',
+    'dashboard.tooltips.toPay': 'Previsión de cuentas por pagar pendientes para el período seleccionado.',
+    'dashboard.tooltips.savings': 'Diferencia entre Ingresos y Gastos en el período.',
     'sidebar.income': 'Ingresos',
     'sidebar.expenses': 'Gastos',
     'sidebar.transactions': 'Transacciones',
@@ -1702,6 +1720,7 @@ const translations = {
     // Filters
     'filters.advanced': 'Filtros Avanzados',
     'filters.clear': 'Limpiar Filtros',
+    'filters.custom': 'Personalizado',
     'filters.apply': 'Aplicar',
     'filters.account': 'Cuenta',
     'filters.transactionType': 'Tipo de Transação',
@@ -1794,6 +1813,7 @@ const translations = {
     'action.cancelPayment': 'Cancelar pago',
     'action.edit': 'Editar',
     'action.delete': 'Eliminar',
+    'action.filterByDate': 'Filtrar por fecha',
 
     // Categories
     'categories.title': 'Categorías',
@@ -2454,6 +2474,14 @@ const translations = {
     'sidebar.personal': 'Personal',
     'sidebar.pj': 'Business',
     'sidebar.dashboard': 'Dashboard',
+
+    // Tooltips
+    'dashboard.tooltips.balance': 'Sum of current balance of all active accounts.',
+    'dashboard.tooltips.income': 'Total income receipts in the selected period.',
+    'dashboard.tooltips.expenses': 'Total expenses paid in the selected period.',
+    'dashboard.tooltips.toReceive': 'Forecast of pending income for the selected period.',
+    'dashboard.tooltips.toPay': 'Forecast of pending bills to pay for the selected period.',
+    'dashboard.tooltips.savings': 'Difference between Income and Expenses in the period.',
     'sidebar.income': 'Income',
     'sidebar.expenses': 'Expenses',
     'sidebar.transactions': 'Transactions',
@@ -2499,6 +2527,7 @@ const translations = {
     // Filters
     'filters.advanced': 'Advanced Filters',
     'filters.clear': 'Clear filters',
+    'filters.custom': 'Custom',
     'filters.startDate': 'Start Date',
     'filters.endDate': 'End Date',
     'filters.apply': 'Apply Filters',
@@ -2609,6 +2638,7 @@ const translations = {
     'action.cancelPayment': 'Cancel payment',
     'action.edit': 'Edit',
     'action.delete': 'Delete',
+    'action.filterByDate': 'Filter by date',
 
     // Categories
     'categories.title': 'Categories',

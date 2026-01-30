@@ -14,6 +14,7 @@ import { useMemo, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Sparkline } from "@/components/dashboard/ui/sparkline";
 import { generateSparklineData } from "@/lib/dashboard-utils";
+import { HelpTooltip } from "@/components/ui/help-tooltip";
 
 interface StatCard {
   title: string;
@@ -25,6 +26,7 @@ interface StatCard {
   count?: string;
   sparklineData?: number[];
   sparklineColor?: string;
+  tooltip?: string;
 }
 
 export function StatsCards() {
@@ -53,40 +55,49 @@ export function StatsCards() {
   const { stats, loading } = useTransactionsQuery(effectivePeriod, customRange, accountId, 'all', true);
   const { transactions: futureTransactions, loading: loadingFuture } = useFutureTransactionsQuery();
 
-  // Calcular contas a pagar e receber (baseado no período selecionado)
-  const payableReceivable = useMemo(() => {
-    const now = new Date();
-    let startDate = new Date();
-    let endDate = new Date();
+  // Calcular intervalo de datas
+  const dateRange = useMemo(() => {
+    // Se tiver datas personalizadas no contexto, usar elas
+    if (startDate && endDate) {
+      // startDate e endDate do contexto já são strings YYYY-MM-DD
+      return { startStr: startDate, endStr: endDate };
+    }
 
-    // Calcular intervalo baseado no período
+    const now = new Date();
+    let start = new Date();
+    let end = new Date();
+
+    // Calcular intervalo baseado no período apenas se não tiver custom range
     switch (period) {
       case 'day':
-        startDate.setHours(0, 0, 0, 0);
-        endDate.setHours(23, 59, 59, 999);
+        start.setHours(0, 0, 0, 0);
+        end.setHours(23, 59, 59, 999);
         break;
       case 'week':
-        startDate.setDate(now.getDate() - now.getDay()); // Início da semana
-        startDate.setHours(0, 0, 0, 0);
-        endDate.setDate(startDate.getDate() + 6); // Fim da semana
-        endDate.setHours(23, 59, 59, 999);
+        start.setDate(now.getDate() - now.getDay()); // Início da semana
+        start.setHours(0, 0, 0, 0);
+        end.setDate(start.getDate() + 6); // Fim da semana
+        end.setHours(23, 59, 59, 999);
         break;
       case 'month':
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1);
-        endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+        start = new Date(now.getFullYear(), now.getMonth(), 1);
+        end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
         break;
       case 'year':
-        startDate = new Date(now.getFullYear(), 0, 1);
-        endDate = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
+        start = new Date(now.getFullYear(), 0, 1);
+        end = new Date(now.getFullYear(), 11, 31, 23, 59, 59, 999);
         break;
       default:
         // Para custom ou outros, usar próximos 30 dias
-        startDate = now;
-        endDate.setDate(now.getDate() + 30);
+        start = now;
+        end.setDate(now.getDate() + 30);
     }
 
-    const startStr = startDate.toISOString().split('T')[0];
-    const endStr = endDate.toISOString().split('T')[0];
+    return { startStr: start.toISOString().split('T')[0], endStr: end.toISOString().split('T')[0] };
+  }, [period, startDate, endDate]);
+
+  const payableReceivable = useMemo(() => {
+    const { startStr, endStr } = dateRange;
 
     const pending = futureTransactions.filter(t => {
       const tDate = t.data_prevista.split('T')[0];
@@ -105,7 +116,7 @@ export function StatsCards() {
     const receivableCount = pending.filter(t => t.tipo === 'entrada').length;
 
     return { payable, receivable, payableCount, receivableCount };
-  }, [futureTransactions, period]);
+  }, [futureTransactions, dateRange]);
 
   if (loading || loadingFuture) {
     return (
@@ -119,21 +130,7 @@ export function StatsCards() {
     );
   }
 
-  // Determinar label do período para os cards de A Pagar/Receber
-  const getPeriodLabel = () => {
-    switch (period) {
-      case 'day':
-        return t('dashboard.period.today');
-      case 'week':
-        return t('dashboard.period.week');
-      case 'month':
-        return t('dashboard.period.month');
-      case 'year':
-        return t('dashboard.period.year');
-      default:
-        return '30d';
-    }
-  };
+
 
   const mainStatsCards: StatCard[] = [
     {
@@ -145,6 +142,7 @@ export function StatsCards() {
       iconColor: "text-blue-400",
       sparklineData: generateSparklineData(12, stats.balance >= 0 ? 'up' : 'down'),
       sparklineColor: "#3B82F6",
+      tooltip: t('dashboard.tooltips.balance'),
     },
     {
       title: t('dashboard.stats.income'),
@@ -156,6 +154,7 @@ export function StatsCards() {
       count: `${stats.incomeCount} ${t('dashboard.stats.transactions')}`,
       sparklineData: generateSparklineData(12, 'up'),
       sparklineColor: "#22C55E",
+      tooltip: t('dashboard.tooltips.income'),
     },
     {
       title: t('dashboard.stats.expenses'),
@@ -167,9 +166,10 @@ export function StatsCards() {
       count: `${stats.expensesCount} ${t('dashboard.stats.transactions')}`,
       sparklineData: generateSparklineData(12, 'flat'),
       sparklineColor: "#EF4444",
+      tooltip: t('dashboard.tooltips.expenses'),
     },
     {
-      title: `${t('dashboard.stats.toReceive')} (${getPeriodLabel()})`,
+      title: t('dashboard.stats.toReceive'),
       value: formatCurrency(payableReceivable.receivable),
       change: "+100%",
       changeType: "positive",
@@ -178,9 +178,10 @@ export function StatsCards() {
       count: `${payableReceivable.receivableCount} ${t('dashboard.stats.pending')}`,
       sparklineData: generateSparklineData(12, 'up'),
       sparklineColor: "#A855F7",
+      tooltip: t('dashboard.tooltips.toReceive'),
     },
     {
-      title: `${t('dashboard.stats.toPay')} (${getPeriodLabel()})`,
+      title: t('dashboard.stats.toPay'),
       value: formatCurrency(payableReceivable.payable),
       change: "-100%",
       changeType: "negative",
@@ -189,6 +190,7 @@ export function StatsCards() {
       count: `${payableReceivable.payableCount} ${t('dashboard.stats.pending')}`,
       sparklineData: generateSparklineData(12, 'flat'),
       sparklineColor: "#FBBF24",
+      tooltip: t('dashboard.tooltips.toPay'),
     },
   ];
 
@@ -201,6 +203,7 @@ export function StatsCards() {
     iconColor: "text-[#F59E0B]",
     sparklineData: generateSparklineData(12, stats.savingsRate > 0 ? 'up' : 'flat'),
     sparklineColor: "#F59E0B",
+    tooltip: t('dashboard.tooltips.savings'),
   };
 
   return (
@@ -231,7 +234,10 @@ export function StatsCards() {
             </div>
 
             {/* Title */}
-            <p className="text-xs md:text-sm text-muted-foreground mb-2 line-clamp-2">{stat.title}</p>
+            <div className="flex items-center gap-2 mb-2">
+              <p className="text-xs md:text-sm text-muted-foreground line-clamp-1">{stat.title}</p>
+              {stat.tooltip && <HelpTooltip content={stat.tooltip} />}
+            </div>
 
             {/* Value */}
             <p className="text-base md:text-lg xl:text-xl font-bold font-mono mb-2 whitespace-nowrap overflow-hidden text-ellipsis">{stat.value}</p>
@@ -268,7 +274,10 @@ export function StatsCards() {
               <savingsCard.icon className="w-5 h-5 md:w-6 md:h-6" />
             </div>
             <div>
-              <p className="text-xs md:text-sm text-muted-foreground mb-1">{savingsCard.title}</p>
+              <div className="flex items-center gap-2 mb-1">
+                <p className="text-xs md:text-sm text-muted-foreground">{savingsCard.title}</p>
+                {savingsCard.tooltip && <HelpTooltip content={savingsCard.tooltip} />}
+              </div>
               <p className="text-xl md:text-2xl font-bold font-mono">{savingsCard.value}</p>
             </div>
           </div>

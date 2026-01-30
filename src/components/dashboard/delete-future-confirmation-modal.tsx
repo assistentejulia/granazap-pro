@@ -52,9 +52,10 @@ export function DeleteFutureConfirmationModal({
             const parcelaAtual = transaction.parcela_info.numero;
             const { data: relatedTransactions, error: fetchError } = await supabase
               .from('lancamentos_futuros')
-              .select('id')
+              .select('id, parcela_info')
               .eq('usuario_id', transaction.usuario_id)
               .eq('cartao_id', transaction.cartao_id)
+              .eq('descricao', transaction.descricao)
               .not('parcela_info', 'is', null);
 
             if (fetchError) throw fetchError;
@@ -153,40 +154,40 @@ export function DeleteFutureConfirmationModal({
             <p className="text-sm font-medium text-white mb-3">{t('common.delete')}</p>
             <div className="space-y-2">
               {/* Apenas esta transação */}
-              <label className="flex items-center gap-3 p-3 border border-white/10 rounded-lg cursor-pointer hover:bg-white/5 transition-colors">
+              <label className="flex items-center gap-3 p-3 border border-border rounded-lg cursor-pointer hover:bg-muted transition-colors">
                 <input
                   type="radio"
                   name="deleteType"
                   value="single"
                   checked={deleteType === 'single'}
                   onChange={(e) => setDeleteType(e.target.value as 'single' | 'all')}
-                  className="w-4 h-4 text-red-500"
+                  className="w-4 h-4 text-red-500 accent-red-500"
                 />
-                <span className="text-sm text-white">{t('future.editSingle')}</span>
+                <span className="text-sm text-foreground">{t('future.editSingle')}</span>
               </label>
 
               {/* Esta e futuras transações */}
-              <label className="flex items-center gap-3 p-3 border border-white/10 rounded-lg cursor-pointer hover:bg-white/5 transition-colors">
+              <label className="flex items-center gap-3 p-3 border border-border rounded-lg cursor-pointer hover:bg-muted transition-colors">
                 <input
                   type="radio"
                   name="deleteType"
                   value="all"
                   checked={deleteType === 'all'}
                   onChange={(e) => setDeleteType(e.target.value as 'single' | 'all')}
-                  className="w-4 h-4 text-red-500"
+                  className="w-4 h-4 text-red-500 accent-red-500"
                 />
-                <span className="text-sm text-white">{t('future.editFuture')}</span>
+                <span className="text-sm text-foreground">{t('future.editFuture')}</span>
               </label>
             </div>
           </div>
         )}
 
         {/* Footer */}
-        <div className="flex justify-end gap-3 pt-3 border-t border-white/5">
+        <div className="flex justify-end gap-3 pt-3 border-t border-border">
           <Button
             onClick={onClose}
             disabled={deleting}
-            className="px-6 bg-transparent border border-white/10 text-zinc-400 hover:text-white hover:bg-white/5"
+            className="px-6 bg-transparent border border-border text-muted-foreground hover:text-foreground hover:bg-muted"
           >
             {t('common.cancel')}
           </Button>

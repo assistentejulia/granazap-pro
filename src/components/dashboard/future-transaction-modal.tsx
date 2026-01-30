@@ -333,8 +333,27 @@ export function FutureTransactionModal({
         }
       } else {
         // ... (Insert logic uses baseData which has conta_id)
-        if (isRecurrent && dataFinal) {
+        // Validar dados de recorrência e parcelamento antes de processar
+        if (isRecurrent) {
+          if (!dataFinal) {
+            alert(t('validation.endDateRequired') || 'Data final é obrigatória para recorrência');
+            return;
+          }
+
+          const startDate = new Date(data.data_prevista);
+          const endDate = new Date(dataFinal);
+          if (endDate < startDate) {
+            alert(t('validation.endDateBeforeStart') || 'A data final deve ser posterior à data de início');
+            return;
+          }
+
           const dates = generateRecurrentDates(data.data_prevista, dataFinal, periodicidade);
+
+          if (dates.length === 0) {
+            alert(t('validation.noDatesGenerated') || 'Nenhuma data foi gerada. Verifique o período selecionado.');
+            return;
+          }
+
           const transactions = dates.map(date => ({
             ...baseData,
             data_prevista: date,
@@ -344,8 +363,13 @@ export function FutureTransactionModal({
           }));
           const { error } = await supabase.from('lancamentos_futuros').insert(transactions);
           if (error) throw error;
-        } else if (isInstallment && numeroParcelas) {
-          // ...
+
+        } else if (isInstallment) {
+          if (!numeroParcelas || parseInt(numeroParcelas) < 2) {
+            alert(t('validation.installmentsRequired') || 'Número de parcelas inválido');
+            return;
+          }
+
           const parcelas = parseInt(numeroParcelas);
           const valorTotal = parseFloat(data.valor);
           const valorParcela = valorTotal / parcelas;
@@ -369,7 +393,7 @@ export function FutureTransactionModal({
           const { error } = await supabase.from('lancamentos_futuros').insert(transactions);
           if (error) throw error;
         } else {
-          // ...
+          // Inserção única (não recorrente, não parcelada)
           const { error } = await supabase
             .from('lancamentos_futuros')
             .insert([{
