@@ -34,7 +34,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
     return {
       title: appName,
-      description: `Sistema de gestão financeira - ${appName}`,
+      description: `Pare de depender de planilhas. Com a Assistente Júlia, você controla receitas, despesas e contas direto no WhatsApp, com relatórios claros para PF e PJ.`,
       manifest: '/api/manifest',
       appleWebApp: {
         capable: true,

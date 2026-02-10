@@ -159,14 +159,14 @@ export function NewHeroSection() {
                             </span>
                         </motion.h1>
 
-                        <motion.p
+                        <motion.h2
                             initial={{ opacity: 0, y: 20 }}
                             animate={isInView ? { opacity: 1, y: 0 } : {}}
                             transition={{ delay: 0.4 }}
-                            className="text-xl text-blue-100/90 leading-relaxed"
+                            className="text-xl text-blue-100/90 leading-relaxed font-normal"
                         >
-                            Envie texto, foto ou áudio. A Júlia entende, registra e organiza tudo para você.
-                        </motion.p>
+                            Envie texto, foto ou áudio. A Júlia entende, registra e organiza tudo para você
+                        </motion.h2>
 
                         {/* Feature List */}
                         <motion.div
@@ -185,7 +185,7 @@ export function NewHeroSection() {
                             ].map((feature, index) => (
                                 <div key={index} className="flex items-start gap-3">
                                     <CheckCircle2 className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />
-                                    <span className="text-blue-100/90">{feature}</span>
+                                    <h3 className="text-blue-100/90 text-base font-normal">{feature}</h3>
                                 </div>
                             ))}
                         </motion.div>
