@@ -25,9 +25,12 @@ export function DashboardFilterProvider({ children }: { children: ReactNode }) {
     // States
     const [accountId, setAccountId] = useState<string>('all');
 
-    // Default to current year
-    const currentYear = new Date().getFullYear();
-    const [startDate, setStartDate] = useState<string | null>(`${currentYear}-01-01`);
+    // Default to current month start
+    const now = new Date();
+    const currentYear = now.getFullYear();
+    const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+
+    const [startDate, setStartDate] = useState<string | null>(`${currentYear}-${currentMonth}-01`);
     const [endDate, setEndDate] = useState<string | null>(`${currentYear}-12-31`);
 
     // Set default account when accounts are loaded or accountType changes
@@ -49,8 +52,11 @@ export function DashboardFilterProvider({ children }: { children: ReactNode }) {
             setAccountId('all');
         }
 
-        const currentYear = new Date().getFullYear();
-        setStartDate(`${currentYear}-01-01`);
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+
+        setStartDate(`${currentYear}-${currentMonth}-01`);
         setEndDate(`${currentYear}-12-31`);
     };
 

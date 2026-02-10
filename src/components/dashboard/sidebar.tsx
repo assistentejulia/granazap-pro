@@ -148,9 +148,9 @@ export function DashboardSidebar() {
                 <img src={settings.appLogoUrl} alt={settings.appName} className="w-10 h-10 rounded-xl object-cover" />
               ) : !settings.show_sidebar_logo && (
                 <img
-                  src="/assistente-julia-avatar.png"
+                  src="/img/logos/icon.png"
                   alt="Assistente Julia"
-                  className="w-auto h-10 object-contain"
+                  className="w-auto h-12 object-contain"
                 />
               )}
               {/* Mostrar nome se habilitado */}
