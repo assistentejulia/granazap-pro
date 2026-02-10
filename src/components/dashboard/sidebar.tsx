@@ -150,7 +150,7 @@ export function DashboardSidebar() {
                 <img
                   src="/assistente-julia-avatar.png"
                   alt="Assistente Julia"
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="w-auto h-10 object-contain"
                 />
               )}
               {/* Mostrar nome se habilitado */}

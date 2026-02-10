@@ -141,17 +141,17 @@ export function InvestmentShowcaseSection() {
                         </span>
                     </motion.div>
 
-                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-foreground mb-4">
+                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white mb-4">
                         Veja como é <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-cyan-500">fácil e rápido</span>
                     </h2>
-                    <p className="text-lg sm:text-xl text-muted-foreground max-w-3xl mx-auto">
+                    <p className="text-lg sm:text-xl text-white/80 max-w-3xl mx-auto">
                         Em 3 passos simples, você terá controle total das suas finanças
                     </p>
                 </motion.div>
 
                 {/* Steps Flow */}
                 <div ref={ref} className="max-w-5xl mx-auto">
-                    <div className="flex flex-col md:flex-row items-start justify-between gap-12 md:gap-4 relative">
+                    <div className="flex flex-col md:flex-row items-center md:items-start justify-between gap-12 md:gap-4 relative">
                         {/* Connecting Lines (Desktop) */}
                         <div className="absolute top-[64px] left-0 w-full h-0.5 border-t-2 border-dashed border-white/10 hidden md:block -z-10" />
 
@@ -217,7 +217,7 @@ export function InvestmentShowcaseSection() {
                 >
                     <div className="inline-flex items-center gap-3 px-6 py-4 rounded-full bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/20 backdrop-blur-sm">
                         <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse" />
-                        <span className="text-lg font-semibold text-foreground">
+                        <span className="text-lg font-semibold text-white">
                             Tudo acontece em segundos, 24 horas por dia
                         </span>
                     </div>

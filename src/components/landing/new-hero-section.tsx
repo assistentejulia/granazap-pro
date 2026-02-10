@@ -153,11 +153,10 @@ export function NewHeroSection() {
                             transition={{ delay: 0.3 }}
                             className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight"
                         >
-                            Controle financeiro com{" "}
+                            Controle financeiro no WhatsApp com{" "}
                             <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-300 to-emerald-400">
-                                IA
+                                inteligência artificial
                             </span>
-                            {" "}direto no WhatsApp.
                         </motion.h1>
 
                         <motion.p
@@ -166,8 +165,7 @@ export function NewHeroSection() {
                             transition={{ delay: 0.4 }}
                             className="text-xl text-blue-100/90 leading-relaxed"
                         >
-                            Acompanhe gastos por mensagem, monitore suas{" "}
-                            <strong className="text-white">dashboards profissionais</strong>, sem planilhas, sem complicação.
+                            Envie texto, foto ou áudio. A Júlia entende, registra e organiza tudo para você.
                         </motion.p>
 
                         {/* Feature List */}
@@ -178,11 +176,12 @@ export function NewHeroSection() {
                             className="space-y-3"
                         >
                             {[
-                                "Fale com a Julia e ela registra tudo para você",
-                                "Conta PJ e Pessoa Física no mesmo lugar",
+                                "Fale com a Júlia no WhatsApp",
+                                "Pessoa Física e PJ no mesmo painel",
+                                "Contas para casais ou família",
                                 "Dashboards na web e no celular",
                                 "Relatórios em PDF e Excel",
-                                "7 dias grátis — sem cartão"
+                                "Teste grátis por 7 dias"
                             ].map((feature, index) => (
                                 <div key={index} className="flex items-start gap-3">
                                     <CheckCircle2 className="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5" />

@@ -8,11 +8,11 @@ interface LandingLogoProps {
 
 export function LandingLogo({ className }: LandingLogoProps) {
     return (
-        <div className={cn("relative flex items-center justify-center w-10 h-10 overflow-hidden rounded-full border border-green-500/20 shadow-lg", className)}>
+        <div className={cn("relative flex items-center justify-center h-10 w-auto overflow-hidden", className)}>
             <img
-                src="/img/logo-julia.png"
+                src="/img/logos/logo-white.png"
                 alt="Assistente Julia Logo"
-                className="w-full h-full object-cover transition-transform hover:scale-110 duration-500"
+                className="h-full w-auto object-contain transition-transform hover:scale-105 duration-500"
             />
         </div>
     );

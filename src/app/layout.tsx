@@ -58,8 +58,8 @@ export async function generateMetadata(): Promise<Metadata> {
     };
   } catch (error) {
     return {
-      title: 'Assistente Julia',
-      description: 'Sistema de gestão financeira',
+      title: 'Assistente Júlia | Controle Financeiro no WhatsApp sem Planilhas',
+      description: 'Pare de depender de planilhas. Com a Assistente Júlia, você controla receitas, despesas e contas direto no WhatsApp, com relatórios claros para PF e PJ.',
       manifest: '/api/manifest',
       appleWebApp: {
         capable: true,
