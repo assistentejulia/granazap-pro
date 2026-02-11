@@ -45,52 +45,39 @@ export function matchTransactions(
         for (const existingTx of accountTransactions) {
             // 1. Check if amounts match (exact)
             const amountMatch = Math.abs(existingTx.valor - ofxTx.amount) < 0.01;
-
             if (!amountMatch) continue;
 
-            // 2. Check date proximity
+            // 2. Check if types match (income vs expense)
+            const typeMatch = (ofxTx.type === 'CREDIT' && existingTx.tipo === 'entrada') ||
+                (ofxTx.type === 'DEBIT' && existingTx.tipo === 'saida');
+            if (!typeMatch) continue;
+
+            // 3. Prepare data for comparison
             const ofxDate = new Date(ofxTx.date);
             const existingDate = new Date(existingTx.data);
             const daysDiff = Math.abs(
                 (ofxDate.getTime() - existingDate.getTime()) / (1000 * 60 * 60 * 24)
             );
 
-            // 3. Check description similarity using fuzzy matching
             const descriptionSimilarity = fuzzball.ratio(
                 ofxTx.description.toLowerCase(),
                 existingTx.descricao.toLowerCase()
             );
 
-            // PRIORITY 1: Exact match - Same date + Same amount (description doesn't matter much)
-            // This catches duplicates even if description differs slightly
-            if (daysDiff === 0) {
-                bestMatch = {
-                    ofxTransaction: ofxTx,
-                    matchType: 'exact',
-                    existingTransaction: existingTx,
-                    confidence: 100, // Perfect date+amount match
-                };
-                break; // Found exact match, no need to continue
-            }
-
-            // PRIORITY 2: Very likely duplicate - Date within 1 day + Amount exact + Description 50%+ similar
-            if (daysDiff <= 1 && descriptionSimilarity >= 50) {
+            // PRIORITY 1: Exact match - Same day + High similarity (85%+)
+            if (daysDiff === 0 && descriptionSimilarity >= 85) {
                 bestMatch = {
                     ofxTransaction: ofxTx,
                     matchType: 'exact',
                     existingTransaction: existingTx,
                     confidence: descriptionSimilarity,
                 };
-                break;
+                break; // Found perfect match
             }
 
-            // PRIORITY 3: Suggestion - Date within 3 days + Amount exact + Description 40%+ similar
-            if (daysDiff <= 3 && descriptionSimilarity >= 40) {
-                // Only update if this is a better match than current best
-                if (
-                    bestMatch.matchType === 'new' ||
-                    (bestMatch.confidence && descriptionSimilarity > bestMatch.confidence)
-                ) {
+            // PRIORITY 2: Suggestion - Same day + Medium similarity (40%+)
+            if (daysDiff === 0 && descriptionSimilarity >= 40) {
+                if (bestMatch.matchType === 'new' || (bestMatch.confidence || 0) < descriptionSimilarity) {
                     bestMatch = {
                         ofxTransaction: ofxTx,
                         matchType: 'suggestion',
@@ -98,16 +85,20 @@ export function matchTransactions(
                         confidence: descriptionSimilarity,
                     };
                 }
+                continue; // Keep looking for better matches
             }
 
-            // PRIORITY 4: Weak suggestion - Date within 7 days + Amount exact (any description)
-            if (daysDiff <= 7 && bestMatch.matchType === 'new') {
-                bestMatch = {
-                    ofxTransaction: ofxTx,
-                    matchType: 'suggestion',
-                    existingTransaction: existingTx,
-                    confidence: Math.max(30, descriptionSimilarity), // Minimum 30% confidence
-                };
+            // PRIORITY 3: Suggestion - Date drift (up to 3 days) + High similarity (60%+)
+            if (daysDiff <= 3 && descriptionSimilarity >= 60) {
+                const weightedConfidence = descriptionSimilarity * (1 - daysDiff * 0.1);
+                if (bestMatch.matchType === 'new' || (bestMatch.confidence || 0) < weightedConfidence) {
+                    bestMatch = {
+                        ofxTransaction: ofxTx,
+                        matchType: 'suggestion',
+                        existingTransaction: existingTx,
+                        confidence: weightedConfidence,
+                    };
+                }
             }
         }
 

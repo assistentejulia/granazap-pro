@@ -27,15 +27,16 @@ export function DynamicMetadata() {
 
       // Add new favicon
       if (document.head) {
+        const timestamp = new Date().getTime();
         const link = document.createElement('link');
         link.rel = 'icon';
-        link.href = faviconUrl;
+        link.href = `${faviconUrl}${faviconUrl.includes('?') ? '&' : '?'}v=${timestamp}`;
         document.head.appendChild(link);
 
         // Add apple touch icon
         const appleTouchIcon = document.createElement('link');
         appleTouchIcon.rel = 'apple-touch-icon';
-        appleTouchIcon.href = faviconUrl;
+        appleTouchIcon.href = `${faviconUrl}${faviconUrl.includes('?') ? '&' : '?'}v=${timestamp}`;
         document.head.appendChild(appleTouchIcon);
       }
     }

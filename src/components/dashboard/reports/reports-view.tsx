@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useExportPDFNew } from "@/hooks/use-export-pdf-new";
 import { CalendarClock } from "lucide-react";
-import { format } from "date-fns";
+import { format, startOfMonth, endOfMonth } from "date-fns";
 import { ptBR } from 'date-fns/locale';
 import { useLanguage } from "@/contexts/language-context";
 import { useCurrency } from "@/contexts/currency-context";
@@ -33,10 +33,10 @@ export function ReportsView() {
 
     const [accountId, setAccountId] = useState("all");
     const [categoryId, setCategoryId] = useState("all");
-    // Default to current year
-    const currentYear = new Date().getFullYear();
-    const [startDate, setStartDate] = useState<string | null>(`${currentYear}-01-01`);
-    const [endDate, setEndDate] = useState<string | null>(`${currentYear}-12-31`);
+    // Default to current month
+    const now = new Date();
+    const [startDate, setStartDate] = useState<string | null>(format(startOfMonth(now), 'yyyy-MM-dd'));
+    const [endDate, setEndDate] = useState<string | null>(format(endOfMonth(now), 'yyyy-MM-dd'));
 
     const period: 'day' | 'week' | 'month' | 'year' | 'custom' = 'custom';
     const customRange = { start: startDate!, end: endDate! };

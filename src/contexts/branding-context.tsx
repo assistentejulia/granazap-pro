@@ -26,12 +26,13 @@ interface BrandingSettings {
 
 const defaultSettings: BrandingSettings = {
   appName: "Assistente Julia",
-  appLogoUrl: "",
+  appLogoUrl: "/icon.png",
   primaryColor: "#22C55E",
   secondaryColor: "#0A0F1C",
   supportEmail: "suporte@Assistente Julia.com",
   habilitar_modo_pj: true,
   restringir_cadastro_usuarios_existentes: false,
+  logo_url_login: "/icon.png",
 };
 
 interface BrandingContextType {
@@ -94,7 +95,7 @@ export function BrandingProvider({ children }: { children: React.ReactNode }) {
             show_login_logo: settingsData.show_login_logo || false,
             show_login_name: settingsData.show_login_name !== false, // Default true
             logo_url_sidebar: settingsData.logo_url_sidebar || '',
-            logo_url_login: settingsData.logo_url_login || '',
+            logo_url_login: settingsData.logo_url_login || defaultSettings.logo_url_login || '',
             favicon_url: settingsData.favicon_url || settingsData.app_logo_url || '',
             pwa_icon_192_url: settingsData.pwa_icon_192_url || '',
             pwa_icon_512_url: settingsData.pwa_icon_512_url || '',

@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { Search, Calendar, Wallet, X, Upload } from "lucide-react";
+import { startOfMonth, endOfMonth, format } from "date-fns";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useAllTransactions } from "@/hooks/use-all-transactions";
 import { useAccountFilter } from "@/hooks/use-account-filter";
@@ -30,12 +31,12 @@ export function AllTransactionsPage() {
   const { filter: accountType } = useAccountFilter();
   const { accounts } = useAccounts(accountType);
 
-  // Initialize filters with defaults
-  const currentYear = new Date().getFullYear();
+  // Initialize filters with defaults (Current Month)
+  const now = new Date();
   const [accountId, setAccountId] = useState("all");
   const [categoryId, setCategoryId] = useState("all");
-  const [startDate, setStartDate] = useState<string | null>(`${currentYear}-01-01`);
-  const [endDate, setEndDate] = useState<string | null>(`${currentYear}-12-31`);
+  const [startDate, setStartDate] = useState<string | null>(format(startOfMonth(now), 'yyyy-MM-dd'));
+  const [endDate, setEndDate] = useState<string | null>(format(endOfMonth(now), 'yyyy-MM-dd'));
   const [transactionType, setTransactionType] = useState<TransactionType>('all');
 
   // Sync with URL param for account filter if present

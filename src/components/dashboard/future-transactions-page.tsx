@@ -7,7 +7,7 @@ import { useFutureTransactionsQuery, useFutureTransactionMutations } from "@/hoo
 import { useAccountFilter } from "@/hooks/use-account-filter";
 import { usePeriodFilter } from "@/hooks/use-period-filter";
 import { cn } from "@/lib/utils";
-import { format, parseISO, isPast, isFuture, isToday, differenceInDays } from "date-fns";
+import { format, parseISO, isPast, isFuture, isToday, differenceInDays, startOfMonth, endOfMonth } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { TableSkeleton, CardSkeleton } from "@/components/ui/skeleton";
 import { Modal } from "@/components/ui/modal";
@@ -59,9 +59,9 @@ export function FutureTransactionsPage() {
   const [filterType, setFilterType] = useState<FilterType>('todos');
   const [filterStatus, setFilterStatus] = useState<FilterStatus>('todos');
   const [filterRecurrence, setFilterRecurrence] = useState<FilterRecurrence>('todos');
-  const currentYear = new Date().getFullYear();
-  const [startDate, setStartDate] = useState(`${currentYear}-01-01`);
-  const [endDate, setEndDate] = useState(`${currentYear}-12-31`);
+  const now = new Date();
+  const [startDate, setStartDate] = useState(format(startOfMonth(now), 'yyyy-MM-dd'));
+  const [endDate, setEndDate] = useState(format(endOfMonth(now), 'yyyy-MM-dd'));
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   const [mounted, setMounted] = useState(false);

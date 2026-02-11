@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useDeferredValue, useEffect } from "react";
 import { Plus, Search, Pencil, Trash2, Loader2 } from "lucide-react";
+import { startOfMonth, endOfMonth, format } from "date-fns";
 import { useTransactionsQuery } from "@/hooks/use-transactions-query";
 import { useTransactionsExport } from "@/hooks/use-transactions-export";
 import { useAccountFilter } from "@/hooks/use-account-filter";
@@ -32,12 +33,12 @@ export function TransactionPage({ type, title }: TransactionPageProps) {
   const { filter: accountFilter } = useAccountFilter();
   const { canCreate, canEdit, canDelete } = usePermissions();
 
-  // Initialize filters with defaults
-  const currentYear = new Date().getFullYear();
+  // Initialize filters with defaults (Current Month)
+  const now = new Date();
   const [accountId, setAccountId] = useState("all");
   const [categoryId, setCategoryId] = useState("all");
-  const [startDate, setStartDate] = useState<string | null>(`${currentYear}-01-01`);
-  const [endDate, setEndDate] = useState<string | null>(`${currentYear}-12-31`);
+  const [startDate, setStartDate] = useState<string | null>(format(startOfMonth(now), 'yyyy-MM-dd'));
+  const [endDate, setEndDate] = useState<string | null>(format(endOfMonth(now), 'yyyy-MM-dd'));
 
   // Force 'custom' period when using start/end date
   const effectivePeriod = (startDate && endDate) ? 'custom' : 'year'; // Default as fallback
