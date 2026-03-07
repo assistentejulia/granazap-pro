@@ -289,21 +289,28 @@ export function NewHeroSection() {
 
                                     {/* iPhone Frame */}
                                     <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-8 border-gray-800 bg-white">
-                                        {/* Notch */}
-                                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-gray-900 rounded-b-3xl z-10" />
-
-                                        {/* Mobile Screenshot */}
-                                        <Image
-                                            src="/screenshots/mobile-dash-1.jpeg"
-                                            alt="App Mobile Dashboard"
-                                            width={280}
-                                            height={560}
-                                            className="w-full h-auto"
-                                        />
+                                        {/* Mobile Screenshot / Video Demo */}
+                                        <div className="relative w-full aspect-[9/19] bg-zinc-950 overflow-hidden">
+                                            <video
+                                                className="absolute inset-0 w-full h-full object-cover scale-[1.03] origin-center"
+                                                autoPlay
+                                                loop
+                                                muted
+                                                playsInline
+                                                preload="auto"
+                                                poster="/screenshots/mobile-dash-1.jpeg"
+                                            >
+                                                <source 
+                                                    src="https://lxmwsnfszwoqzorxdwdu.supabase.co/storage/v1/object/public/Logos/VideoWtsp.mp4" 
+                                                    type="video/mp4" 
+                                                />
+                                                Seu navegador não suporta este vídeo.
+                                            </video>
+                                        </div>
                                     </div>
 
                                     {/* Badge on Phone */}
-                                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-xl whitespace-nowrap">
+                                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-blue-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-xl whitespace-nowrap z-30">
                                         📱 App Mobile
                                     </div>
                                 </motion.div>
