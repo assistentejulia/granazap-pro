@@ -15,6 +15,7 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import { EmailConfirmationModal } from "@/components/ui/email-confirmation-modal";
 import { SignupBlockedModal } from "@/components/ui/signup-blocked-modal";
 import { DuplicateAccountModal } from "@/components/ui/duplicate-account-modal";
+import { SignupConfirmationModal } from "@/components/ui/signup-confirmation-modal";
 import { useLanguage } from "@/contexts/language-context";
 
 type SignupFormValues = {
@@ -38,6 +39,9 @@ export function SignupForm() {
   const [duplicateType, setDuplicateType] = useState<'email' | 'phone'>('email');
   const [duplicateValue, setDuplicateValue] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [pendingSignupData, setPendingSignupData] = useState<SignupFormValues | null>(null);
+  const [isConfirming, setIsConfirming] = useState(false);
 
   // Schema for validation with translations
   const signupSchema = z.object({
@@ -85,19 +89,28 @@ export function SignupForm() {
   }, [emailParam]);
 
   const onSubmit = async (data: SignupFormValues) => {
+    setPendingSignupData(data);
+    setShowConfirmationModal(true);
+  };
+
+  const handleConfirmSignup = async () => {
+    if (!pendingSignupData) return;
+    
+    setIsConfirming(true);
     try {
       // Importar dinamicamente para evitar problemas de SSR
       const { signupUser } = await import('@/lib/auth/signup');
 
       const result = await signupUser({
-        fullName: data.fullName,
-        email: data.email,
-        phone: data.phone,
-        password: data.password,
-        acceptTerms: data.acceptTerms
+        fullName: pendingSignupData.fullName,
+        email: pendingSignupData.email,
+        phone: pendingSignupData.phone,
+        password: pendingSignupData.password,
+        acceptTerms: pendingSignupData.acceptTerms
       });
 
       if (!result.success) {
+        setShowConfirmationModal(false);
         // Verificar se é erro de cadastro bloqueado
         if (result.error === 'CADASTRO_BLOQUEADO') {
           setShowBlockedModal(true);
@@ -107,7 +120,7 @@ export function SignupForm() {
         // Verificar se é email duplicado
         if (result.error === 'EMAIL_JA_CADASTRADO') {
           setDuplicateType('email');
-          setDuplicateValue(data.email);
+          setDuplicateValue(pendingSignupData.email);
           setShowDuplicateModal(true);
           return;
         }
@@ -115,7 +128,7 @@ export function SignupForm() {
         // Verificar se é celular duplicado
         if (result.error === 'CELULAR_JA_CADASTRADO') {
           setDuplicateType('phone');
-          setDuplicateValue(data.phone || '');
+          setDuplicateValue(pendingSignupData.phone || '');
           setShowDuplicateModal(true);
           return;
         }
@@ -125,11 +138,15 @@ export function SignupForm() {
       }
 
       // Sucesso! Mostrar modal de confirmação de email
-      setUserEmail(data.email);
+      setShowConfirmationModal(false);
+      setUserEmail(pendingSignupData.email);
       setShowEmailModal(true);
 
     } catch (error: any) {
+      setShowConfirmationModal(false);
       alert('Erro ao criar conta. Tente novamente.');
+    } finally {
+      setIsConfirming(false);
     }
   };
 
@@ -293,11 +310,26 @@ export function SignupForm() {
       {/* Sign Up Button */}
       <Button
         type="submit"
-        disabled={isSubmitting}
+        disabled={isSubmitting || showConfirmationModal}
         className="mt-4 w-full"
       >
         {isSubmitting ? t('signup.buttonLoading') : t('signup.button')}
       </Button>
+
+      {/* Signup Confirmation Modal */}
+      {pendingSignupData && (
+        <SignupConfirmationModal
+          isOpen={showConfirmationModal}
+          onClose={() => setShowConfirmationModal(false)}
+          onConfirm={handleConfirmSignup}
+          isLoading={isConfirming}
+          userData={{
+            fullName: pendingSignupData.fullName,
+            email: pendingSignupData.email,
+            phone: pendingSignupData.phone,
+          }}
+        />
+      )}
 
       {/* Email Confirmation Modal */}
       <EmailConfirmationModal
