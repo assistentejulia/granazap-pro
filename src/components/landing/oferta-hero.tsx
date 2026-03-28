@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, MessageCircle, Shield, Zap, TrendingUp, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 export function OfertaHero() {
     return (
@@ -25,6 +26,23 @@ export function OfertaHero() {
 
             <div className="container mx-auto px-4 relative z-10">
                 <div className="max-w-4xl mx-auto text-center space-y-8">
+                    {/* Logo */}
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6 }}
+                        className="flex justify-center pb-2"
+                    >
+                        <Image
+                            src="/logo-branca.png"
+                            alt="Assistente Júlia Logo"
+                            width={280}
+                            height={90}
+                            className="object-contain"
+                            priority
+                        />
+                    </motion.div>
+
                     {/* Urgency Badge */}
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
