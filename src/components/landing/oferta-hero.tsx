@@ -33,12 +33,22 @@ export function OfertaHero() {
                         transition={{ duration: 0.6 }}
                         className="flex justify-center pb-2"
                     >
+                        {/* Logo para tema claro */}
+                        <Image
+                            src="/logo-preta.png"
+                            alt="Assistente Júlia Logo"
+                            width={280}
+                            height={90}
+                            className="object-contain block dark:hidden"
+                            priority
+                        />
+                        {/* Logo para tema escuro */}
                         <Image
                             src="/logo-branca.png"
                             alt="Assistente Júlia Logo"
                             width={280}
                             height={90}
-                            className="object-contain"
+                            className="object-contain hidden dark:block"
                             priority
                         />
                     </motion.div>
