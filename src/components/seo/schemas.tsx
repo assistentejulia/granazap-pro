@@ -11,7 +11,7 @@ export function SeoSchemas() {
         "logo": "https://assistentejulia.com.br/img/logo-julia.png",
         "description": "Controle financeiro no WhatsApp com inteligência artificial.",
         "sameAs": [
-            "https://www.instagram.com/assistentejulia"
+            "https://www.instagram.com/assistentejulia.com.br/"
         ]
     };
 

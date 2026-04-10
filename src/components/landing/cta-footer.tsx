@@ -20,7 +20,7 @@ import { LandingLogo } from "@/components/landing/logo";
 import Link from "next/link";
 
 const socialLinks = [
-    { icon: Instagram, href: "https://www.instagram.com/assistente.julia/", label: "Instagram", color: "from-pink-500 to-purple-500" },
+    { icon: Instagram, href: "https://www.instagram.com/assistentejulia.com.br/", label: "Instagram", color: "from-pink-500 to-purple-500" },
 ];
 
 const footerLinks = {
