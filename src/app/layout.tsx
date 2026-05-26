@@ -86,6 +86,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <BrandingStyleInjector />
+      </head>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        suppressHydrationWarning
+      >
+        {/* Facebook Pixel */}
         <Script
           id="fb-pixel"
           strategy="afterInteractive"
@@ -113,7 +119,7 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
-        {/* Google Tag Manager */}
+        {/* Google Analytics 4 */}
         <Script
           id="gtag-js"
           strategy="afterInteractive"
@@ -131,11 +137,6 @@ export default function RootLayout({
             `,
           }}
         />
-      </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        suppressHydrationWarning
-      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
