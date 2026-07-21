@@ -114,6 +114,8 @@ const translations = {
     'error.invalidPhone': 'Telefone inválido',
     'error.nameMin': 'Nome deve ter pelo menos 3 caracteres',
     'error.confirmPassword': 'Confirmação de senha obrigatória',
+    'error.generic': 'Ocorreu um erro inesperado. Tente novamente.',
+    'error.sessionMissing': 'Link de recuperação de senha inválido ou expirado. Por favor, solicite um novo link.',
 
     // Dashboard
     'dashboard.stats.balance': 'Saldo Total',
@@ -1138,6 +1140,8 @@ const translations = {
     'error.invalidPhone': 'Número de teléfono inválido',
     'error.acceptTerms': 'Debes aceptar los términos',
     'error.confirmPassword': 'Por favor confirma tu contraseña',
+    'error.generic': 'Ocurrió un error inesperado. Por favor intente de nuevo.',
+    'error.sessionMissing': 'Enlace de recuperación de contraseña inválido o expirado. Por favor solicite un nuevo enlace.',
 
     // Features
     'features.welcome': 'Bienvenido a Assistente Julia',
@@ -2114,6 +2118,8 @@ const translations = {
     'error.invalidPhone': 'Invalid phone number',
     'error.acceptTerms': 'You must accept the terms',
     'error.confirmPassword': 'Please confirm your password',
+    'error.generic': 'An unexpected error occurred. Please try again.',
+    'error.sessionMissing': 'Invalid or expired password reset link. Please request a new link.',
 
     // Features
     'features.welcome': 'Welcome to Assistente Julia',

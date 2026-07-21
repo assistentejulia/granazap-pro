@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Eye, EyeOff, Lock } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Eye, EyeOff, Lock, AlertTriangle } from "lucide-react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,7 +19,47 @@ export function ResetPasswordForm() {
   const { t } = useLanguage();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  
+  const [isVerifyingSession, setIsVerifyingSession] = useState(true);
+  const [hasValidSession, setHasValidSession] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    async function checkAndExchangeSession() {
+      try {
+        const supabase = createClient();
+
+        // Se houver um parâmetro 'code' na URL (ex: fallback PKCE direto)
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get("code");
+
+        if (code) {
+          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          if (exchangeError) {
+            console.error("Erro ao trocar código por sessão:", exchangeError);
+          }
+        }
+
+        // Verificar se há uma sessão ativa para atualização de senha
+        const { data: { session } } = await supabase.auth.getSession();
+
+        if (session) {
+          setHasValidSession(true);
+        } else {
+          setHasValidSession(false);
+          setErrorMessage(t('error.sessionMissing'));
+        }
+      } catch (err) {
+        console.error("Erro ao verificar sessão de redefinição:", err);
+        setHasValidSession(false);
+        setErrorMessage(t('error.sessionMissing'));
+      } finally {
+        setIsVerifyingSession(false);
+      }
+    }
+
+    checkAndExchangeSession();
+  }, [t]);
+
   // Schema for validation with translations
   const resetPasswordSchema = z.object({
     password: z.string().min(6, { message: t('error.passwordMin') }),
@@ -42,6 +82,7 @@ export function ResetPasswordForm() {
   });
 
   const onSubmit = async (data: ResetPasswordFormValues) => {
+    setErrorMessage(null);
     try {
       const supabase = createClient();
 
@@ -50,7 +91,8 @@ export function ResetPasswordForm() {
       });
 
       if (error) {
-        alert(t('error.generic'));
+        console.error("Erro ao atualizar senha:", error);
+        setErrorMessage(error.message || t('error.generic'));
         return;
       }
 
@@ -61,12 +103,55 @@ export function ResetPasswordForm() {
       window.location.href = '/';
 
     } catch (error: any) {
-      alert('Erro ao redefinir senha. Tente novamente.');
+      setErrorMessage(error?.message || t('error.generic'));
     }
   };
 
+  if (isVerifyingSession) {
+    return (
+      <div className="flex flex-col items-center justify-center p-8 space-y-3">
+        <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-sm text-zinc-400">Verificando link de recuperação...</p>
+      </div>
+    );
+  }
+
+  if (!hasValidSession) {
+    return (
+      <div className="space-y-6">
+        <div className="p-6 rounded-xl bg-red-500/10 border border-red-500/20 text-center space-y-3">
+          <div className="flex justify-center">
+            <div className="p-3 bg-red-500/20 rounded-full">
+              <AlertTriangle className="w-6 h-6 text-red-400" />
+            </div>
+          </div>
+          <h3 className="text-lg font-semibold text-white">
+            Link Inválido ou Expirado
+          </h3>
+          <p className="text-sm text-zinc-300">
+            {errorMessage || t('error.sessionMissing')}
+          </p>
+        </div>
+
+        <Button
+          onClick={() => window.location.href = '/esqueci-senha'}
+          variant="outline"
+          className="w-full"
+        >
+          Solicitar novo link de recuperação
+        </Button>
+      </div>
+    );
+  }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex w-full flex-col gap-5">
+      {errorMessage && (
+        <div className="p-4 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm font-medium">
+          {errorMessage}
+        </div>
+      )}
+
       {/* Password Input */}
       <div className="flex flex-col w-full space-y-2">
         <label className="text-sm font-medium leading-none text-white" htmlFor="password">
